@@ -5,6 +5,7 @@ const git = require('simple-git/promise')();
 
 var call = 0;
 app.set("view engine", "ejs");
+app.use(app.static("/public"));
 
 const dbOptions = { useNewUrlParser: true, reconnectTries: Number.MAX_VALUE, poolSize: 10 };
 mongoose.connect(require("./mongo"), dbOptions).then(
