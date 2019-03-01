@@ -1,6 +1,7 @@
 const app = require("express")();
 const mongoose = require("mongoose");
 const clear = require('clear');
+const git = require('simple-git/promise')();
 
 var call = 0;
 app.set("view engine", "ejs");
@@ -17,10 +18,35 @@ app.use(function(req, res, next) {
     next();
 });
 
+app.get("/git", function(req, res) {
+    var m = req.query.m;
+    console.log("\n" + ++call + ") Pushing to Github");
+    git.add('.')
+        .then(
+            (addSuccess) => {
+                console.log(">  Changes Successfully Added to Stack");
+            }, (failedAdd) => {
+                console.log(">  Changes Adding Failed\n>  " + failedAdd);
+            });
+    git.commit(m)
+        .then(
+            (successCommit) => {
+                console.log(">  Changes Successfully Commited\n   >  Message : \"" + m + "\"");
+            }, (failed) => {
+                console.log(">  Changes Commit Failed\n>  " + failed);
+            });
+    git.push('origin', 'master')
+        .then((success) => {
+            console.log(">  Changes Successfully Pushed to Origin Master");
+        }, (failed) => {
+            console.log(">  Changes Push Failed\n>  " + failed);
+        });
+    res.send("1");
+});
+
 app.get("/*",function(req, res) {
     res.send(req.originalUrl); 
 });
-
 
 app.listen(process.env.PORT, process.env.IP, function() {
     clear();
