@@ -1,11 +1,12 @@
-const app = require("express")();
+const express = require("express");
+const app = express();
 const mongoose = require("mongoose");
 const clear = require('clear');
 const git = require('simple-git/promise')();
 
 var call = 0;
 app.set("view engine", "ejs");
-app.use(app.static("/public"));
+app.use(express.static("/public"));
 
 const dbOptions = { useNewUrlParser: true, reconnectTries: Number.MAX_VALUE, poolSize: 10 };
 mongoose.connect(require("./mongo"), dbOptions).then(
@@ -45,8 +46,8 @@ app.get("/git", function(req, res) {
     res.send("1");
 });
 
-app.get("/*",function(req, res) {
-    res.send(req.originalUrl);
+app.get("/*", function(req, res) {
+    res.render("edit", {});
 });
 
 app.listen(process.env.PORT, process.env.IP, function() {
