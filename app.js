@@ -47,7 +47,8 @@ app.get("/git", function(req, res) {
 });
 
 app.get("/*", function(req, res) {
-    res.render("edit", {});
+    var path = (req.originalUrl).substring(1, (req.originalUrl).length);
+    res.render("edit", { path: path });
 });
 
 app.listen(process.env.PORT, process.env.IP, function() {
