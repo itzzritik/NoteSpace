@@ -9,10 +9,18 @@ html {
     background-color: #1DA1F2;
 }
 
+.editdiv {
+    width: 100%;
+    height: 100%;
+    padding-left: 10%;
+    padding-right: 10%;
+}
+
 .edit {
     position: absolute;
     width: calc(90% - 20%);
     height: calc(90% - 30%);
+    min-height: 60%;
     padding: 5%;
     bottom: 0;
     left: 0;
