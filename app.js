@@ -65,14 +65,15 @@ app.post("/save", function(req, res) {
             if (e) { console.log(">  Error occured :\n>  " + e); }
             else {
                 if (token.length) {
-                    Token.updateMany({ path: path }, {
+                    Token.findOneAndUpdate({ token: path }, {
                             $set: {
+                                token: path,
                                 value: value
                             }
                         },
                         function(err, user) {
                             if (err) {
-                                console.log(">  Error While Saving Changes");
+                                console.log(">  Error While Saving Changes" + err);
                                 res.send("0");
                             }
                             else {
@@ -83,17 +84,14 @@ app.post("/save", function(req, res) {
                 else {
                     Token.create({
                         token: path,
-                        value: ""
+                        value: value
                     }, function(e, user) {
                         if (e) {
                             res.send("0");
                             console.log(">  Error While Creating New Notespace\n>  " + e);
                         }
                         else {
-                            res.render("edit", {
-                                token: path,
-                                value: ""
-                            });
+                            //Created
                         }
                     });
                 }
