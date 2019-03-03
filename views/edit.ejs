@@ -29,13 +29,13 @@
         const http = new XMLHttpRequest()
         http.open('POST', '/save')
         http.setRequestHeader('Content-type', 'application/json')
+        http.onload = function() {
+            alert(http.responseText)
+        }
         http.send(JSON.stringify({
             path : "<%= token %>",
             value : ""+$('.edit').val()
         }))
-        http.onload = function() {
-            alert(http.responseText)
-        }
     }
 </script>
 </html>

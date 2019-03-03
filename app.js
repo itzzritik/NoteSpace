@@ -15,7 +15,7 @@ mongoose.connect(require("./mongo"), dbOptions).then(
     e => { console.log(">  Connection Failed \n>  " + e); }
 );
 
-app.use(bodyparser.urlencoded({ extended: true }));
+app.use(bodyparser.json());
 app.use(function(req, res, next) {
     res.header("Access-Control-Allow-Origin", "*");
     res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
@@ -57,7 +57,7 @@ app.post("/save", function(req, res) {
     var path = req.body.path;
     var value = req.body.value;
     console.log(path + " - " + value);
-    /*if (value != null && value.length == 0) {
+    if (value != null && value.length == 0) {
 
     }
     else
@@ -98,7 +98,7 @@ app.post("/save", function(req, res) {
                     });
                 }
             }
-        });*/
+        });
 });
 app.get("/*", function(req, res) {
     var path = (req.originalUrl).substring(1, (req.originalUrl).length);
