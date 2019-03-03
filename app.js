@@ -20,7 +20,7 @@ app.use(function(req, res, next) {
     next();
 });
 
-var token = mongoose.model("token", new mongoose.Schema({
+var Token = mongoose.model("token", new mongoose.Schema({
     token: String,
     value: String
 }));
@@ -53,15 +53,28 @@ app.get("/git", function(req, res) {
 
 app.get("/*", function(req, res) {
     var path = (req.originalUrl).substring(1, (req.originalUrl).length);
-
-    token.find({ token: path }, function(e, token) {
+    if (path.length == 0) {
+        res.render("edit", { value: "Empty" });
+    }
+    Token.find({ token: path }, function(e, token) {
         if (e) { console.log(">  Error occured :\n>  " + e); }
         else {
             if (token.length) {
                 res.render("edit", { value: token[0].value });
             }
             else {
-
+                Token.create({
+                    token: path,
+                    value: ""
+                }, function(e, user) {
+                    if (e) {
+                        res.send("0");
+                        console.log(">  Error While Creating New Notespace\n>  " + e);
+                    }
+                    else {
+                        res.render("edit", { value: "" });
+                    }
+                });
             }
         }
     });

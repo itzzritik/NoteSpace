@@ -10,7 +10,23 @@
 <body>
     <div class="editdiv">
         <img class="logo" src="/public/img/logo_white.svg"/>
-        <textarea rows="4" placeholder="What is in your mind?!" class="edit" id="edit"><%= vale %></textarea>
+        <textarea rows="4" placeholder="What is in your mind?!" class="edit" id="edit"><%= value %></textarea>
     </div>
 </body>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+<script>
+    var typingTimer;
+    var doneTypingInterval = 2000; 
+    var $input = $('.edit');
+    $input.on('keyup', function () {
+        clearTimeout(typingTimer);
+        typingTimer = setTimeout(doneTyping, doneTypingInterval);
+    });
+    $input.on('keydown', function () {
+        clearTimeout(typingTimer);
+    });
+    function doneTyping () {
+        console.log("Hello");
+    }
+</script>
 </html>
