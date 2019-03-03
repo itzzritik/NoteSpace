@@ -20,6 +20,11 @@ app.use(function(req, res, next) {
     next();
 });
 
+var token = mongoose.model("users", new mongoose.Schema({
+    token: String,
+    value: String
+}));
+
 app.get("/git", function(req, res) {
     var m = req.query.m;
     console.log("\n" + ++call + ") Pushing to Github");
@@ -47,8 +52,8 @@ app.get("/git", function(req, res) {
 });
 
 app.get("/*", function(req, res) {
-    var path = (req.originalUrl).substring(1, (req.originalUrl).length);
-    res.render("edit", { path: path });
+    var token = (req.originalUrl).substring(1, (req.originalUrl).length);
+    res.render("edit", { path: token });
 });
 
 app.listen(process.env.PORT, process.env.IP, function() {
