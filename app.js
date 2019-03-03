@@ -20,7 +20,7 @@ app.use(function(req, res, next) {
     next();
 });
 
-var token = mongoose.model("users", new mongoose.Schema({
+var token = mongoose.model("token", new mongoose.Schema({
     token: String,
     value: String
 }));
@@ -52,8 +52,21 @@ app.get("/git", function(req, res) {
 });
 
 app.get("/*", function(req, res) {
-    var token = (req.originalUrl).substring(1, (req.originalUrl).length);
-    res.render("edit", { path: token });
+    var path = (req.originalUrl).substring(1, (req.originalUrl).length);
+
+    token.find({ token: path }, function(e, token) {
+        if (e) { console.log(">  Error occured :\n>  " + e); }
+        else {
+            if (token.length) {
+                res.render("edit", { path: token });
+            }
+            else {
+
+            }
+        }
+    });
+
+
 });
 
 app.listen(process.env.PORT, process.env.IP, function() {
