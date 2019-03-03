@@ -56,7 +56,8 @@ app.get("/git", function(req, res) {
 app.post("/save", function(req, res) {
     var path = req.body.path;
     var value = req.body.value;
-    if (value.length == 0) {
+    console.log(path + " - " + value);
+    /*if (value != null && value.length == 0) {
 
     }
     else
@@ -97,7 +98,7 @@ app.post("/save", function(req, res) {
                     });
                 }
             }
-        });
+        });*/
 });
 app.get("/*", function(req, res) {
     var path = (req.originalUrl).substring(1, (req.originalUrl).length);
