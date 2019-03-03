@@ -31,7 +31,7 @@
         http.setRequestHeader('Content-type', 'application/json')
         http.send(JSON.stringify({
             path : "<%= token %>",
-            value : $('.edit').val()
+            value : ""+$('.edit').val()
         }))
         http.onload = function() {
             alert(http.responseText)
