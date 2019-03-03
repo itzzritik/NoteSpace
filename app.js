@@ -58,7 +58,7 @@ app.get("/*", function(req, res) {
         if (e) { console.log(">  Error occured :\n>  " + e); }
         else {
             if (token.length) {
-                res.render("edit", { path: token });
+                res.render("edit", { value: token[0].value });
             }
             else {
 
