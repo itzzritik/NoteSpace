@@ -51,35 +51,69 @@ app.get("/git", function(req, res) {
     res.send("1");
 });
 
+app.post("/save", function(req, res) {
+    var path = req.body.path;
+    var value = req.body.value;
+    Token.find({ token: path }, function(e, token) {
+        if (e) { console.log(">  Error occured :\n>  " + e); }
+        else {
+            if (token.length) {
+                Token.updateMany({ path: path }, {
+                        $set: {
+                            value: value
+                        }
+                    },
+                    function(err, user) {
+                        if (err) {
+                            console.log(">  Cannot Save The Changes");
+                            res.send("0");
+                        }
+                        else {
+                            res.send("1");
+                        }
+                    });
+            }
+            else {
+                res.send("0");
+            }
+        }
+    });
+});
 app.get("/*", function(req, res) {
     var path = (req.originalUrl).substring(1, (req.originalUrl).length);
     if (path.length == 0) {
         res.render("edit", { value: "Empty" });
     }
-    Token.find({ token: path }, function(e, token) {
-        if (e) { console.log(">  Error occured :\n>  " + e); }
-        else {
-            if (token.length) {
-                res.render("edit", { value: token[0].value });
-            }
+    else
+        Token.find({ token: path }, function(e, token) {
+            if (e) { console.log(">  Error occured :\n>  " + e); }
             else {
-                Token.create({
-                    token: path,
-                    value: ""
-                }, function(e, user) {
-                    if (e) {
-                        res.send("0");
-                        console.log(">  Error While Creating New Notespace\n>  " + e);
-                    }
-                    else {
-                        res.render("edit", { value: "" });
-                    }
-                });
+                if (token.length) {
+                    res.render("edit", {
+                        token: path,
+                        value: token[0].value
+
+                    });
+                }
+                else {
+                    Token.create({
+                        token: path,
+                        value: ""
+                    }, function(e, user) {
+                        if (e) {
+                            res.send("0");
+                            console.log(">  Error While Creating New Notespace\n>  " + e);
+                        }
+                        else {
+                            res.render("edit", {
+                                token: path,
+                                value: ""
+                            });
+                        }
+                    });
+                }
             }
-        }
-    });
-
-
+        });
 });
 
 app.listen(process.env.PORT, process.env.IP, function() {
