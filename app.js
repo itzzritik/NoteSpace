@@ -4,6 +4,7 @@ const bodyparser = require("body-parser");
 const mongoose = require("mongoose");
 const clear = require('clear');
 const git = require('simple-git/promise')();
+const ran = require("randomstring");
 
 var call = 0;
 app.set("view engine", "ejs");
@@ -98,10 +99,30 @@ app.post("/save", function(req, res) {
             }
         });
 });
+
 app.get("/*", function(req, res) {
     var path = (req.originalUrl).substring(1, (req.originalUrl).length);
     if (path.length == 0) {
-        res.render("edit", { value: "Empty" });
+        var id = "";
+        var unique = (id) => {
+            try {
+                Token.find({ token: id }, function(e, token) {
+                    if (e) { console.log(">  Error occured :\n>  " + e); }
+                    else {
+                        if (token.length) return true;
+                        else return false;
+                    }
+                });
+            }
+            catch (err) {
+                console.log(err);
+                return false;
+            }
+        };
+        do {
+            id = ran.generate(7);
+        } while (unique(id));
+        console.log(id);
     }
     else
         Token.find({ token: path }, function(e, token) {
