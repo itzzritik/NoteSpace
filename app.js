@@ -59,7 +59,14 @@ app.post("/save", function(req, res) {
     var value = req.body.value;
     console.log(path + " - " + value);
     if (value != null && value.length == 0) {
-
+        Token.remove({ token: path }, function(err) {
+            if (!err) {
+                console.log(">  Error occured :\n>  " + err);
+            }
+            else {
+                console.log(">  Note Removed");
+            }
+        });
     }
     else
         Token.find({ token: path }, function(e, token) {
@@ -122,7 +129,7 @@ app.get("/*", function(req, res) {
         do {
             id = ran.generate(7);
         } while (unique(id));
-        console.log(id);
+        res.redirect(id);
     }
     else
         Token.find({ token: path }, function(e, token) {
