@@ -42,22 +42,22 @@ html {
 
 .spinner {
     position: absolute;
-    width: 8vh;
-    height: 8vh;
+    width: 7vh;
+    height: 7vh;
     top: 0;
     left: 50%;
-    margin-left: -4.8vh;
-    margin-top: 0.5vh;
+    margin-left: -4.4vh;
+    margin-top: 0.7vh;
     border: 6px solid #fff;
 
     border-radius: 100%;
-    -webkit-animation: sk-scaleout 1.0s infinite ease-in-out;
-    animation: sk-scaleout 0.5s infinite ease-in-out;
+    -webkit-animation: sk-scaleout 0.6s infinite ease-in-out;
+    animation: sk-scaleout 0.6s infinite ease-in-out;
 }
 
 @-webkit-keyframes sk-scaleout {
     0% {
-        -webkit-transform: scale(0.2)
+        -webkit-transform: scale(0)
     }
     100% {
         -webkit-transform: scale(1.0);
@@ -67,8 +67,8 @@ html {
 
 @keyframes sk-scaleout {
     0% {
-        -webkit-transform: scale(0.2);
-        transform: scale(0.2);
+        -webkit-transform: scale(0);
+        transform: scale(0);
     }
     100% {
         -webkit-transform: scale(1.0);
