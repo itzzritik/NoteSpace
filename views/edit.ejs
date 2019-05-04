@@ -29,11 +29,13 @@
     });
 
     function doneTyping() {
+        $('.spinner').css("display","block");
         const http = new XMLHttpRequest()
         http.open('POST', '/save')
         http.setRequestHeader('Content-type', 'application/json')
         http.onload = function() {
-            alert(http.responseText)
+            console.log('done');
+            $('.spinner').css("display","none");
         }
         http.send(JSON.stringify({
             path: "<%= token %>",

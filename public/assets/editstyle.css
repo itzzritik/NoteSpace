@@ -41,6 +41,7 @@ html {
 }
 
 .spinner {
+    display: none;
     position: absolute;
     width: 7vh;
     height: 7vh;

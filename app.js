@@ -62,9 +62,11 @@ app.post("/save", function(req, res) {
         Token.remove({ token: path }, function(err) {
             if (!err) {
                 console.log(">  Error occured :\n>  " + err);
+                res.send("0");
             }
             else {
                 console.log(">  Note Removed");
+                res.send("1");
             }
         });
     }
@@ -99,7 +101,7 @@ app.post("/save", function(req, res) {
                             console.log(">  Error While Creating New Notespace\n>  " + e);
                         }
                         else {
-                            //Created
+                            res.send("1");
                         }
                     });
                 }
