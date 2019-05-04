@@ -1,0 +1,1 @@
+module.exports = "mongodb+srv://notespace:notespace@cluster0-qohrh.mongodb.net/test?retryWrites=true";
