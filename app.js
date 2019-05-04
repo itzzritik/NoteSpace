@@ -154,9 +154,9 @@ app.get("/*", function(req, res) {
         });
 });
 
-app.listen(process.env.PORT, process.env.IP, function() {
+app.listen(process.env.PORT || 3000, function() {
     clear();
     console.log("\n" + ++call + ") Starting Server");
-    console.log(">  Server is Listening");
+    console.log(">  Server is running at http://"+(this.address().address + this.address().port));
     console.log("\n" + ++call + ") Connection to MongoDB Atlas Server");
 });

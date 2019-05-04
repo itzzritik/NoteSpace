@@ -6,7 +6,6 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
-  "author": "",
   "license": "ISC",
   "dependencies": {
     "body-parser": "^1.18.3",
@@ -17,5 +16,10 @@
     "nodemon": "^1.18.10",
     "randomstring": "^1.1.5",
     "simple-git": "^1.107.0"
-  }
+  },
+  "scripts": {
+    "start": "node app.js"
+  },
+  "author": "Ritik Srivastava",
+  "license": "ISC"
 }
