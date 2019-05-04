@@ -4,7 +4,7 @@
   "description": "",
   "main": "app.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "start": "node app.js"
   },
   "license": "ISC",
   "dependencies": {
@@ -12,14 +12,11 @@
     "clear": "^0.1.0",
     "ejs": "^2.6.1",
     "express": "^4.16.4",
+    "ip": "^1.1.5",
     "mongoose": "^5.4.16",
     "nodemon": "^1.18.10",
     "randomstring": "^1.1.5",
     "simple-git": "^1.107.0"
   },
-  "scripts": {
-    "start": "node app.js"
-  },
-  "author": "Ritik Srivastava",
-  "license": "ISC"
+  "author": "Ritik Srivastava"
 }

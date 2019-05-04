@@ -5,6 +5,7 @@ const mongoose = require("mongoose");
 const clear = require('clear');
 const git = require('simple-git/promise')();
 const ran = require("randomstring");
+const ip = require("ip");
 
 var call = 0;
 app.set("view engine", "ejs");
@@ -154,9 +155,9 @@ app.get("/*", function(req, res) {
         });
 });
 
-app.listen(process.env.PORT || 3000, function() {
+app.listen(process.env.PORT || 8080, function() {
     clear();
     console.log("\n" + ++call + ") Starting Server");
-    console.log(">  Server is running at http://"+(this.address().address + this.address().port));
+    console.log(">  Server is running at http://"+(ip.address()|| process.env.IP || "localhost")+":"+(process.env.PORT || "8080"));
     console.log("\n" + ++call + ") Connection to MongoDB Atlas Server");
 });
