@@ -158,6 +158,6 @@ app.get("/*", function(req, res) {
 app.listen(process.env.PORT || 8080, function() {
     clear();
     console.log("\n" + ++call + ") Starting Server");
-    console.log(">  Server is running at http://"+(ip.address()|| process.env.IP || "localhost")+":"+(process.env.PORT || "8080"));
+    console.log(">  Server is running at http://" + (process.env.IP || ip.address() || "localhost") + ":" + (process.env.PORT || "8080"));
     console.log("\n" + ++call + ") Connection to MongoDB Atlas Server");
 });
