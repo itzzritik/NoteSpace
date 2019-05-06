@@ -1,1 +1,5 @@
-$('.editor').css('margin-right','-200px');
+$('.menu-link').click(function(e){
+    e.preventDefault();
+    $('.menu').toggleClass('open');
+    $('.editor').toggleClass('open');
+});
