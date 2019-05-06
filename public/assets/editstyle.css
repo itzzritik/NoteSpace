@@ -1,6 +1,8 @@
 @import url("https://fonts.googleapis.com/css?family=Pacifico|Raleway:500");
 :root {
-	--nav_height: 50px;
+    --nav_height: 50px;
+    --nav_color: #3c3c3c;
+    --sidebar_color: #2d2d2d;
 }
 body,
 html {
@@ -16,7 +18,7 @@ html {
     position: fixed;
     width: 100%;
     height: var(--nav_height);
-    background: #252526;
+    background: var(--nav_color);
 }
 
 .editor {
@@ -31,8 +33,21 @@ html {
     left: 0;
     width: calc(200px + var(--nav_height));
     height: 100%;
-    background-color: #333;
+    background-color: var(--sidebar_color);
 }
+.sidebar .navHead{
+    width: 100%;
+    height: var(--nav_height);
+    background: var(--nav_color);
+}
+.sidebar .navHead .menu{
+    position: absolute;
+    right: 0;
+    width: var(--nav_height);
+    height: var(--nav_height);
+    background-color: var(--sidebar_color);
+}
+
 .edit {
     position: absolute;
     top: 0;
