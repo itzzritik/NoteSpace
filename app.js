@@ -8,14 +8,32 @@ const ran = require("randomstring");
 const ip = require("ip");
 
 var call = 0;
+var loader = function() {
+    var x=0,load = ["⠁ ","⠈ "," ⠁"," ⠈"," ⠐"," ⠠"," ⢀"," ⡀","⢀ ","⡀ ","⠄ ","⠂ "];//"⠁⠂⠄⡀⢀⠠⠐⠈";
+    return setInterval(function() {
+        process.stdout.write("\r" + load[x=(++x<load.length)?x:0]+" ".repeat(35));
+    }, 50);
+  };
+
 app.set("view engine", "ejs");
 app.use('/public', express.static('public'));
 
 const dbOptions = { useNewUrlParser: true, reconnectTries: Number.MAX_VALUE, poolSize: 10 };
-mongoose.connect(require("./mongo"), dbOptions).then(
-    () => { console.log(">  Connection Established"); },
-    e => { console.log(">  Connection Failed \n>  " + e); }
-);
+var mongoConnect = function() {
+    mongoose.connect(require("./mongo"), dbOptions).then(
+        () => { 
+            clearInterval(loader);
+            console.log("\r>  Connection Established"); 
+        },
+        e => { 
+            clearInterval(loader);
+            console.log("\r>  Connection Failed \n>  " + e); 
+            process.stdout.write(">  Reconnecting  ");
+            loader(); 
+        }
+    );
+};
+mongoConnect();
 
 app.use(bodyparser.json());
 app.use(function(req, res, next) {
@@ -160,4 +178,5 @@ app.listen(process.env.PORT || 8080, function() {
     console.log("\n" + ++call + ") Starting Server");
     console.log(">  Server is running at http://" + (process.env.IP || ip.address() || "localhost") + ":" + (process.env.PORT || "8080"));
     console.log("\n" + ++call + ") Connection to MongoDB Atlas Server");
+    loader = loader();
 });

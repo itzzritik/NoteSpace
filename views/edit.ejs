@@ -1,17 +1,21 @@
 <!DOCTYPE html>
-<html> 
+<html>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
 <head>
-	<title>Notespace</title>
-	<link rel="icon" href="/public/img/fevicon.png" type="image/png" sizes="32x32">
-	
-	<link href="/public/assets/editstyle.css" rel="stylesheet" type="text/css">
-</head>
-<body>
-    <div class="editdiv">
+    <title>Notespace</title>
+    <link rel="icon" href="/public/img/fevicon.png" type="image/png" sizes="32x32">
+    <link href="/public/assets/editstyle.css" rel="stylesheet" type="text/css">
+    <div class="nav">
         <div class="spinner"></div>
-        <img class="logo" src="/public/img/logo_white.svg"/>
-        <textarea rows="4" placeholder="What is in your mind?!" class="edit" id="edit"><%= value %></textarea>
+        <img class="logo" src="/public/img/logo_white.svg" />
+    </div>
+</head>
+
+<body>
+    <div class="editor">
+        <div class="sidebar"></div>
+        <textarea class="edit" rows="4" placeholder="What is in your mind?!" id="edit"><%= value %></textarea>
     </div>
 </body>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
@@ -20,22 +24,22 @@
     var typingTimer;
     var doneTypingInterval = 500;
     var $input = $('.edit');
-    $input.on('keyup', function() {
+    $input.on('keyup', function () {
         clearTimeout(typingTimer);
         typingTimer = setTimeout(doneTyping, doneTypingInterval);
     });
-    $input.on('keydown', function() {
+    $input.on('keydown', function () {
         clearTimeout(typingTimer);
     });
 
     function doneTyping() {
-        $('.spinner').css("display","block");
+        $('.spinner').css("display", "block");
         const http = new XMLHttpRequest()
         http.open('POST', '/save')
         http.setRequestHeader('Content-type', 'application/json')
-        http.onload = function() {
+        http.onload = function () {
             console.log('done');
-            $('.spinner').css("display","none");
+            $('.spinner').css("display", "none");
         }
         http.send(JSON.stringify({
             path: "<%= token %>",
@@ -43,4 +47,5 @@
         }))
     }
 </script>
+
 </html>
