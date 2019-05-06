@@ -29,11 +29,16 @@ html {
     background: #2d2d2d;
     border-radius: calc(var(--nav_height) / 2);
     transform: scaleX(0);
+    opacity: 0;
 }
 .ripple.animate {
-    animation: ripple 0.5s infinite cubic-bezier(0.895, 0.03, 0.685, 0.22);
+    animation: ripple 0.4s infinite linear;
 }
 @keyframes ripple {
+    30%{
+        opacity: 1;
+        transform: scaleX(0.3);
+    }
     100% {
         opacity: 0;
         transform: scaleX(2.5);
