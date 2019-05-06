@@ -11,7 +11,7 @@ html {
     height: 100%;
     margin: 0;
     padding: 0;
-    background-color: #1DA1F2;
+    background-color: var(--sidebar_color);;
 }
 
 .nav {
@@ -20,12 +20,16 @@ html {
     height: var(--nav_height);
     background: var(--nav_color);
 }
+.nav:active{
+    background: #47a7f5 radial-gradient(circle, transparent 1%, #47a7f5 1%) center/15000%;
+}
 
 .editor {
     position: absolute;
     width: calc(100vw + 200px);
     right: 0;
     height: 100vh;
+    transition: margin-right 0.26s cubic-bezier(0.175, 0.885, 0.32, 1.275);
 }
 .editor.open{
     margin-right: -200px; 
@@ -64,12 +68,10 @@ html {
 
 .logo {
     position: absolute;
-    width: 5vh;
-    height: 5vh;
-    top: 0;
+    width: calc(var(--nav_height) - 15px);
+    height: 100%;
     left: 50%;
-    margin-left: -2.5vh;
-    margin-top: 1.5vh;
+    margin-left: calc(0px - calc(var(--nav_height) / 2));
 }
 
 .spinner {
@@ -143,7 +145,7 @@ html {
 	border-radius: 2px;
 	position: absolute;
 	left: 0;
-	transition: all 0.25s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+	transition: all 0.26s cubic-bezier(0.175, 0.885, 0.32, 1.275);
 }
 .menu-line-1 {
 	top: 0;
