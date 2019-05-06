@@ -3,6 +3,7 @@
     --nav_height: 45px;
     --nav_color: #3c3c3c;
     --sidebar_color: #2d2d2d;
+    --sidebar_white_color: #eee;
 }
 body,
 html {
@@ -11,7 +12,7 @@ html {
     height: 100%;
     margin: 0;
     padding: 0;
-    background-color: var(--sidebar_color);;
+    background-color: var(--sidebar_color);
 }
 
 .nav {
@@ -59,6 +60,7 @@ html {
     position: absolute;
     top: 0;
     left: 0;
+    font-family: 'Raleway', Tahoma, Geneva, Verdana, sans-serif;
     width: calc(200px + var(--nav_height));
     height: 100%;
     background-color: var(--sidebar_color);
@@ -68,31 +70,14 @@ html {
     height: var(--nav_height);
     background: var(--nav_color);
 }
-
-.edit {
+.sidebar .navHead .navTitle{
     position: absolute;
-    top: 0;
     left: 0;
-    width: calc(100vw - var(--nav_height));
-    height: calc(100vh - var(--nav_height));
-    margin-top: var(--nav_height); 
-    margin-left: calc(200px + var(--nav_height));
-    padding: 2%;
-    box-sizing: border-box;
-    border-color: transparent;
-    background-color: #1E1E1E;
-    resize: none;
-    outline: none;
-    color: #fff;
-    font-size: 16px;
-}
-
-.logo {
-    position: absolute;
-    width: calc(var(--nav_height) - 15px);
-    height: 100%;
-    left: 50%;
-    margin-left: calc(0px - calc(var(--nav_height) / 2));
+    width: calc(100% - var(--nav_height));
+    height: var(--nav_height);
+    text-align: center;
+    color: var(--sidebar_white_color);
+    line-height: var(--nav_height);
 }
 
 /* Menu Button */
@@ -113,14 +98,14 @@ html {
 	position: absolute;
 	width: 20px;
 	height: 14px;
-	margin: auto;
-	left: 0;
+    margin: auto;
+    left: 0;
 	top: 0;
 	right: 0;
 	bottom: 1px;
 }
 .menu-line {
-	background-color: #eee;
+	background-color: var(--sidebar_white_color);
 	height: 2px;
 	width: 100%;
 	border-radius: 2px;
@@ -148,5 +133,30 @@ html {
 .menu.open .menu-line-3 {
 	transform: translateY(-7px) translateY(50%) rotate(135deg);
 }
-
 /* Menu Button */
+
+.edit {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: calc(100vw - var(--nav_height));
+    height: calc(100vh - var(--nav_height));
+    margin-top: var(--nav_height); 
+    margin-left: calc(200px + var(--nav_height));
+    padding: 2%;
+    box-sizing: border-box;
+    border-color: transparent;
+    background-color: #1E1E1E;
+    resize: none;
+    outline: none;
+    color: #fff;
+    font-size: 16px;
+}
+
+.logo {
+    position: fixed;
+    width: calc(var(--nav_height) - 15px);
+    height: var(--nav_height);
+    left: 50%;
+    margin-left: calc(0px - calc(var(--nav_height) / 2));
+}

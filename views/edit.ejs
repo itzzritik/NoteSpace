@@ -16,7 +16,8 @@
     <div class="editor">
         <div class="sidebar">
             <div class="navHead">
-                <div class="menu"><a class="menu-link" href="#"><span class="menu-icon">
+                <span class="navTitle">NOTES</span>
+                <div class="menu"><a class="menu-link" href=""><span class="menu-icon">
                         <span class="menu-line menu-line-1"></span> 
                         <span class="menu-line menu-line-2"></span> 
                         <span class="menu-line menu-line-3"></span>
@@ -28,32 +29,4 @@
 </body>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
 <script src="/public/assets/editscript.js"></script>
-<script>
-    var typingTimer;
-    var doneTypingInterval = 500;
-    var $input = $('.edit');
-    $input.on('keyup', function () {
-        clearTimeout(typingTimer);
-        typingTimer = setTimeout(doneTyping, doneTypingInterval);
-    });
-    $input.on('keydown', function () {
-        clearTimeout(typingTimer);
-    });
-
-    function doneTyping() {
-        $(".ripple").toggleClass("animate");
-        const http = new XMLHttpRequest()
-        http.open('POST', '/save')
-        http.setRequestHeader('Content-type', 'application/json')
-        http.onload = function () {
-            console.log('done');
-            $(".ripple").toggleClass("animate");
-        }
-        http.send(JSON.stringify({
-            path: "<%= token %>",
-            value: "" + $('.edit').val()
-        }))
-    }
-</script>
-
 </html>

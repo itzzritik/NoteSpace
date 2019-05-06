@@ -161,17 +161,10 @@ app.get("/*", function(req, res) {
             if (e) { console.log(">  Error occured :\n>  " + e); }
             else {
                 if (token.length) {
-                    res.render("edit", {
-                        token: path,
-                        value: token[0].value
-
-                    });
+                    res.render("edit", {value: token[0].value});
                 }
                 else {
-                    res.render("edit", {
-                        token: path,
-                        value: ""
-                    });
+                    res.render("edit", {value: ""});
                 }
             }
         });
