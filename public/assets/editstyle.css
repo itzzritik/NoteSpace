@@ -56,6 +56,7 @@ html {
 .editor.open{
     margin-right: -200px; 
 }
+
 .sidebar {
     position: absolute;
     top: 0;
@@ -80,6 +81,36 @@ html {
     line-height: var(--nav_height);
 }
 
+.sidebar .tabs .newTabPane{
+    width: 100%;
+    height: var(--nav_height);
+}
+.newTab{
+    position: absolute;
+    right: 0;
+    width: var(--nav_height);
+    height: var(--nav_height);
+    background-color: var(--nav_color);
+    cursor: pointer;
+    transition: transform 0.26s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+.newTab:hover{
+    border-radius: calc(var(--nav_height) / 2);
+    transform: scale(0.8);
+}
+.newTab .plus-icon{
+    position: absolute;
+	width: 14px;
+	height: 14px;
+    margin: auto;
+    left: 0;
+	top: calc(50% - 1px);
+	right: 0;
+}
+.newTab .new-line-1{
+    transform: rotate(90deg);
+}
+
 /* Menu Button */
 .menu {
 	position: absolute;
@@ -87,6 +118,11 @@ html {
     width: var(--nav_height);
     height: var(--nav_height);
     background-color: var(--sidebar_color);
+    transition: transform 0.26s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+.menu:hover{
+    border-radius: calc(var(--nav_height) / 2);
+    transform: scale(0.8);
 }
 .menu-link {
 	width: 100%;

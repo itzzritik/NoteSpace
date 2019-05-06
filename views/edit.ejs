@@ -1,7 +1,6 @@
 <!DOCTYPE html>
 <html>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
 <head>
     <title>Notespace</title>
     <link rel="icon" href="/public/img/fevicon.png" type="image/png" sizes="32x32">
@@ -11,17 +10,19 @@
         <img class="logo" src="/public/img/logo_white.svg" />
     </div>
 </head>
-
 <body>
     <div class="editor">
         <div class="sidebar">
             <div class="navHead">
                 <span class="navTitle">NOTES</span>
                 <div class="menu"><a class="menu-link" href=""><span class="menu-icon">
-                        <span class="menu-line menu-line-1"></span> 
-                        <span class="menu-line menu-line-2"></span> 
-                        <span class="menu-line menu-line-3"></span>
+                        <span class="menu-line menu-line-1"></span> <span class="menu-line menu-line-2"></span> <span class="menu-line menu-line-3"></span>
                 </span></a></div>
+            </div>
+            <div class="tabs">   
+                <div class="newTabPane"><div class="newTab">
+                    <span class="plus-icon"><span class="menu-line new-line-1"></span> <span class="menu-line new-line-2"></span>
+                </div></div>   
             </div>
         </div>
         <textarea class="edit" rows="4" placeholder="What is in your mind?!" id="edit"><%= value %></textarea>
