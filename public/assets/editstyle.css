@@ -31,7 +31,7 @@ html {
     transform: scaleX(0);
 }
 .ripple.animate {
-    animation: ripple 0.65s linear;
+    animation: ripple 0.5s infinite cubic-bezier(0.895, 0.03, 0.685, 0.22);
 }
 @keyframes ripple {
     100% {
