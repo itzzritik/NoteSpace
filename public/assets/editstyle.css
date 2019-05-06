@@ -14,33 +14,34 @@ html {
     position: fixed;
     width: 100%;
     height: 55px;
-    background: #222;
+    background: #252526;
 }
 
 .editor {
     position: absolute;
-    display: table;
-    width: 100vw;
+    width: calc(100vw + 200px);
+    right: 0;
     height: 100vh;
 }
 .sidebar {
-    display: table-cell;
-    width: 55px;
+    position: absolute;
+    width: 255px;
     height: 100%;
-    background-color: #555;
-    display: inline-block;
+    background-color: #333;
 }
 .edit {
-    display: table-cell;
-    width: 90vw;
-    white-space: nowrap;
+    position: absolute;
+    width: calc(100vw - 55px);
     height: calc(100vh - 55px);
-    display: inline-block;
+    margin-top: 55px; 
+    margin-left: 255px;
     border-color: transparent;
+    background-color: #1E1E1E;
+    padding: 2%;
     resize: none;
     outline: none;
-    color: #1DA1F2;
-    font-size: 20px;
+    color: #fff;
+    font-size: 16px;
 }
 
 .logo {
