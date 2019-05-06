@@ -7,8 +7,8 @@
     <link rel="icon" href="/public/img/fevicon.png" type="image/png" sizes="32x32">
     <link href="/public/assets/editstyle.css" rel="stylesheet" type="text/css">
     <div class="nav">
-            <div class="spinner"></div>
-            <img class="logo" src="/public/img/logo_white.svg" />
+        <span class="ripple"></span>
+        <img class="logo" src="/public/img/logo_white.svg" />
     </div>
 </head>
 
@@ -16,15 +16,11 @@
     <div class="editor">
         <div class="sidebar">
             <div class="navHead">
-                <div class="menu">
-                    <a class="menu-link" href="#">
-                        <span class="menu-icon">
-                            <span class="menu-line menu-line-1"></span> 
-                            <span class="menu-line menu-line-2"></span> 
-                            <span class="menu-line menu-line-3"></span>
-                        </span>
-                    </a>
-                </div>
+                <div class="menu"><a class="menu-link" href="#"><span class="menu-icon">
+                        <span class="menu-line menu-line-1"></span> 
+                        <span class="menu-line menu-line-2"></span> 
+                        <span class="menu-line menu-line-3"></span>
+                </span></a></div>
             </div>
         </div>
         <textarea class="edit" rows="4" placeholder="What is in your mind?!" id="edit"><%= value %></textarea>
@@ -45,13 +41,13 @@
     });
 
     function doneTyping() {
-        $('.spinner').css("display", "block");
+        $(".ripple").toggleClass("animate");
         const http = new XMLHttpRequest()
         http.open('POST', '/save')
         http.setRequestHeader('Content-type', 'application/json')
         http.onload = function () {
             console.log('done');
-            $('.spinner').css("display", "none");
+            $(".ripple").toggleClass("animate");
         }
         http.send(JSON.stringify({
             path: "<%= token %>",
