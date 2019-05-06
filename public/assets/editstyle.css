@@ -1,5 +1,7 @@
 @import url("https://fonts.googleapis.com/css?family=Pacifico|Raleway:500");
-
+:root {
+	--nav_height: 50px;
+}
 body,
 html {
     overflow: hidden;
@@ -13,7 +15,7 @@ html {
 .nav {
     position: fixed;
     width: 100%;
-    height: 55px;
+    height: var(--nav_height);
     background: #252526;
 }
 
@@ -25,19 +27,24 @@ html {
 }
 .sidebar {
     position: absolute;
-    width: 255px;
+    top: 0;
+    left: 0;
+    width: calc(200px + var(--nav_height));
     height: 100%;
     background-color: #333;
 }
 .edit {
     position: absolute;
-    width: calc(100vw - 55px);
-    height: calc(100vh - 55px);
-    margin-top: 55px; 
-    margin-left: 255px;
+    top: 0;
+    left: 0;
+    width: calc(100vw - var(--nav_height));
+    height: calc(100vh - var(--nav_height));
+    margin-top: var(--nav_height); 
+    margin-left: calc(200px + var(--nav_height));
+    padding: 2%;
+    box-sizing: border-box;
     border-color: transparent;
     background-color: #1E1E1E;
-    padding: 2%;
     resize: none;
     outline: none;
     color: #fff;
@@ -92,16 +99,4 @@ html {
         transform: scale(1.0);
         opacity: 0;
     }
-}
-
-@media (max-width: 480px) {
-    .edit {
-        width: calc(90% - 6%);
-        top: 10%;
-        bottom: 0;
-        left: 0;
-        margin-left: 3%;
-        font-size: 20px;
-    }
-
 }
