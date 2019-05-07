@@ -1,7 +1,8 @@
 var token = (window.location.pathname).substring(1,(window.location.pathname).length),
 	tabColors = [],
     cssVar = window.getComputedStyle(document.body),
-    tabNO=0;
+    tabNO=0,
+    currTab=null;
 
 function newColor(){
     tabColors.push(palette[Math.floor(Math.random() * (palette.length-1))]);
@@ -79,9 +80,11 @@ $('.newTab').click(function () {
     tabNO++;
 });
 
-$('.tabs').on('click', '.tab', function() {
-    var card = $(this).parent();
-    $(this).css("background-color",tabColors[card.attr('id')]);
+$('.tabs').on('click', '.tabPane', function() {
+    var card = $(this);
+    if(currTab!=null) card.parent().find('#'+card.attr('id')).css("background-color","#000");
+    card.find('.tab').css("background-color",tabColors[card.attr('id')]);
     card.css("background-color","#3C3C3C");
+    currTab = card.attr('id');
     console.log(card.attr('id'));
 });
