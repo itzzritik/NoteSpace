@@ -103,7 +103,7 @@ html {
     transform: scale(0.8);
 }
 .tab p{
-    margin-top:0px; 
+    margin:0px; 
     width: var(--nav_height);
     height: var(--nav_height);
     color: var(--sidebar_white_color);
