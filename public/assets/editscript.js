@@ -69,7 +69,7 @@ $('.newTab').click(function () {
         '<div class="tabPane" id="'+(tabColors.length-1)+'">' +
         '<span class="ripple"></span>'+
         '<div class="title">'+
-        '<input value="'+tabTitle+'">'+
+        '<input value="'+tabTitle+'" disabled>'+
         '</div> '+
         '<div class="tab">' +
         '<p>'+tabTitle.charAt(0).toUpperCase()+'</p>' +
@@ -81,22 +81,33 @@ $('.newTab').click(function () {
     if((tabColors.length-1)==1) $('.tabs').find('#'+(tabColors.length-2)).click();
 });
 
-$('.tabs').on('click', '.tabPane', function() {
+$('.tabs').on('click dblclick', '.tabPane', function(e) {
     var card = $(this);
-    if(currTab!=null) {
-        card.parent().find('#'+currTab).css("background-color","transparent");
-        card.parent().find('#'+currTab).find('.tab').css("background-color","transparent");
+    if(e.type == "click"){
+        if(currTab!=null) {
+            card.parent().find('#'+currTab).css("background-color","transparent");
+            card.parent().find('#'+currTab).find('.tab').css("background-color","transparent");
+        }
+        card.find('.tab').css("background-color",tabColors[card.attr('id')]);
+        card.css("background-color","#3C3C3C");
+        currTab = card.attr('id');
     }
-    card.find('.tab').css("background-color",tabColors[card.attr('id')]);
-    card.css("background-color","#3C3C3C");
-    currTab = card.attr('id');
+    else if(e.type == "dblclick"){
+        card.find('.title input').attr("disabled", false);
+        card.find('.title input').css({
+            "background-color":"#333",
+            "cursor": "text"
+        });
+        card.find('.title input').focus().val(card.find('.title input').val());
+    }
 });
 
 $('.tabs').on('keypress blur', '.title input', function(e) {
     var card = $(this).parent().parent(),
         keycode = (event.keyCode ? event.keyCode : event.which);
-    if(e.type == "focusout" || (e.type == "keypress" && keycode == '13')){
+    if((e.type == "focusout") || (e.type == "keypress" && keycode == '13')){
         card.find('.tab p').text($(this).val().charAt(0).toUpperCase());
         card.find('.ripple').toggleClass("animate");
+        setTimeout(function(){card.find('.ripple').toggleClass("animate")}, 400);
     }
 });
