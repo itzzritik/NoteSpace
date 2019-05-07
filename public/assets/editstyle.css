@@ -85,8 +85,9 @@ html {
 
 .sidebar .tabs .tabPane{
     width: 100%;
-    height: var(--nav_height);
+    height: 0px;
     float: top;
+    transition: height 0.26s cubic-bezier(0.175, 0.885, 0.32, 1.275);
 }
 .tab{
     position: absolute;
@@ -94,10 +95,9 @@ html {
     text-align: center;
     width: var(--nav_height);
     height: var(--nav_height);
-    background-color: #007ACC;
     cursor: pointer;
-    opacity: 0;
-    transition: transform 0.26s cubic-bezier(0.175, 0.885, 0.32, 1.275), opacity 0.3s ease-in;
+    transition: transform 0.26s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    animation: enterTab 0.4s linear;
 }
 .tab:active{
     border-radius: calc(var(--nav_height) / 2);

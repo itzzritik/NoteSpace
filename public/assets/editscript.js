@@ -1,12 +1,8 @@
-const token = (window.location.pathname).substring(1,(window.location.pathname).length),
-    palette = ["#f44336","#E91E63","#9C27B0","#673AB7","#3F51B5","#2196F3","#03A9F4","#00BCD4","#009688","#4CAF50","#8BC34A","#FF9800","#FF5722","#795548"];
-var current;
+var token = (window.location.pathname).substring(1,(window.location.pathname).length),
+    palette = ["#f44336","#E91E63","#9C27B0","#673AB7","#3F51B5","#2196F3","#03A9F4","#00BCD4","#009688","#4CAF50","#8BC34A","#FF9800","#FF5722","#795548"],
+    cssVar = window.getComputedStyle(document.body),
+    currColor,currColorLight,tabNO=0;
 
-function newColor(){
-    var a=Math.floor(Math.random() * (palette.length-1));
-    console.log(a);
-    return palette[a];
-}
 function LightenDarkenColor(col, amt) {
     var usePound = false;
     if (col[0] == "#") {
@@ -25,10 +21,13 @@ function LightenDarkenColor(col, amt) {
     else if (g < 0) g = 0;
     return (usePound ? "#" : "") + (g | (b << 8) | (r << 16)).toString(16);
 }
+function newColor(){
+    currColor=palette[Math.floor(Math.random() * (palette.length-1))]
+    currColorLight=LightenDarkenColor(currColor,20);
+    return currColor;
+}
+$(".newTab").css({"background-color": newColor(),"opacity": "1"});
 
-$(".newTab").css({"background-color": current=newColor(),"opacity": "1"});
-
-console.log(current);
 require.config({ paths: { 'vs': 'monaco-editor/min/vs' }});
 window.editor = "";
 require(['vs/editor/editor.main'], function() {
@@ -78,8 +77,22 @@ function doneTyping() {
     }))
 }
 
-$('.menu-link').click(function (e) {
-    e.preventDefault();
+$('.menu-link').click(function () {
     $('.menu').toggleClass('open');
     $('.editor').toggleClass('open');
+});
+
+$('.newTab').click(function () {
+    var newTab =
+        '<div class="tabPane tab'+tabNO+'">' +
+        '<div class="tab">' +
+        '<p>O</p>' +
+        '</div> ' +
+        '</div>';
+    $('.newTab').before(newTab);
+    $('.tabs').find('.tab'+tabNO).css("height",cssVar.getPropertyValue('--nav_height')+"px");
+    if(tabNO%2!=0)$('.tabs').find('.tab'+tabNO).css("background-color","#3C3C3C");
+    $('.tabs').find('.tab'+tabNO+' .tab').css("background-color",currColor);
+    $(".newTab").css({"background-color": newColor()});
+    tabNO++;
 });
