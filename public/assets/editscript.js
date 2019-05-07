@@ -44,13 +44,13 @@ $('.edit').on('keydown', function () {
 });
 
 function doneTyping() {
-    $(".ripple").toggleClass("animate");
+    $(".nav .ripple").toggleClass("animate");
     const http = new XMLHttpRequest()
     http.open('POST', '/save')
     http.setRequestHeader('Content-type', 'application/json')
     http.onload = function () {
         console.log('done');
-        $(".ripple").toggleClass("animate");
+        $(".nav .ripple").toggleClass("animate");
     }
     http.send(JSON.stringify({
         path: token,
@@ -67,6 +67,7 @@ $('.newTab').click(function () {
     var tabTitle = title[Math.floor(Math.random() * (title.length-1))]
     var newTab =
         '<div class="tabPane" id="'+(tabColors.length-1)+'">' +
+        '<span class="ripple"></span>'+
         '<div class="title">'+
         '<input value="'+tabTitle+'">'+
         '</div> '+
@@ -91,11 +92,11 @@ $('.tabs').on('click', '.tabPane', function() {
     currTab = card.attr('id');
 });
 
-$('.tabs').on('keypress', '.title input', function() {
+$('.tabs').on('keypress blur', '.title input', function(e) {
     var card = $(this).parent().parent(),
         keycode = (event.keyCode ? event.keyCode : event.which);
-	if(keycode == '13'){
+    if(e.type == "focusout" || (e.type == "keypress" && keycode == '13')){
         card.find('.tab p').text($(this).val().charAt(0).toUpperCase());
-        console.log($(this).val().charAt(0).toUpperCase());
-	}
+        card.find('.ripple').toggleClass("animate");
+    }
 });
