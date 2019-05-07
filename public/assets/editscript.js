@@ -18,7 +18,7 @@ function doneTyping() {
     }
     http.send(JSON.stringify({
         path: (window.location.pathname).substring(1,(window.location.pathname).length),
-        value: "" + $('.edit').val()
+        value: "" + window.editor.getValue()
     }))
 }
 
@@ -28,6 +28,11 @@ $('.menu-link').click(function (e) {
     $('.editor').toggleClass('open');
 });
 
-var editor = ace.edit("editor");
-    editor.setTheme("ace/theme/monokai");
-    editor.session.setMode("ace/mode/javascript");
+'use strict';
+require.config({baseUrl: '/monaco-editor/min/'});
+require(['vs/editor/editor.main'], function() {
+    window.editor = monaco.editor.create(document.getElementById('container'), {
+        value: "<%= value %>",
+        language: 'javascript'
+    });
+});

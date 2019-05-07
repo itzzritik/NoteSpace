@@ -39,6 +39,7 @@ var mongoConnect = function(callback) {
 };
 mongoConnect();
 
+app.use('/monaco-editor', express.static(__dirname + '/node_modules/monaco-editor'));
 app.use(bodyparser.json());
 app.use(function(req, res, next) {
     res.header("Access-Control-Allow-Origin", "*");

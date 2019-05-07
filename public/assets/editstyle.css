@@ -182,6 +182,7 @@ html {
     padding: 1%;
     box-sizing: border-box;
     border-color: transparent;
+    background-color: #1E1E1E;
     resize: none;
     outline: none;
     color: #fff;

@@ -13,6 +13,7 @@
     "ejs": "^2.6.1",
     "express": "^4.16.4",
     "ip": "^1.1.5",
+    "monaco-editor": "^0.17.0",
     "mongoose": "^5.4.16",
     "nodemon": "^1.18.10",
     "randomstring": "^1.1.5",
