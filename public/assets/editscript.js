@@ -1,30 +1,12 @@
 var token = (window.location.pathname).substring(1,(window.location.pathname).length),
     palette = ["#f44336","#E91E63","#9C27B0","#673AB7","#3F51B5","#2196F3","#03A9F4","#00BCD4","#009688","#4CAF50","#8BC34A","#FF9800","#FF5722","#795548"],
+    tabColors = [];
     cssVar = window.getComputedStyle(document.body),
-    currColor,currColorLight,tabNO=0;
+    tabNO=0;
 
-function LightenDarkenColor(col, amt) {
-    var usePound = false;
-    if (col[0] == "#") {
-        col = col.slice(1);
-        usePound = true;
-    }
-    var num = parseInt(col, 16);
-    var r = (num >> 16) + amt;
-    if (r > 255) r = 255;
-    else if (r < 0) r = 0;
-    var b = ((num >> 8) & 0x00FF) + amt;
-    if (b > 255) b = 255;
-    else if (b < 0) b = 0;
-    var g = (num & 0x0000FF) + amt;
-    if (g > 255) g = 255;
-    else if (g < 0) g = 0;
-    return (usePound ? "#" : "") + (g | (b << 8) | (r << 16)).toString(16);
-}
 function newColor(){
-    currColor=palette[Math.floor(Math.random() * (palette.length-1))]
-    currColorLight=LightenDarkenColor(currColor,20);
-    return currColor;
+    tabColors.push(palette[Math.floor(Math.random() * (palette.length-1))]);
+    return tabColors[tabColors.length-1];
 }
 $(".newTab").css({"background-color": newColor(),"opacity": "1"});
 
@@ -90,9 +72,8 @@ $('.newTab').click(function () {
         '</div> ' +
         '</div>';
     $('.newTab').before(newTab);
-    $('.tabs').find('.tab'+tabNO).css("height",cssVar.getPropertyValue('--nav_height')+"px");
+    $('.tabs').find('.tab'+tabNO).css("height",cssVar.getPropertyValue('--nav_height'));
     if(tabNO%2!=0)$('.tabs').find('.tab'+tabNO).css("background-color","#3C3C3C");
-    $('.tabs').find('.tab'+tabNO+' .tab').css("background-color",currColor);
     $(".newTab").css({"background-color": newColor()});
     tabNO++;
 });
