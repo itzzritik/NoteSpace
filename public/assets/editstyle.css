@@ -179,14 +179,14 @@ html {
     height: calc(100vh - var(--nav_height));
     margin-top: var(--nav_height); 
     margin-left: calc(200px + var(--nav_height));
-    padding: 2%;
+    padding: 1%;
     box-sizing: border-box;
     border-color: transparent;
     background-color: #1E1E1E;
     resize: none;
     outline: none;
     color: #fff;
-    font-size: 16px;
+    font-size: 14px;
 }
 
 .logo {
