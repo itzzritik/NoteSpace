@@ -1,11 +1,15 @@
 const token = (window.location.pathname).substring(1,(window.location.pathname).length),
-    palette = ["#EF5350","#EC407A","#AB47BC","#7E57C2","#5C6BC0","#42A5F5","#29B6F6","#26C6DA","#26A69A","#66BB6A","#9CCC65","#D4E157","#FFEE58","#FFCA28","#FFA726","#FF7043","#8D6E63"];
+    palette = ["#1abc9c","#2ecc71","#3498db","#9b59b6","#16a085","#27ae60","#2980b9","#8e44ad","#007ACC","#e74c3c","#7E57C2","#7f8c8d","#ef5350","#EC407A","#FF7043"];
 var current;
 
-function newColor(){return palette[Math.floor(Math.random() * palette.length-1)];}
+function newColor(){
+    var a=Math.floor(Math.random() * (palette.length-1));
+    console.log(a);
+    return palette[a];
+}
 
-$(".newTab").css("background-color",current=newColor());
-
+$(".newTab").css({"background-color": current=newColor(),"opacity": "1"});
+console.log(current);
 require.config({ paths: { 'vs': 'monaco-editor/min/vs' }});
 window.editor = "";
 require(['vs/editor/editor.main'], function() {
