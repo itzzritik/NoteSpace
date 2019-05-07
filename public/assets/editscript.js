@@ -1,6 +1,7 @@
 const token = (window.location.pathname).substring(1,(window.location.pathname).length);
-
 require.config({ paths: { 'vs': 'monaco-editor/min/vs' }});
+
+window.editor = null
 require(['vs/editor/editor.main'], function() {
     window.editor = monaco.editor.create(document.getElementsByClassName('edit')[0], {
         value: "",

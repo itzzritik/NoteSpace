@@ -83,9 +83,41 @@ html {
     user-select: none;
 }
 
+.sidebar .tabs .tabPane{
+    width: 100%;
+    height: var(--nav_height);
+    float: top;
+}
+.tab{
+    position: absolute;
+    right: 0;
+    text-align: center;
+    width: var(--nav_height);
+    height: var(--nav_height);
+    background-color: #007ACC;
+    cursor: pointer;
+    transition: transform 0.26s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+.tab:active{
+    border-radius: calc(var(--nav_height) / 2);
+    transform: scale(0.8);
+}
+.tab p{
+    margin-top:0px; 
+    width: var(--nav_height);
+    height: var(--nav_height);
+    color: var(--sidebar_white_color);
+    text-align: center;
+    font-size: 18px;
+    display: inline-block;
+    line-height: var(--nav_height);
+    user-select: none;
+}
+
 .sidebar .tabs .newTabPane{
     width: 100%;
     height: var(--nav_height);
+    float: top;
 }
 .newTab{
     position: absolute;
