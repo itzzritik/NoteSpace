@@ -89,20 +89,25 @@ html {
     float: top;
     cursor: pointer;
     -webkit-tap-highlight-color: transparent;
-    transition: height 0.26s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    transition: height 0.26s cubic-bezier(0.175, 0.885, 0.32, 1.275), background-color 0.2s ease-in;
 }
 .title{
     position: absolute;
     left: 0;
     width: calc(100% - var(--nav_height));
     height: var(--nav_height);
+    line-height: var(--nav_height);
+    text-align: center;
+}
+.title input{
+    font-family: 'Raleway', Tahoma, Geneva, Verdana, sans-serif;
     text-align: center;
     font-size: 13px;
     color: var(--sidebar_white_color);
-    line-height: var(--nav_height);
+    background-color: transparent;
+    border-color: transparent;
+    outline: none;
     user-select: none;
-}
-.title p{
     margin:0;
 }
 .tab{
@@ -113,7 +118,7 @@ html {
     height: var(--nav_height);
     cursor: pointer;
     -webkit-tap-highlight-color: transparent;
-    transition: transform 0.26s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    transition: transform 0.26s cubic-bezier(0.175, 0.885, 0.32, 1.275), background-color 0.25s ease-in;
     animation: enterTab 0.4s linear;
 }
 .tab:active{

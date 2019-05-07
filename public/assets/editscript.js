@@ -68,7 +68,8 @@ $('.newTab').click(function () {
     var newTab =
         '<div class="tabPane" id="'+(tabColors.length-1)+'">' +
         '<div class="title">'+
-        '<p>'+tabTitle+'</p></div> '+
+        '<input value="'+tabTitle+'">'+
+        '</div> '+
         '<div class="tab">' +
         '<p>'+tabTitle.charAt(0).toUpperCase()+'</p>' +
         '</div> ' +
