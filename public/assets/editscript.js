@@ -88,5 +88,4 @@ $('.tabs').on('click', '.tabPane', function() {
     card.find('.tab').css("background-color",tabColors[card.attr('id')]);
     card.css("background-color","#3C3C3C");
     currTab = card.attr('id');
-    console.log(card.attr('id'));
 });
