@@ -1,7 +1,6 @@
 var token = (window.location.pathname).substring(1,(window.location.pathname).length),
 	tabColors = [],
     cssVar = window.getComputedStyle(document.body),
-    tabNO=0,
     currTab=null;
 
 function newColor(){
@@ -67,7 +66,7 @@ $('.menu-link').click(function () {
 $('.newTab').click(function () {
     var tabTitle = title[Math.floor(Math.random() * (title.length-1))]
     var newTab =
-        '<div class="tabPane" id="'+tabNO+'">' +
+        '<div class="tabPane" id="'+(tabColors.length-1)+'">' +
         '<div class="title">'+
         '<p>'+tabTitle+'</p></div> '+
         '<div class="tab">' +
@@ -75,14 +74,17 @@ $('.newTab').click(function () {
         '</div> ' +
         '</div>';
     $('.newTab').before(newTab);
-    $('.tabs').find('#'+tabNO).css("height",cssVar.getPropertyValue('--nav_height'));
+    $('.tabs').find('#'+(tabColors.length-1)).css("height",cssVar.getPropertyValue('--nav_height'));
     $(".newTab").css({"background-color": newColor()});
-    tabNO++;
+    if((tabColors.length-1)==1) $('.tabs').find('#'+(tabColors.length-2)).click();
 });
 
 $('.tabs').on('click', '.tabPane', function() {
     var card = $(this);
-    if(currTab!=null) card.parent().find('#'+card.attr('id')).css("background-color","#000");
+    if(currTab!=null) {
+        card.parent().find('#'+currTab).css("background-color","transparent");
+        card.parent().find('#'+currTab).find('.tab').css("background-color","transparent");
+    }
     card.find('.tab').css("background-color",tabColors[card.attr('id')]);
     card.css("background-color","#3C3C3C");
     currTab = card.attr('id');
