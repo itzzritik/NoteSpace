@@ -81,7 +81,6 @@ app.get("/git", function(req, res) {
 app.post("/save", function(req, res) {
     var path = req.body.path;
     var value = req.body.value;
-    console.log(path + " - " + value);
     if (value != null && value.length == 0) {
         Token.remove({ token: path }, function(err) {
             if (!err) {
@@ -133,6 +132,17 @@ app.post("/save", function(req, res) {
         });
 });
 
+app.post("/getData", function(req, res) {
+    var token= req.body.token;
+    console.log("\n" + ++call + ") User Data Requested  ( Token : "+req.body.token+" )");
+    Token.find({ token: token }, function(e, token) {
+        if (e) { console.log(">  Error occured :\n>  " + e); }
+        else {
+            res.json(token);
+            console.log("  > Fetched and sent successfully");
+        }
+    });
+});
 app.get("/*", function(req, res) {
     var path = (req.originalUrl).substring(1, (req.originalUrl).length);
     if (path.length == 0) {
@@ -158,17 +168,7 @@ app.get("/*", function(req, res) {
         res.redirect(id);
     }
     else
-        Token.find({ token: path }, function(e, token) {
-            if (e) { console.log(">  Error occured :\n>  " + e); }
-            else {
-                if (token.length) {
-                    res.render("edit", {value: token[0].value});
-                }
-                else {
-                    res.render("edit", {value: ""});
-                }
-            }
-        });
+        res.render("edit");
 });
 
 app.listen(process.env.PORT || 8080, function() {

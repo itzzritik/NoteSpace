@@ -27,7 +27,7 @@ html {
     position: absolute;
     width: 100%;
     height: 100%;
-    background: #2d2d2d;
+    background: #333;
     border-radius: calc(var(--nav_height) / 2);
     transform: scaleX(0);
     opacity: 0;
@@ -94,7 +94,7 @@ html {
     cursor: pointer;
     transition: transform 0.26s cubic-bezier(0.175, 0.885, 0.32, 1.275);
 }
-.newTab:hover{
+.newTab:active{
     border-radius: calc(var(--nav_height) / 2);
     transform: scale(0.8);
 }
@@ -120,7 +120,7 @@ html {
     background-color: var(--sidebar_color);
     transition: transform 0.26s cubic-bezier(0.175, 0.885, 0.32, 1.275);
 }
-.menu:hover{
+.menu:active{
     border-radius: calc(var(--nav_height) / 2);
     transform: scale(0.8);
 }
@@ -179,13 +179,6 @@ html {
     height: calc(100vh - var(--nav_height));
     margin-top: var(--nav_height); 
     margin-left: calc(200px + var(--nav_height));
-    box-sizing: border-box;
-    border-color: transparent;
-    background-color: #1E1E1E;
-    resize: none;
-    outline: none;
-    color: #fff;
-    font-size: 14px;
 }
 
 .logo {

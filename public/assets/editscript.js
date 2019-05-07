@@ -1,3 +1,15 @@
+const token = (window.location.pathname).substring(1,(window.location.pathname).length);
+
+require.config({ paths: { 'vs': 'monaco-editor/min/vs' }});
+require(['vs/editor/editor.main'], function() {
+    window.editor = monaco.editor.create(document.getElementsByClassName('edit')[0], {
+        value: "",
+        language: 'javascript',
+        minimap: { enabled: true },
+        theme: "vs-dark"
+    });
+}); 
+
 window.onresize = function (){
     window.editor.layout();
 };
@@ -21,7 +33,7 @@ function doneTyping() {
         $(".ripple").toggleClass("animate");
     }
     http.send(JSON.stringify({
-        path: (window.location.pathname).substring(1,(window.location.pathname).length),
+        path: token,
         value: "" + window.editor.getValue()
     }))
 }
@@ -33,19 +45,11 @@ $('.menu-link').click(function (e) {
 });
 
 const http = new XMLHttpRequest();
-http.open('POST', '/table');
+http.open('POST', '/getData');
 http.setRequestHeader('Content-type', 'application/json');
 http.onload = function() {
-	data = JSON.parse(http.responseText);
+    data = JSON.parse(http.responseText);
+    console.log(data[0]);
+    window.editor.setValue(data[0].value);
 };
-http.send();
-
-require.config({ paths: { 'vs': 'monaco-editor/min/vs' }});
-require(['vs/editor/editor.main'], function() {
-    window.editor = monaco.editor.create(document.getElementsByClassName('edit')[0], {
-        value: "<%= value %>",
-        language: 'javascript',
-        minimap: { enabled: false },
-        scrollBeyondLastLine: false
-    });
-});
+http.send(JSON.stringify({token: token}));
