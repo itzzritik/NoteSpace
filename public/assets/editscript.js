@@ -14,7 +14,7 @@ window.editor = "";
 require(['vs/editor/editor.main'], function() {
     window.editor = monaco.editor.create(document.getElementsByClassName('edit')[0], {
         value: "",
-        language: 'javascript',
+        language: 'plaintext',
         minimap: { enabled: true },
         theme: "vs-dark"
     });
