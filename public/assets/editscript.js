@@ -48,8 +48,7 @@ const http = new XMLHttpRequest();
 http.open('POST', '/getData');
 http.setRequestHeader('Content-type', 'application/json');
 http.onload = function() {
-    data = JSON.parse(http.responseText);
-    console.log(data[0]);
+    var data = JSON.parse(http.responseText);
     window.editor.setValue(data[0].value);
 };
 http.send(JSON.stringify({token: token}));
