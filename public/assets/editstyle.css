@@ -1,6 +1,6 @@
 @import url("https://fonts.googleapis.com/css?family=Pacifico|Raleway:500");
 :root {
-    --nav_height: 45px;
+    --nav_height: 40px;
     --nav_color: #3c3c3c;
     --sidebar_color: #2d2d2d;
     --sidebar_white_color: #eee;
@@ -77,8 +77,10 @@ html {
     width: calc(100% - var(--nav_height));
     height: var(--nav_height);
     text-align: center;
+    font-size: 18px;
     color: var(--sidebar_white_color);
     line-height: var(--nav_height);
+    user-select: none;
 }
 
 .sidebar .tabs .newTabPane{
@@ -90,7 +92,7 @@ html {
     right: 0;
     width: var(--nav_height);
     height: var(--nav_height);
-    background-color: var(--nav_color);
+    background-color: #007ACC;
     cursor: pointer;
     transition: transform 0.26s cubic-bezier(0.175, 0.885, 0.32, 1.275);
 }
