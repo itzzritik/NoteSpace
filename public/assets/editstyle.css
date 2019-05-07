@@ -96,7 +96,8 @@ html {
     height: var(--nav_height);
     background-color: #007ACC;
     cursor: pointer;
-    transition: transform 0.26s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    opacity: 0;
+    transition: transform 0.26s cubic-bezier(0.175, 0.885, 0.32, 1.275), opacity 0.3s ease-in;
 }
 .tab:active{
     border-radius: calc(var(--nav_height) / 2);

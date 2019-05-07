@@ -1,5 +1,5 @@
 const token = (window.location.pathname).substring(1,(window.location.pathname).length),
-    palette = ["#1abc9c","#2ecc71","#3498db","#9b59b6","#16a085","#27ae60","#2980b9","#8e44ad","#007ACC","#e74c3c","#7E57C2","#7f8c8d","#ef5350","#EC407A","#FF7043"];
+    palette = ["#f44336","#E91E63","#9C27B0","#673AB7","#3F51B5","#2196F3","#03A9F4","#00BCD4","#009688","#4CAF50","#8BC34A","#FF9800","#FF5722","#795548"];
 var current;
 
 function newColor(){
