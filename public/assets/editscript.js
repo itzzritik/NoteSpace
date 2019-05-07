@@ -90,3 +90,12 @@ $('.tabs').on('click', '.tabPane', function() {
     card.css("background-color","#3C3C3C");
     currTab = card.attr('id');
 });
+
+$('.tabs').on('keypress', '.title input', function() {
+    var card = $(this).parent().parent(),
+        keycode = (event.keyCode ? event.keyCode : event.which);
+	if(keycode == '13'){
+        card.find('.tab p').text($(this).val().charAt(0).toUpperCase());
+        console.log($(this).val().charAt(0).toUpperCase());
+	}
+});
