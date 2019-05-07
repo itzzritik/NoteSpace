@@ -1,4 +1,8 @@
-var typingTimer,doneTypingInterval = 500;
+window.onresize = function (){
+    window.editor.layout();
+};
+
+var typingTimer,doneTypingInterval = 1000;
 $('.edit').on('keyup', function () {
     clearTimeout(typingTimer);
     typingTimer = setTimeout(doneTyping, doneTypingInterval);
@@ -28,11 +32,20 @@ $('.menu-link').click(function (e) {
     $('.editor').toggleClass('open');
 });
 
-'use strict';
-require.config({baseUrl: '/monaco-editor/min/'});
+const http = new XMLHttpRequest();
+http.open('POST', '/table');
+http.setRequestHeader('Content-type', 'application/json');
+http.onload = function() {
+	data = JSON.parse(http.responseText);
+};
+http.send();
+
+require.config({ paths: { 'vs': 'monaco-editor/min/vs' }});
 require(['vs/editor/editor.main'], function() {
-    window.editor = monaco.editor.create(document.getElementById('container'), {
+    window.editor = monaco.editor.create(document.getElementsByClassName('edit')[0], {
         value: "<%= value %>",
-        language: 'javascript'
+        language: 'javascript',
+        minimap: { enabled: false },
+        scrollBeyondLastLine: false
     });
 });
