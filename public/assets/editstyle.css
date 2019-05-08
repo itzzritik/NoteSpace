@@ -4,6 +4,7 @@
     --nav_color: #3c3c3c;
     --sidebar_color: #2d2d2d;
     --sidebar_white_color: #eee;
+    --new_tab_color: #2d2d2d;
 }
 body,
 html {
@@ -160,7 +161,18 @@ html {
 .sidebar .newTabPane{
     width: 100%;
     height: var(--nav_height);
+    margin-top: 2px; 
     flex-shrink: 0;
+}
+.sidebar .newTabPane .ripple {
+    display: block;
+    position: absolute;
+    width: 200%;
+    height: var(--nav_height);
+    background: #333;
+    border-radius: calc(var(--nav_height) / 2);
+    transform: scaleX(0);
+    opacity: 0;
 }
 .newTab{
     position: absolute;
@@ -168,12 +180,16 @@ html {
     width: var(--nav_height);
     height: var(--nav_height);
     cursor: pointer;
-    opacity: 0;
-    margin-top: 2px;
+    opacity: 1;
+    background-color: var(--nav_color);
     -webkit-tap-highlight-color: transparent;
     border-radius: calc(var(--nav_height) / 2);
     transform: scale(0.8);
-    transition: transform 0.26s cubic-bezier(0.175, 0.885, 0.32, 1.275), opacity 0.3s ease-in;
+    transition: transform 0.26s cubic-bezier(0.175, 0.885, 0.32, 1.275), background-color 0.1s ease-in-out;
+}
+.newTab:hover{
+    background-color: var(--new_tab_color);
+    transform: scale(0.82) rotate(-360deg);
 }
 .newTab:active{
     transform: scale(0.75) rotate(360deg);
