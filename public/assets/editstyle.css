@@ -109,9 +109,20 @@ body, html {
     border-radius: 0;
 }
 .sidebar .tabs .tabPane .ripple.animate {
-    animation: ripple 0.4s infinite linear;
+    animation: ripple2 0.4s linear;
     transform-origin: 0% 50%;
 }
+@keyframes ripple2 {
+    0%{
+        opacity: 1;
+        transform: scaleX(0);
+    }
+    100% {
+        opacity: 0;
+        transform: scaleX(3);
+    }
+}
+
 .title{
     float: left;
     width: calc(100% - var(--nav_height));

@@ -49,6 +49,7 @@ app.use(function(req, res, next) {
 
 var Token = mongoose.model("token", new mongoose.Schema({
     token: String,
+    title: Array,
     notes: Array
 }));
 
@@ -79,8 +80,10 @@ app.get("/git", function(req, res) {
 });
 
 app.post("/save", function(req, res) {
-    var token = req.body.token;
-    var notes = req.body.notes;
+    var token = req.body.token,
+        notes = req.body.notes,
+        title = req.body.title;
+        
     Token.find({ token: token }, function(e, token) {
         if (e) { console.log(">  Error occured :\n>  " + e); }
         else {

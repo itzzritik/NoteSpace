@@ -73,25 +73,26 @@ $('.newTab').click(function () {
     var tabTitle = title[Math.floor(Math.random() * (title.length-1))]
     var newTab =
         '<div class="tabPane" id="'+(tabColors.length-1)+'">' +
-        '<span class="ripple"></span>'+
+        
         '<div class="title">'+
         '<input value="'+tabTitle+'">'+
         '</div> '+
         '<div class="tab">' +
         '<p>'+tabTitle.charAt(0).toUpperCase()+'</p>' +
         '</div> ' +
+        '<span class="ripple"></span>'+
         '</div>';
     $('.tabs').append(newTab);
+
     $("body").get(0).style.setProperty("--new_tab_color", newColor());
     var lastTab=$('.tabs').children().last();
     lastTab.css("height",cssVar.getPropertyValue('--nav_height'));
+    if((tabColors.length-1)==1) lastTab.click();
 
     // Tab Ripple Effect
-    // var ripple=lastTab.find('.ripple');
-    // lastTab.find('.ripple').css("background-color",tabColors[tabColors.length-2]);
+    var ripple=lastTab.find('.ripple');
+    lastTab.find('.ripple').css("background-color",tabColors[tabColors.length-2]);
     // lastTab.find('.ripple').toggleClass("animate");setTimeout(function(){lastTab.find('.ripple').toggleClass("animate")}, 400);
-
-    if((tabColors.length-1)==1) lastTab.click();
 });
 
 $('.tabs').on('click', '.tabPane', function(e) {
