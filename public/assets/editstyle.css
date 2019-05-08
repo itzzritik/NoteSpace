@@ -109,7 +109,7 @@ body, html {
     border-radius: 0;
 }
 .sidebar .tabs .tabPane .ripple.animate {
-    animation: ripple2 0.4s linear;
+    animation: ripple2 0.4s infinite linear;
     transform-origin: 0% 50%;
 }
 @keyframes ripple2 {

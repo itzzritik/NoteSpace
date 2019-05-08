@@ -85,7 +85,7 @@ app.post("/save", function(req, res) {
     console.log("\n" + ++call + ") Saving Notebook ( Token : "+notebook.token+" )");
     load = loader(" ".repeat(34));
     NoteSpace.find({ token: notebook.token }, function(e, data) {
-        if (e) { clearInterval(load);console.log("\r>  Error occured :\n>  " + e); }
+        if (e) { clearInterval(load);console.log("\r>  Error occured :\n>  " + e);res.send("0"); }
         else {
             if (data.length) {
                 NoteSpace.findOneAndUpdate({ token: notebook.token }, {

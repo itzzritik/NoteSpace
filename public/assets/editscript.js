@@ -34,11 +34,15 @@ window.onload = function(){
     http.open('POST', '/getData');
     http.setRequestHeader('Content-type', 'application/json');
     http.onload = function() {
-        var data = JSON.parse(http.responseText);
-        tabColors = data.colors;
-        tabTitles = data.titles;
-        updateUI();
-        //window.editor.setValue(data[0].value);
+        if(http.responseText!=""){
+            var data = JSON.parse(http.responseText);
+            tabColors = data.colors;
+            tabTitles = data.titles;
+            updateUI();
+
+            //window.editor.setValue(data[0].value);
+        }
+        else $('.newTab').click();
     };
     http.send(JSON.stringify({token: token}));
 };
@@ -94,7 +98,8 @@ $('.tabs').on('keypress blur', '.title input', function(e) {
         }
         else $(this).val(tabTitles[currTab]);
         card.find('.ripple').toggleClass("animate");
-        setTimeout(function(){card.find('.ripple').toggleClass("animate")}, 400);
+        updateServer(function(){card.find('.ripple').toggleClass("animate");});
+        //setTimeout(function(){card.find('.ripple').toggleClass("animate")}, 400);
     }
 });
 
@@ -117,15 +122,22 @@ function pushNewTab(i, title){
 
     var lastTab=$('.tabs').children().last();
     lastTab.css("height",cssVar.getPropertyValue('--nav_height'));
-    lastTab.find('.ripple').css("background-color",tabColors[tabColors.length-2]);
-    // lastTab.find('.ripple').toggleClass("animate");setTimeout(function(){lastTab.find('.ripple').toggleClass("animate")}, 400);
+    lastTab=lastTab.find('.ripple');
+    lastTab.css("background-color",tabColors[i]);
+    //lastTab.toggleClass("animate");setTimeout(function(){lastTab.toggleClass("animate")}, 400);
 }
-
+function updateUI(){
+    for(var i=0;i<tabTitles.length;i++)
+        pushNewTab(i, tabTitles[i]);
+    $('.tabs').children().first().click();
+}
 function updateServer(postfunction){
     const http = new XMLHttpRequest();
     http.open('POST', '/save');
     http.setRequestHeader('Content-type', 'application/json');
-    http.onload = function () {postfunction();}
+    http.onload = function () {
+        postfunction();
+    }
     http.send(JSON.stringify({
         notebook:{
             token: token,
@@ -133,17 +145,4 @@ function updateServer(postfunction){
             colors: tabColors
         }
     }));
-
-    console.log(JSON.stringify({
-        notebook:{
-            token: token,
-            titles: tabTitles,
-            colors: tabColors
-        }
-    }));
-}
-function updateUI(){
-    for(var i=0;i<tabTitles.length;i++)
-        pushNewTab(i, tabTitles[i]);
-    $('.tabs').children().first().click();
 }
