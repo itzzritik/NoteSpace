@@ -134,7 +134,7 @@ app.post("/getData", function(req, res) {
     NoteSpace.find({ token: token }, function(e, token) {
         if (e) { console.log(">  Error occured :\n>  " + e); }
         else {
-            res.json(token);
+            res.json(token[0]);
             console.log("  > Fetched and sent successfully");
         }
     });

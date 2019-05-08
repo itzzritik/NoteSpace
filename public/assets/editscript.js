@@ -37,9 +37,7 @@ window.onload = function(){
         var data = JSON.parse(http.responseText);
         tabColors = data.colors;
         tabTitles = data.titles;
-        console.log(data);
-        console.log(tabColors);
-        console.log(tabTitles);
+        updateUI();
         //window.editor.setValue(data[0].value);
     };
     http.send(JSON.stringify({token: token}));
@@ -64,27 +62,11 @@ $('.menu-link').click(function () {
 });
 
 $('.newTab').click(function () {
-    var tabTitle = title[Math.floor(Math.random() * (title.length-1))],
-        newTab =
-        '<div class="tabPane" id="'+(tabColors.length-1)+'">' +
-        '<span class="ripple"></span>'+
-        '<div class="title">'+
-        '<input value="'+tabTitle+'">'+
-        '</div> '+
-        '<div class="tab">' +
-        '<p>'+tabTitle.charAt(0).toUpperCase()+'</p>' +
-        '</div> ' +
-        '</div>';
-    $('.tabs').append(newTab);
+    var tabTitle = title[Math.floor(Math.random() * (title.length-1))];
+    pushNewTab(tabTitles.length, tabTitle);
     tabTitles.push(tabTitle);
     $("body").get(0).style.setProperty("--new_tab_color", newColor());
-    var lastTab=$('.tabs').children().last();
-    lastTab.css("height",cssVar.getPropertyValue('--nav_height'));
-    if((tabColors.length-1)==1) lastTab.click();
-
-    var ripple=lastTab.find('.ripple');
-    lastTab.find('.ripple').css("background-color",tabColors[tabColors.length-2]);
-    // lastTab.find('.ripple').toggleClass("animate");setTimeout(function(){lastTab.find('.ripple').toggleClass("animate")}, 400);
+    if(tabTitles.length==1) $('.tabs').children().last().click();
 });
 
 $('.tabs').on('click', '.tabPane', function(e) {
@@ -120,6 +102,24 @@ $('.edit').focusin(function(){
     if(menuOpen)$('.menu-link').click();
 });
 
+function pushNewTab(i, title){
+    var newTab =
+        '<div class="tabPane" id="'+i+'">' +
+        '<span class="ripple"></span>'+
+        '<div class="title">'+
+        '<input value="'+title+'">'+
+        '</div> '+
+        '<div class="tab">' +
+        '<p>'+title.charAt(0).toUpperCase()+'</p>' +
+        '</div> ' +
+        '</div>';
+    $('.tabs').append(newTab);
+
+    var lastTab=$('.tabs').children().last();
+    lastTab.css("height",cssVar.getPropertyValue('--nav_height'));
+    lastTab.find('.ripple').css("background-color",tabColors[tabColors.length-2]);
+    // lastTab.find('.ripple').toggleClass("animate");setTimeout(function(){lastTab.find('.ripple').toggleClass("animate")}, 400);
+}
 
 function updateServer(postfunction){
     const http = new XMLHttpRequest();
@@ -141,4 +141,9 @@ function updateServer(postfunction){
             colors: tabColors
         }
     }));
+}
+function updateUI(){
+    for(var i=0;i<tabTitles.length;i++)
+        pushNewTab(i, tabTitles[i]);
+    $('.tabs').children().first().click();
 }
