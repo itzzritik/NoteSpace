@@ -6,8 +6,10 @@ var token = (window.location.pathname).substring(1,(window.location.pathname).le
     titleVal = "";
 
 function newColor(){
-    tabColors.push(palette[Math.floor(Math.random() * (palette.length-1))]);
-    return tabColors[tabColors.length-1];
+    var color=palette[Math.floor(Math.random() * (palette.length-1))];
+    if(color==tabColors[tabColors.length-1]){console.log('duplicate');color=newColor();}
+    tabColors.push(color);
+    return color;
 }
 $(".newTab").css({"background-color": newColor(),"opacity": "1"});
 
@@ -16,7 +18,7 @@ window.editor = "";
 require(['vs/editor/editor.main'], function() {
     window.editor = monaco.editor.create(document.getElementsByClassName('edit')[0], {
         value: "",
-        language: 'java',
+        language: 'plaintext',
         minimap: { enabled: true },
         theme: "vs-dark"
     });
@@ -51,7 +53,6 @@ function doneTyping() {
     http.open('POST', '/save')
     http.setRequestHeader('Content-type', 'application/json')
     http.onload = function () {
-        console.log('done');
         $(".nav .ripple").toggleClass("animate");
     }
     http.send(JSON.stringify({
@@ -100,7 +101,6 @@ $('.tabs').on('click', '.tabPane', function(e) {
 });
 
 $('.tabs').on('keypress blur', '.title input', function(e) {
-    console.log(e.type);
     var card = $(this).parent().parent(),
         keycode = (event.keyCode ? event.keyCode : event.which);
     if((e.type == "focusout" && titleVal!=$(this).val()) || (e.type == "keypress" && keycode == '13')){
