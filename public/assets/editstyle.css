@@ -6,8 +6,7 @@
     --sidebar_white_color: #eee;
     --new_tab_color: #2d2d2d;
 }
-body,
-html {
+body, html {
     overflow: hidden;
     width: 100vw;
     height: 100vh;
@@ -37,7 +36,7 @@ html {
     animation: ripple 0.4s infinite linear;
 }
 @keyframes ripple {
-    30%{
+    0%{
         opacity: 1;
         transform: scaleX(0.3);
     }
@@ -105,9 +104,13 @@ html {
     transition: height 0.26s cubic-bezier(0.175, 0.885, 0.32, 1.275), background-color 0.15s ease-in;
 }
 .sidebar .tabs .tabPane .ripple{
-    position: absolute;
-    left: 0;
+    float: left;
     width: calc(100% - var(--nav_height));
+    border-radius: 0;
+}
+.sidebar .tabs .tabPane .ripple.animate {
+    animation: ripple 0.4s infinite linear;
+    transform-origin: 0% 50%;
 }
 .title{
     float: left;

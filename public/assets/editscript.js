@@ -85,6 +85,12 @@ $('.newTab').click(function () {
     $("body").get(0).style.setProperty("--new_tab_color", newColor());
     var lastTab=$('.tabs').children().last();
     lastTab.css("height",cssVar.getPropertyValue('--nav_height'));
+
+    // Tab Ripple Effect
+    // var ripple=lastTab.find('.ripple');
+    // lastTab.find('.ripple').css("background-color",tabColors[tabColors.length-2]);
+    // lastTab.find('.ripple').toggleClass("animate");setTimeout(function(){lastTab.find('.ripple').toggleClass("animate")}, 400);
+
     if((tabColors.length-1)==1) lastTab.click();
 });
 
