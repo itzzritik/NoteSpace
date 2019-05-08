@@ -81,13 +81,13 @@ app.get("/git", function(req, res) {
 app.post("/save", function(req, res) {
     var token = req.body.token;
     var notes = req.body.notes;
-    Token.find({ token: path }, function(e, token) {
+    Token.find({ token: token }, function(e, token) {
         if (e) { console.log(">  Error occured :\n>  " + e); }
         else {
             if (token.length) {
-                Token.findOneAndUpdate({ token: path }, {
+                Token.findOneAndUpdate({ token: token }, {
                         $set: {
-                            token: path,
+                            token: token,
                             value: value
                         }
                     },
@@ -103,7 +103,7 @@ app.post("/save", function(req, res) {
             }
             else {
                 Token.create({
-                    token: path,
+                    token: token,
                     value: value
                 }, function(e, user) {
                     if (e) {
@@ -131,8 +131,8 @@ app.post("/getData", function(req, res) {
     });
 });
 app.get("/*", function(req, res) {
-    var path = (req.originalUrl).substring(1, (req.originalUrl).length);
-    if (path.length == 0) {
+    var token = (req.originalUrl).substring(1, (req.originalUrl).length);
+    if (token.length == 0) {
         var id = "";
         var unique = (id) => {
             try {

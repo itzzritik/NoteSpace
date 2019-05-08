@@ -50,6 +50,7 @@ $('.edit').on('keydown', function () {
 
 function doneTyping() {
     $(".nav .ripple").toggleClass("animate");
+    console.log("Done");
     const http = new XMLHttpRequest()
     http.open('POST', '/save')
     http.setRequestHeader('Content-type', 'application/json')
@@ -57,8 +58,8 @@ function doneTyping() {
         $(".nav .ripple").toggleClass("animate");
     }
     http.send(JSON.stringify({
-        path: token,
-        token: "" + window.editor.getValue()
+        token: token,
+        notes: "" + window.editor.getValue()
     }))
 }
 
