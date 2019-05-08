@@ -70,7 +70,7 @@ $('.newTab').click(function () {
         '<div class="tabPane" id="'+(tabColors.length-1)+'">' +
         '<span class="ripple"></span>'+
         '<div class="title">'+
-        '<input value="'+tabTitle+'" disabled>'+
+        '<input value="'+tabTitle+'">'+
         '</div> '+
         '<div class="tab">' +
         '<p>'+tabTitle.charAt(0).toUpperCase()+'</p>' +
@@ -87,24 +87,23 @@ $('.tabs').on('click', '.tabPane', function(e) {
     if(currTab!=null && currTab!=card.attr('id')) {
         card.parent().find('#'+currTab).css("background-color","transparent");
         card.parent().find('#'+currTab).find('.tab').css("background-color","transparent");
-        card.parent().find('#'+currTab).find('.title input').attr("disabled", true);
         card.parent().find('#'+currTab).find('.title input').css("cursor","pointer");
     }
     card.find('.tab').css("background-color",tabColors[card.attr('id')]);
     card.css("background-color","#3C3C3C");
     currTab = card.attr('id');
 
-    card.find('.title input').attr("disabled", false);
     card.find('.title input').css("cursor","text");
-    card.find('.title input').focus();
+    titleVal=card.find('.title input').val();
 });
 
 $('.tabs').on('keypress blur', '.title input', function(e) {
     console.log(e.type);
     var card = $(this).parent().parent(),
         keycode = (event.keyCode ? event.keyCode : event.which);
-    if((e.type == "focusout") || (e.type == "keypress" && keycode == '13')){
-        card.find('.tab p').text($(this).val().charAt(0).toUpperCase());
+    if((e.type == "focusout" && titleVal!=$(this).val()) || (e.type == "keypress" && keycode == '13')){
+        titleVal=$(this).val();
+        card.find('.tab p').text(titleVal.charAt(0).toUpperCase());
         card.find('.ripple').toggleClass("animate");
         setTimeout(function(){card.find('.ripple').toggleClass("animate")}, 400);
     }
