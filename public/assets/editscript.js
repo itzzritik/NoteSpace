@@ -1,6 +1,7 @@
 var token = (window.location.pathname).substring(1,(window.location.pathname).length),
 	tabColors = [],
     cssVar = window.getComputedStyle(document.body),
+    menuOpen = false;
     currTab = null,
     titleVal = "";
 
@@ -15,7 +16,7 @@ window.editor = "";
 require(['vs/editor/editor.main'], function() {
     window.editor = monaco.editor.create(document.getElementsByClassName('edit')[0], {
         value: "",
-        language: 'plaintext',
+        language: 'java',
         minimap: { enabled: true },
         theme: "vs-dark"
     });
@@ -62,6 +63,7 @@ function doneTyping() {
 $('.menu-link').click(function () {
     $('.menu').toggleClass('open');
     $('.editor').toggleClass('open');
+    menuOpen = !menuOpen;
 });
 
 $('.newTab').click(function () {
@@ -107,4 +109,8 @@ $('.tabs').on('keypress blur', '.title input', function(e) {
         card.find('.ripple').toggleClass("animate");
         setTimeout(function(){card.find('.ripple').toggleClass("animate")}, 400);
     }
+});
+
+$('.edit').focusin(function(){
+    if(menuOpen)$('.menu-link').click();
 });
