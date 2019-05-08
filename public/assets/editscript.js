@@ -72,7 +72,7 @@ $('.newTab').click(function () {
     var tabTitle = title[Math.floor(Math.random() * (title.length-1))]
     var newTab =
         '<div class="tabPane" id="'+(tabColors.length-1)+'">' +
-        '<span class="ripple"></span>'+
+        //'<span class="ripple"></span>'+
         '<div class="title">'+
         '<input value="'+tabTitle+'">'+
         '</div> '+
@@ -81,7 +81,6 @@ $('.newTab').click(function () {
         '</div> ' +
         '</div>';
     $('.tabs').append(newTab);
-    $('.tabs').css('height',);
     $('.tabs').find('#'+(tabColors.length-1)).css("height",cssVar.getPropertyValue('--nav_height'));
     $(".newTab").css("background-color", newColor());
     if((tabColors.length-1)==1) $('.tabs').find('#'+(tabColors.length-2)).click();

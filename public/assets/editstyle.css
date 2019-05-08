@@ -51,6 +51,7 @@ html {
     width: calc(100vw + 200px);
     right: 0;
     height: 100vh;
+    overflow: hidden;
     transition: margin-right 0.26s cubic-bezier(0.175, 0.885, 0.32, 1.275);
 }
 .editor.open{
@@ -58,14 +59,15 @@ html {
 }
 
 .sidebar {
-    display: flex;
-    flex-direction: column;
     position: absolute;
+    font-family: 'Raleway', Tahoma, Geneva, Verdana, sans-serif;
     top: 0;
     left: 0;
-    font-family: 'Raleway', Tahoma, Geneva, Verdana, sans-serif;
+    display: flex;
+    flex-direction: column;
     width: calc(200px + var(--nav_height));
-    height: 100%;
+    height: 100vh;
+    overflow: hidden;
     background-color: var(--sidebar_color);
 }
 .sidebar .navHead{
@@ -87,13 +89,16 @@ html {
 }
 
 .sidebar .tabs{
-    max-height: calc(100vh - calc(calc(var(--nav_height) *2 ) + 2px));
     overflow-y: auto;
+}
+.sidebar .tabs::-webkit-scrollbar {
+    width: 0px; 
+    background: transparent;
 }
 .sidebar .tabs .tabPane{
     width: 100%;
     height: 0px;
-    float: top;
+    overflow: hidden;
     cursor: pointer;
     -webkit-tap-highlight-color: transparent;
     transition: height 0.26s cubic-bezier(0.175, 0.885, 0.32, 1.275), background-color 0.15s ease-in;
@@ -104,8 +109,7 @@ html {
     width: calc(100% - var(--nav_height));
 }
 .title{
-    position: absolute;
-    left: 0;
+    float: left;
     width: calc(100% - var(--nav_height));
     height: var(--nav_height);
     text-align: center;
@@ -129,8 +133,7 @@ html {
 .title input::selection { background: rgba(200,200,200,0.3); }
 
 .tab{
-    position: absolute;
-    right: 0;
+    float: right;
     text-align: center;
     width: var(--nav_height);
     height: var(--nav_height);
@@ -157,7 +160,6 @@ html {
 .sidebar .newTabPane{
     width: 100%;
     height: var(--nav_height);
-    background: var(--sidebar_color);
     flex-shrink: 0;
 }
 .newTab{
