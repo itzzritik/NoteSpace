@@ -20,7 +20,7 @@ app.set("view engine", "ejs");
 app.use('/public', express.static('public'));
 app.use('/lib', express.static('node_modules'));
 
-const dbOptions = { useNewUrlParser: true, reconnectTries: Number.MAX_VALUE, poolSize: 10 };
+const dbOptions = { useNewUrlParser: true,useFindAndModify: false, reconnectTries: Number.MAX_VALUE, poolSize: 10 };
 var mongoConnect = function(callback) {
     mongoose.connect(require("./mongo"), dbOptions).then(
         () => { 
@@ -47,10 +47,11 @@ app.use(function(req, res, next) {
     next();
 });
 
-var Token = mongoose.model("token", new mongoose.Schema({
+var NoteSpace = mongoose.model("notespace", new mongoose.Schema({
     token: String,
-    title: Array,
-    notes: Array
+    titles: [{type: String}],
+    colors: [{type: String}],
+    notes: [{type: String}]
 }));
 
 app.get("/git", function(req, res) {
@@ -80,41 +81,46 @@ app.get("/git", function(req, res) {
 });
 
 app.post("/save", function(req, res) {
-    var token = req.body.token,
-        notes = req.body.notes,
-        title = req.body.title;
-        
-    Token.find({ token: token }, function(e, token) {
-        if (e) { console.log(">  Error occured :\n>  " + e); }
+    var notebook = req.body.notebook;
+    console.log("\n" + ++call + ") Saving Notebook ( Token : "+notebook.token+" )");
+    load = loader(" ".repeat(34));
+    NoteSpace.find({ token: notebook.token }, function(e, data) {
+        if (e) { clearInterval(load);console.log("\r>  Error occured :\n>  " + e); }
         else {
-            if (token.length) {
-                Token.findOneAndUpdate({ token: token }, {
+            if (data.length) {
+                NoteSpace.findOneAndUpdate({ token: notebook.token }, {
                         $set: {
-                            token: token,
-                            value: value
+                            token: notebook.token,
+                            titles: notebook.titles,
+                            colors: notebook.colors
                         }
                     },
                     function(err, user) {
+                        clearInterval(load);
                         if (err) {
-                            console.log(">  Error While Saving Changes" + err);
+                            console.log("\r>  Error While Saving Changes" + err);
                             res.send("0");
                         }
                         else {
+                            console.log("\r>  Notespace Sucessfully Updated");
                             res.send("1");
                         }
                     });
             }
             else {
-                Token.create({
-                    token: token,
-                    value: value
+                NoteSpace.create({
+                    token: notebook.token,
+                    titles: notebook.titles,
+                    colors: notebook.colors
                 }, function(e, user) {
+                    clearInterval(load);
                     if (e) {
                         res.send("0");
-                        console.log(">  Error While Creating New Notespace\n>  " + e);
+                        console.log("\r>  Error While Creating New Notespace\n>  " + e);
                     }
                     else {
                         res.send("1");
+                        console.log("\r>  Notespace Sucessfully Created");
                     }
                 });
             }
@@ -125,7 +131,7 @@ app.post("/save", function(req, res) {
 app.post("/getData", function(req, res) {
     var token= req.body.token;
     console.log("\n" + ++call + ") User Data Requested  ( Token : "+req.body.token+" )");
-    Token.find({ token: token }, function(e, token) {
+    NoteSpace.find({ token: token }, function(e, token) {
         if (e) { console.log(">  Error occured :\n>  " + e); }
         else {
             res.json(token);
@@ -139,7 +145,7 @@ app.get("/*", function(req, res) {
         var id = "";
         var unique = (id) => {
             try {
-                Token.find({ token: id }, function(e, token) {
+                NoteSpace.find({ token: id }, function(e, token) {
                     if (e) { console.log(">  Error occured :\n>  " + e); }
                     else {
                         if (token.length) return true;
