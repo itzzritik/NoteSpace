@@ -4,7 +4,8 @@ var token = (window.location.pathname).substring(1,(window.location.pathname).le
     cssVar = window.getComputedStyle(document.body),
     menuOpen = false;
     currTab = null,
-    titleVal = "";
+    titleVal = "",
+    data="";
 
 function newColor(){
     var color;
@@ -34,8 +35,9 @@ window.onload = function(){
     http.open('POST', '/getData');
     http.setRequestHeader('Content-type', 'application/json');
     http.onload = function() {
-        if(http.responseText!=""){
-            var data = JSON.parse(http.responseText);
+        data=http.responseText;
+        if(data!=""){
+            data = JSON.parse(data);
             tabColors = data.colors;
             tabTitles = data.titles;
             updateUI();
@@ -71,8 +73,11 @@ $('.newTab').click(function () {
     tabTitles.push(tabTitle);
     $("body").get(0).style.setProperty("--new_tab_color", newColor());
     $('.tabs').children().last().click();
-    $(".nav .ripple").toggleClass("animate");
-    updateServer(function(){$(".nav .ripple").toggleClass("animate");}, 5);
+    if(data!=""){
+        $(".nav .ripple").toggleClass("animate");
+        updateServer(function(){$(".nav .ripple").toggleClass("animate");}, 5);
+    }
+    else data="{}";
 });
 
 $('.tabs').on('click', '.tabPane', function(e) {
