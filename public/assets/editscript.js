@@ -52,7 +52,7 @@ $('.edit').on('keyup', function () {
     clearTimeout(typingTimer);
     typingTimer = setTimeout(function(){
         $(".nav .ripple").toggleClass("animate");
-        updateServer(function(){$(".nav .ripple").toggleClass("animate")});
+        updateServer(function(){$(".nav .ripple").toggleClass("animate")}, 5);
     }, doneTypingInterval);
 });
 $('.edit').on('keydown', function () {
@@ -98,7 +98,7 @@ $('.tabs').on('keypress blur', '.title input', function(e) {
         }
         else $(this).val(tabTitles[currTab]);
         card.find('.ripple').toggleClass("animate");
-        updateServer(function(){card.find('.ripple').toggleClass("animate");});
+        updateServer(function(){card.find('.ripple').toggleClass("animate");}, 5);
         //setTimeout(function(){card.find('.ripple').toggleClass("animate")}, 400);
     }
 });
@@ -127,16 +127,29 @@ function pushNewTab(i, title){
     //lastTab.toggleClass("animate");setTimeout(function(){lastTab.toggleClass("animate")}, 400);
 }
 function updateUI(){
-    for(var i=0;i<tabTitles.length;i++)
-        pushNewTab(i, tabTitles[i]);
-    $('.tabs').children().first().click();
+    function addTabs(i, delay) {
+		setTimeout(function() {
+            pushNewTab(i, tabTitles[i]);
+            if(i==tabTitles.length-1){
+                setTimeout(function() {
+                    $('.tabs').children().first().click();
+                    if(tabTitles.length > 5) setTimeout(function() {$('.menu-link').click();},500);
+                },300);
+            }
+            if(i<tabTitles.length)addTabs(++i,delay);
+		}, delay);
+    }
+    addTabs(0,30);
 }
-function updateServer(postfunction){
+function updateServer(postfunction, tries){
     const http = new XMLHttpRequest();
     http.open('POST', '/save');
     http.setRequestHeader('Content-type', 'application/json');
     http.onload = function () {
-        postfunction();
+        if (http.readyState == XMLHttpRequest.DONE) {
+            if (http.responseText == 1) postfunction();
+            else if(tries>0) updateServer(postfunction,--tries);
+        }
     }
     http.send(JSON.stringify({
         notebook:{
