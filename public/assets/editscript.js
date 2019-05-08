@@ -52,7 +52,7 @@ $('.edit').on('keyup', function () {
     clearTimeout(typingTimer);
     typingTimer = setTimeout(function(){
         $(".nav .ripple").toggleClass("animate");
-        updateServer(function(){$(".nav .ripple").toggleClass("animate")}, 5);
+        updateServer(function(){$(".nav .ripple").toggleClass("animate");}, 5);
     }, doneTypingInterval);
 });
 $('.edit').on('keydown', function () {
@@ -70,7 +70,9 @@ $('.newTab').click(function () {
     pushNewTab(tabTitles.length, tabTitle);
     tabTitles.push(tabTitle);
     $("body").get(0).style.setProperty("--new_tab_color", newColor());
-    if(tabTitles.length==1) $('.tabs').children().last().click();
+    $('.tabs').children().last().click();
+    $(".nav .ripple").toggleClass("animate");
+    updateServer(function(){$(".nav .ripple").toggleClass("animate");}, 5);
 });
 
 $('.tabs').on('click', '.tabPane', function(e) {
@@ -85,6 +87,7 @@ $('.tabs').on('click', '.tabPane', function(e) {
     card.css("background-color","#3C3C3C");
     card.find('.title input').css("cursor","text");
     titleVal=card.find('.title input').val();
+    $(".nav .ripple").css('background-color',tabColors[card.attr('id')]);
 });
 
 $('.tabs').on('keypress blur', '.title input', function(e) {
@@ -99,7 +102,7 @@ $('.tabs').on('keypress blur', '.title input', function(e) {
         else $(this).val(tabTitles[currTab]);
         card.find('.ripple').toggleClass("animate");
         updateServer(function(){card.find('.ripple').toggleClass("animate");}, 5);
-        //setTimeout(function(){card.find('.ripple').toggleClass("animate")}, 400);
+        //setTimeout(function(){card.find('.ripple').toggleClass("animate");}, 400);
     }
 });
 
@@ -119,12 +122,12 @@ function pushNewTab(i, title){
         '</div> ' +
         '</div>';
     $('.tabs').append(newTab);
-
+    
     var lastTab=$('.tabs').children().last();
     lastTab.css("height",cssVar.getPropertyValue('--nav_height'));
     lastTab=lastTab.find('.ripple');
     lastTab.css("background-color",tabColors[i]);
-    //lastTab.toggleClass("animate");setTimeout(function(){lastTab.toggleClass("animate")}, 400);
+    //lastTab.toggleClass("animate");setTimeout(function(){lastTab.toggleClass("animate");}, 400);
 }
 function updateUI(){
     function addTabs(i, delay) {
@@ -136,7 +139,7 @@ function updateUI(){
                     if(tabTitles.length > 5) setTimeout(function() {$('.menu-link').click();},500);
                 },300);
             }
-            if(i<tabTitles.length)addTabs(++i,delay);
+            if(i<tabTitles.length-1)addTabs(++i,delay);
 		}, delay);
     }
     addTabs(0,30);
