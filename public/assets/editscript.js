@@ -6,8 +6,9 @@ var token = (window.location.pathname).substring(1,(window.location.pathname).le
     titleVal = "";
 
 function newColor(){
-    var color=palette[Math.floor(Math.random() * (palette.length-1))];
-    if(color==tabColors[tabColors.length-1]){console.log('duplicate');color=newColor();}
+    var color;
+    do{color=palette[Math.floor(Math.random() * (palette.length-1))];}
+    while(color==tabColors[tabColors.length-1]);
     tabColors.push(color);
     return color;
 }
@@ -18,7 +19,7 @@ window.editor = "";
 require(['vs/editor/editor.main'], function() {
     window.editor = monaco.editor.create(document.getElementsByClassName('edit')[0], {
         value: "",
-        language: 'plaintext',
+        language: 'java',
         minimap: { enabled: true },
         theme: "vs-dark"
     });
@@ -57,7 +58,7 @@ function doneTyping() {
     }
     http.send(JSON.stringify({
         path: token,
-        value: "" + window.editor.getValue()
+        token: "" + window.editor.getValue()
     }))
 }
 

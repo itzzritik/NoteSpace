@@ -49,7 +49,7 @@ app.use(function(req, res, next) {
 
 var Token = mongoose.model("token", new mongoose.Schema({
     token: String,
-    value: String
+    notes: Array
 }));
 
 app.get("/git", function(req, res) {
@@ -79,57 +79,44 @@ app.get("/git", function(req, res) {
 });
 
 app.post("/save", function(req, res) {
-    var path = req.body.path;
-    var value = req.body.value;
-    if (value != null && value.length == 0) {
-        Token.remove({ token: path }, function(err) {
-            if (!err) {
-                console.log(">  Error occured :\n>  " + err);
-                res.send("0");
-            }
-            else {
-                console.log(">  Note Removed");
-                res.send("1");
-            }
-        });
-    }
-    else
-        Token.find({ token: path }, function(e, token) {
-            if (e) { console.log(">  Error occured :\n>  " + e); }
-            else {
-                if (token.length) {
-                    Token.findOneAndUpdate({ token: path }, {
-                            $set: {
-                                token: path,
-                                value: value
-                            }
-                        },
-                        function(err, user) {
-                            if (err) {
-                                console.log(">  Error While Saving Changes" + err);
-                                res.send("0");
-                            }
-                            else {
-                                res.send("1");
-                            }
-                        });
-                }
-                else {
-                    Token.create({
-                        token: path,
-                        value: value
-                    }, function(e, user) {
-                        if (e) {
+    var token = req.body.token;
+    var notes = req.body.notes;
+    Token.find({ token: path }, function(e, token) {
+        if (e) { console.log(">  Error occured :\n>  " + e); }
+        else {
+            if (token.length) {
+                Token.findOneAndUpdate({ token: path }, {
+                        $set: {
+                            token: path,
+                            value: value
+                        }
+                    },
+                    function(err, user) {
+                        if (err) {
+                            console.log(">  Error While Saving Changes" + err);
                             res.send("0");
-                            console.log(">  Error While Creating New Notespace\n>  " + e);
                         }
                         else {
                             res.send("1");
                         }
                     });
-                }
             }
-        });
+            else {
+                Token.create({
+                    token: path,
+                    value: value
+                }, function(e, user) {
+                    if (e) {
+                        res.send("0");
+                        console.log(">  Error While Creating New Notespace\n>  " + e);
+                    }
+                    else {
+                        res.send("1");
+                    }
+                });
+            }
+        }
+    });
 });
 
 app.post("/getData", function(req, res) {
