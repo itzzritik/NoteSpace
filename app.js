@@ -18,6 +18,7 @@ var call = 0,
 
 app.set("view engine", "ejs");
 app.use('/public', express.static('public'));
+app.use('/lib', express.static('node_modules'));
 
 const dbOptions = { useNewUrlParser: true, reconnectTries: Number.MAX_VALUE, poolSize: 10 };
 var mongoConnect = function(callback) {
@@ -39,7 +40,6 @@ var mongoConnect = function(callback) {
 };
 mongoConnect();
 
-app.use('/monaco-editor', express.static(__dirname + '/node_modules/monaco-editor'));
 app.use(bodyparser.json());
 app.use(function(req, res, next) {
     res.header("Access-Control-Allow-Origin", "*");

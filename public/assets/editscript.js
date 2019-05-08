@@ -14,7 +14,7 @@ function newColor(){
 }
 $(".newTab").css({"background-color": newColor(),"opacity": "1"});
 
-require.config({ paths: { 'vs': 'monaco-editor/min/vs' }});
+require.config({ paths: { 'vs': 'lib/monaco-editor/min/vs' }});
 window.editor = "";
 require(['vs/editor/editor.main'], function() {
     window.editor = monaco.editor.create(document.getElementsByClassName('edit')[0], {
@@ -80,9 +80,10 @@ $('.newTab').click(function () {
         '<p>'+tabTitle.charAt(0).toUpperCase()+'</p>' +
         '</div> ' +
         '</div>';
-    $('.newTab').before(newTab);
+    $('.tabs').append(newTab);
+    $('.tabs').css('height',);
     $('.tabs').find('#'+(tabColors.length-1)).css("height",cssVar.getPropertyValue('--nav_height'));
-    $(".newTab").css({"background-color": newColor()});
+    $(".newTab").css("background-color", newColor());
     if((tabColors.length-1)==1) $('.tabs').find('#'+(tabColors.length-2)).click();
 });
 
