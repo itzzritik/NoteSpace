@@ -12,7 +12,7 @@ function newColor(){
     tabColors.push(color);
     return color;
 }
-newColor();
+$("body").get(0).style.setProperty("--new_tab_color", newColor());
 
 require.config({ paths: { 'vs': 'lib/monaco-editor/min/vs' }});
 window.editor = "";
@@ -81,7 +81,7 @@ $('.newTab').click(function () {
         '</div> ' +
         '</div>';
     $('.tabs').append(newTab);
-    newColor();
+    $("body").get(0).style.setProperty("--new_tab_color", newColor());
     var lastTab=$('.tabs').children().last();
     lastTab.css("height",cssVar.getPropertyValue('--nav_height'));
     if((tabColors.length-1)==1) lastTab.click();
