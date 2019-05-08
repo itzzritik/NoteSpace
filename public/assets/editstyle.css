@@ -96,23 +96,24 @@ html {
     left: 0;
     width: calc(100% - var(--nav_height));
     height: var(--nav_height);
-    line-height: var(--nav_height);
     text-align: center;
 }
 .title input{
-    height: calc(var(--nav_height) *2/5);
+    width: 100%;
+    height: var(--nav_height);
     font-family: 'Raleway', Tahoma, Geneva, Verdana, sans-serif;
     text-align: center;
     font-size: 13px;
     color: var(--sidebar_white_color);
     background-color: transparent;
-    border-color: transparent;
-    border-radius: calc(var(--nav_height) *2/5);
-    outline: none;
-    user-select: none;
     cursor: pointer;
+    outline: none;
+    -webkit-user-select: none;
+    border: 0;
     margin:0;
+    padding: 0;
 }
+
 .tab{
     position: absolute;
     right: 0;

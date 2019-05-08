@@ -1,7 +1,8 @@
 var token = (window.location.pathname).substring(1,(window.location.pathname).length),
 	tabColors = [],
     cssVar = window.getComputedStyle(document.body),
-    currTab=null;
+    currTab = null,
+    titleVal = "";
 
 function newColor(){
     tabColors.push(palette[Math.floor(Math.random() * (palette.length-1))]);
@@ -81,28 +82,25 @@ $('.newTab').click(function () {
     if((tabColors.length-1)==1) $('.tabs').find('#'+(tabColors.length-2)).click();
 });
 
-$('.tabs').on('click dblclick', '.tabPane', function(e) {
+$('.tabs').on('click', '.tabPane', function(e) {
     var card = $(this);
-    if(e.type == "click"){
-        if(currTab!=null) {
-            card.parent().find('#'+currTab).css("background-color","transparent");
-            card.parent().find('#'+currTab).find('.tab').css("background-color","transparent");
-        }
-        card.find('.tab').css("background-color",tabColors[card.attr('id')]);
-        card.css("background-color","#3C3C3C");
-        currTab = card.attr('id');
+    if(currTab!=null && currTab!=card.attr('id')) {
+        card.parent().find('#'+currTab).css("background-color","transparent");
+        card.parent().find('#'+currTab).find('.tab').css("background-color","transparent");
+        card.parent().find('#'+currTab).find('.title input').attr("disabled", true);
+        card.parent().find('#'+currTab).find('.title input').css("cursor","pointer");
     }
-    else if(e.type == "dblclick"){
-        card.find('.title input').attr("disabled", false);
-        card.find('.title input').css({
-            "background-color":"#333",
-            "cursor": "text"
-        });
-        card.find('.title input').focus().val(card.find('.title input').val());
-    }
+    card.find('.tab').css("background-color",tabColors[card.attr('id')]);
+    card.css("background-color","#3C3C3C");
+    currTab = card.attr('id');
+
+    card.find('.title input').attr("disabled", false);
+    card.find('.title input').css("cursor","text");
+    card.find('.title input').focus();
 });
 
 $('.tabs').on('keypress blur', '.title input', function(e) {
+    console.log(e.type);
     var card = $(this).parent().parent(),
         keycode = (event.keyCode ? event.keyCode : event.which);
     if((e.type == "focusout") || (e.type == "keypress" && keycode == '13')){
