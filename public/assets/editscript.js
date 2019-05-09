@@ -2,7 +2,7 @@ var token = (window.location.pathname).substring(1,(window.location.pathname).le
     tabColors = [],
     tabTitles = [],
     cssVar = window.getComputedStyle(document.body),
-    menuOpen = false;
+    menuOpen = -1;
     currTab = null,
     titleVal = "",
     data="";
@@ -14,7 +14,6 @@ function newColor(){
     tabColors.push(color);
     return color;
 }
-$("body").get(0).style.setProperty("--new_tab_color", newColor());
 
 require.config({ paths: { 'vs': 'lib/monaco-editor/min/vs' }});
 window.editor = "";
@@ -40,11 +39,12 @@ window.onload = function(){
             data = JSON.parse(data);
             tabColors = data.colors;
             tabTitles = data.titles;
-            updateUI();
+            updateUI(true);
 
             //window.editor.setValue(data[0].value);
         }
-        else $('.newTab').click();
+        else{newColor();$('.newTab').click();} 
+        $("body").get(0).style.setProperty("--new_tab_color", tabColors[tabTitles.length]);
     };
     http.send(JSON.stringify({token: token}));
 };
@@ -62,9 +62,11 @@ $('.edit').on('keydown', function () {
 });
 
 $('.menu-link').click(function () {
-    $('.menu').toggleClass('open');
-    $('.editor').toggleClass('open');
-    menuOpen = !menuOpen;
+    if(menuOpen != -1){
+        $('.menu').toggleClass('open');
+        $('.editor').toggleClass('open');
+        menuOpen = +!menuOpen;
+    }
 });
 
 $('.newTab').click(function () {
@@ -95,6 +97,14 @@ $('.tabs').on('click', '.tabPane', function(e) {
     $(".nav .ripple").css('background-color',tabColors[card.attr('id')]);
 });
 
+$('.tabs').on('click', '.tab', function(e) {
+    var card = $(this).parent();
+    tabTitles.splice(card.attr('id'),1);
+    tabColors.splice(card.attr('id'),1);
+    card.css("height",'0');
+    updateIDs(0);
+    
+});
 $('.tabs').on('keypress blur', '.title input', function(e) {
     var card = $(this).parent().parent(),
         keycode = (event.keyCode ? event.keyCode : event.which);
@@ -112,10 +122,19 @@ $('.tabs').on('keypress blur', '.title input', function(e) {
 });
 
 $('.edit').focusin(function(){
-    if(menuOpen)$('.menu-link').click();
+    if(menuOpen==1)$('.menu-link').click();
 });
 
+function updateIDs(i){
+    console.log(i);
+    $('tabs').next('.tabPane').prop('id', i);
+    if(i<tabTitles.length-1) updateIDs(++i);
+    else for(var i=0;i<tabTitles.length;i++){
+        console.log($('tabs').find('.tabPane #'+i));
+    }
+}
 function pushNewTab(i, title){
+    console.log(title);
     var newTab =
         '<div class="tabPane" id="'+i+'">' +
         '<span class="ripple"></span>'+
@@ -134,17 +153,21 @@ function pushNewTab(i, title){
     lastTab.css("background-color",tabColors[i]);
     //lastTab.toggleClass("animate");setTimeout(function(){lastTab.toggleClass("animate");}, 400);
 }
-function updateUI(){
+function updateUI(menu){
     function addTabs(i, delay) {
 		setTimeout(function() {
             pushNewTab(i, tabTitles[i]);
             if(i==tabTitles.length-1){
                 setTimeout(function() {
                     $('.tabs').children().first().click();
-                    if(tabTitles.length > 5) setTimeout(function() {$('.menu-link').click();},500);
+                    if(menu && tabTitles.length > 5) 
+                        setTimeout(function() {
+                            menuOpen=0;
+                            $('.menu-link').click();
+                        },500);
                 },300);
             }
-            if(i<tabTitles.length-1)addTabs(++i,delay);
+            if(i<tabTitles.length)addTabs(++i,delay);
 		}, delay);
     }
     addTabs(0,30);
