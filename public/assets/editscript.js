@@ -4,6 +4,7 @@ var token = (window.location.pathname).substring(1,(window.location.pathname).le
     cssVar = window.getComputedStyle(document.body),
     menuOpen = -1;
     currTab = null,
+    newTabReady = true;
     hoverTabColor = null,
     titleVal = "",
     data="";
@@ -14,6 +15,13 @@ function newColor(){
     while(color==tabColors[tabColors.length-1]);
     tabColors.push(color);
     return color;
+}
+function newTitle(){
+    var tabTitle;
+    do{tabTitle=title[Math.floor(Math.random() * (title.length-1))];}
+    while(tabTitles.indexOf(tabTitle) > -1);
+    tabTitles.push(tabTitle);
+    return tabTitle;
 }
 
 require.config({ paths: { 'vs': 'lib/monaco-editor/min/vs' }});
@@ -54,8 +62,7 @@ var typingTimer,doneTypingInterval = 1000;
 $(".edit").bind("propertychange change keyup input cut paste", function(event){
     clearTimeout(typingTimer);
     typingTimer = setTimeout(function(){
-        $(".nav .ripple").toggleClass("animate");
-        updateServer(function(){$(".nav .ripple").toggleClass("animate");}, 5);
+        updateServer(function(){},$('.tabs').find('#'+currTab+' .ripple'), 5);
     }, doneTypingInterval);
 });
 
@@ -120,16 +127,16 @@ $(".tabs").on({
 $('.tabs').on('keypress blur', '.title input', function(e) {
     var card = $(this).parent().parent(),
         keycode = (event.keyCode ? event.keyCode : event.which);
-    if((e.type == "focusout" && titleVal!=$(this).val()) || (e.type == "keypress" && keycode == '13' && titleVal!=$(this).val())){
+        $(this).val($(this).val().trim());
+    if((e.type == "focusout" || (e.type == "keypress" && keycode == '13')) && titleVal!=$(this).val() && tabTitles.indexOf($(this).val())==-1){
         if($(this).val()!=""){
             titleVal=$(this).val();
             tabTitles[currTab]=titleVal;
             card.find('.tab p').text(titleVal.charAt(0).toUpperCase());
+            updateServer(function(){},card.find('.ripple'), 5);
+            //setTimeout(function(){card.find('.ripple').toggleClass("animate");}, 400);
         }
         else $(this).val(tabTitles[currTab]);
-        card.find('.ripple').toggleClass("animate");
-        updateServer(function(){card.find('.ripple').toggleClass("animate");}, 5);
-        //setTimeout(function(){card.find('.ripple').toggleClass("animate");}, 400);
     }
 });
 
@@ -138,16 +145,18 @@ $('.edit').focusin(function(){
 });
 
 $('.newTab').click(function () {
-    var tabTitle = title[Math.floor(Math.random() * (title.length-1))];
-    pushNewTab(tabTitles.length, tabTitle);
-    tabTitles.push(tabTitle);
-    $("body").get(0).style.setProperty("--new_tab_color", newColor());
-    if(menuOpen==1) $('.tab .delete').css('height',(parseInt(cssVar.getPropertyValue('--nav_height'),10)*menuOpen)+'px');
-    if(data!=""){
-        $(".nav .ripple").toggleClass("animate");
-        updateServer(function(){$(".nav .ripple").toggleClass("animate");}, 5);
+    if(newTabReady){
+        pushNewTab(tabTitles.length, newTitle());
+        $("body").get(0).style.setProperty("--new_tab_color", newColor());
+        if(data!=""){
+            newTabReady=!newTabReady;
+            updateServer(function(){
+                if(menuOpen==1) $('.tab .delete').css('height',(parseInt(cssVar.getPropertyValue('--nav_height'),10)*menuOpen)+'px');
+                newTabReady=!newTabReady;
+            }, $('.tabs').children().last().find('.ripple'), 5);
+        }
+        else data="{}";
     }
-    else data="{}";
 });
 
 function updateIDs(i){
@@ -173,10 +182,10 @@ function pushNewTab(i, title){
     $('.tabs').append(newTab);
     
     var lastTab=$('.tabs').children().last();
-    lastTab.css("background-color",tabColors[i]);
     lastTab.click();
     lastTab.css("height",cssVar.getPropertyValue('--nav_height'));
     lastTab=lastTab.find('.ripple');
+    lastTab.css("background-color",tabColors[i]);
     //lastTab.toggleClass("animate");setTimeout(function(){lastTab.toggleClass("animate");}, 400);
 }
 function updateUI(menu){
@@ -199,14 +208,25 @@ function updateUI(menu){
     }
     addTabs(0,50);
 }
-function updateServer(postfunction, tries){
+function updateServer(postfunction, ripple, tries){
+    ripple.toggleClass("animate");
+    ripple.parent().find('.tab').css('opacity', '0');
+
     const http = new XMLHttpRequest();
     http.open('POST', '/save');
     http.setRequestHeader('Content-type', 'application/json');
     http.onload = function () {
         if (http.readyState == XMLHttpRequest.DONE) {
-            if (http.responseText == 1) postfunction();
+            if (http.responseText == 1) {
+                ripple.toggleClass("animate");
+                ripple.parent().find('.tab').css('opacity', '1');
+                postfunction();
+            }
             else if(tries>0) updateServer(postfunction,--tries);
+            else {
+                ripple.toggleClass("animate");
+                ripple.parent().find('.tab').css('opacity', '1');
+            }
         }
     }
     http.send(JSON.stringify({

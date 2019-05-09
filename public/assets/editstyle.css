@@ -22,30 +22,6 @@ body, html {
     background: var(--nav_color);
 }
 
-.ripple {
-    display: block;
-    position: absolute;
-    width: 100%;
-    height: var(--nav_height);
-    background: #333;
-    border-radius: calc(var(--nav_height) / 2);
-    transform: scaleX(0);
-    opacity: 0;
-}
-.ripple.animate {
-    animation: ripple 0.4s infinite linear;
-}
-@keyframes ripple {
-    0%{
-        opacity: 1;
-        transform: scaleX(0.3);
-    }
-    100% {
-        opacity: 0;
-        transform: scaleX(2.5);
-    }
-}
-
 .editor {
     position: absolute;
     width: calc(100vw + 200px);
@@ -103,16 +79,23 @@ body, html {
     -webkit-tap-highlight-color: transparent;
     transition: height 0.26s cubic-bezier(0.175, 0.885, 0.32, 1.275), background-color 0.15s ease-in;
 }
+
 .sidebar .tabs .tabPane .ripple{
+    display: block;
     float: left;
+    position: absolute;
     width: calc(100% - var(--nav_height));
+    height: var(--nav_height);
+    background: #333;
+    transform: scaleX(0);
+    opacity: 0;
     border-radius: 0;
 }
 .sidebar .tabs .tabPane .ripple.animate {
-    animation: ripple2 0.4s infinite linear;
+    animation: ripple 0.4s infinite linear;
     transform-origin: 0% 50%;
 }
-@keyframes ripple2 {
+@keyframes ripple {
     0%{
         opacity: 1;
         transform: scaleX(0);
@@ -155,7 +138,7 @@ body, html {
     height: var(--nav_height);
     cursor: pointer;
     -webkit-tap-highlight-color: transparent;
-    transition: transform 0.26s cubic-bezier(0.175, 0.885, 0.32, 1.275), background-color 0.15s ease-in;
+    transition: transform 0.26s cubic-bezier(0.175, 0.885, 0.32, 1.275), background-color 0.15s ease-in, opacity 0.15s ease-in;
     animation: enterTab 0.4s linear;
 }
 
