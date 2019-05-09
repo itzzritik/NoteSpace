@@ -84,8 +84,8 @@ $('.tabs').on('click', '.tabPane', function(e) {
 });
 
 $('.tabs').on('click', '.tab', function (e) {
-    e.stopPropagation();
     if (menuOpen == 1) {
+        e.stopPropagation();
         var card = $(this).parent();
         tabTitles.splice(card.attr('id'), 1);
         tabColors.splice(card.attr('id'), 1);
@@ -181,7 +181,7 @@ function pushNewTab(i, title){
 }
 function updateUI(menu){
     if(!(menu && tabTitles.length > 5)) menuOpen=0;
-    function addTabs(i) {
+    function addTabs(i, delay) {
 		setTimeout(function() {
             pushNewTab(i, tabTitles[i]);
             if(i==tabTitles.length-1){
@@ -192,12 +192,12 @@ function updateUI(menu){
                             menuOpen=0;
                             $('.menu-link').click();
                         },500);
-                },300);
+                },200);
             }
             if(i<tabTitles.length-1)addTabs(++i,50/i);
 		}, delay);
     }
-    addTabs(0);
+    addTabs(0,50);
 }
 function updateServer(postfunction, tries){
     const http = new XMLHttpRequest();

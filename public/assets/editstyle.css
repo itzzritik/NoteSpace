@@ -158,10 +158,7 @@ body, html {
     transition: transform 0.26s cubic-bezier(0.175, 0.885, 0.32, 1.275), background-color 0.15s ease-in;
     animation: enterTab 0.4s linear;
 }
-.tab:active{
-    border-radius: calc(var(--nav_height) / 2);
-    transform: scale(0.8);
-}
+
 .tab p{
     margin:0px; 
     width: var(--nav_height);
@@ -172,6 +169,7 @@ body, html {
     display: inline-block;
     line-height: var(--nav_height);
     user-select: none;
+    transition: all 0.26s cubic-bezier(0.175, 0.885, 0.32, 1.275);
 }
 .tab .delete{
     position: absolute;
@@ -182,6 +180,9 @@ body, html {
     opacity: 0;
     overflow: hidden;
     transition: all 0.26s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+.tab .delete:active{
+    transform: scale(0.8);
 }
 .tab .delete img{
     width: calc(var(--nav_height) / 3);
@@ -222,7 +223,7 @@ body, html {
     background-color: var(--new_tab_color);
 }
 .newTab:active{
-    transform: scale(0.75);
+    transform: scale(0.75) rotate(360deg);
 }
 .newTab .plus-icon{
     position: absolute;
