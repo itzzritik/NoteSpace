@@ -181,7 +181,7 @@ function pushNewTab(i, title){
 }
 function updateUI(menu){
     if(!(menu && tabTitles.length > 5)) menuOpen=0;
-    function addTabs(i, delay) {
+    function addTabs(i) {
 		setTimeout(function() {
             pushNewTab(i, tabTitles[i]);
             if(i==tabTitles.length-1){
@@ -194,10 +194,10 @@ function updateUI(menu){
                         },500);
                 },300);
             }
-            if(i<tabTitles.length-1)addTabs(++i,delay);
+            if(i<tabTitles.length-1)addTabs(++i,50/i);
 		}, delay);
     }
-    addTabs(0,30);
+    addTabs(0);
 }
 function updateServer(postfunction, tries){
     const http = new XMLHttpRequest();
