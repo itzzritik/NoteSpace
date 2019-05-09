@@ -4,6 +4,7 @@ var token = (window.location.pathname).substring(1,(window.location.pathname).le
     cssVar = window.getComputedStyle(document.body),
     menuOpen = -1;
     currTab = null,
+    hoverTabColor = null,
     titleVal = "",
     data="";
 
@@ -50,15 +51,12 @@ window.onload = function(){
 };
 
 var typingTimer,doneTypingInterval = 1000;
-$('.edit').on('keyup', function () {
+$(".edit").bind("propertychange change keyup input cut paste", function(event){
     clearTimeout(typingTimer);
     typingTimer = setTimeout(function(){
         $(".nav .ripple").toggleClass("animate");
         updateServer(function(){$(".nav .ripple").toggleClass("animate");}, 5);
     }, doneTypingInterval);
-});
-$('.edit').on('keydown', function () {
-    clearTimeout(typingTimer);
 });
 
 $('.menu-link').click(function () {
@@ -66,20 +64,8 @@ $('.menu-link').click(function () {
         $('.menu').toggleClass('open');
         $('.editor').toggleClass('open');
         menuOpen = +!menuOpen;
+        $('.tab .delete').css('height',(parseInt(cssVar.getPropertyValue('--nav_height'),10)*menuOpen)+'px');
     }
-});
-
-$('.newTab').click(function () {
-    var tabTitle = title[Math.floor(Math.random() * (title.length-1))];
-    pushNewTab(tabTitles.length, tabTitle);
-    tabTitles.push(tabTitle);
-    $("body").get(0).style.setProperty("--new_tab_color", newColor());
-    $('.tabs').children().last().click();
-    if(data!=""){
-        $(".nav .ripple").toggleClass("animate");
-        updateServer(function(){$(".nav .ripple").toggleClass("animate");}, 5);
-    }
-    else data="{}";
 });
 
 $('.tabs').on('click', '.tabPane', function(e) {
@@ -97,18 +83,40 @@ $('.tabs').on('click', '.tabPane', function(e) {
     $(".nav .ripple").css('background-color',tabColors[card.attr('id')]);
 });
 
-$('.tabs').on('click', '.tab', function(e) {
-    var card = $(this).parent();
-    tabTitles.splice(card.attr('id'),1);
-    tabColors.splice(card.attr('id'),1);
-    card.css("height",'0');
-    setTimeout(function() {
-        card.remove();
-        updateIDs(0);
-    },260);
-    
-    
+$('.tabs').on('click', '.tab', function (e) {
+    e.stopPropagation();
+    if (menuOpen == 1) {
+        var card = $(this).parent();
+        tabTitles.splice(card.attr('id'), 1);
+        tabColors.splice(card.attr('id'), 1);
+        card.css("height", '0');
+        setTimeout(function () {
+            card.remove();
+            updateIDs(0);
+        }, 260);
+    }
 });
+
+$(".tabs").on({
+    mouseenter: function () {
+        if(menuOpen==1){
+            $(this).find('.delete').css('opacity', '1');
+            $(this).find('.delete').css('border-radius', (parseInt(cssVar.getPropertyValue('--nav_height'),10)/2)+'px');
+            $(this).find('.delete').css('transform', 'scale(0.8)');
+            hoverTabColor=$(this).css('background-color');
+            $(this).css('background-color', $(this).parent().css('background-color'));
+        }
+    },
+    mouseleave: function () {
+        if (menuOpen == 1) {
+            $(this).find('.delete').css('opacity', '0');
+            $(this).find('.delete').css('border-radius', '0');
+            $(this).find('.delete').css('transform', 'scale(1)');
+            $(this).css('background-color', hoverTabColor);
+        }
+    }
+},'.tab');
+
 $('.tabs').on('keypress blur', '.title input', function(e) {
     var card = $(this).parent().parent(),
         keycode = (event.keyCode ? event.keyCode : event.which);
@@ -129,6 +137,19 @@ $('.edit').focusin(function(){
     if(menuOpen==1)$('.menu-link').click();
 });
 
+$('.newTab').click(function () {
+    var tabTitle = title[Math.floor(Math.random() * (title.length-1))];
+    pushNewTab(tabTitles.length, tabTitle);
+    tabTitles.push(tabTitle);
+    $("body").get(0).style.setProperty("--new_tab_color", newColor());
+    if(menuOpen==1) $('.tab .delete').css('height',(parseInt(cssVar.getPropertyValue('--nav_height'),10)*menuOpen)+'px');
+    if(data!=""){
+        $(".nav .ripple").toggleClass("animate");
+        updateServer(function(){$(".nav .ripple").toggleClass("animate");}, 5);
+    }
+    else data="{}";
+});
+
 function updateIDs(i){
     $('.tabs > div').map(function() {
         $(this).prop('id',i++);
@@ -145,16 +166,17 @@ function pushNewTab(i, title){
         '<input value="'+title+'">'+
         '</div> '+
         '<div class="tab">' +
+        '<div class="delete"><img src="/public/img/del.svg"></img></div>'+
         '<p>'+title.charAt(0).toUpperCase()+'</p>' +
-        '<div class="delete"></div>'+
         '</div> ' +
         '</div>';
     $('.tabs').append(newTab);
     
     var lastTab=$('.tabs').children().last();
+    lastTab.css("background-color",tabColors[i]);
+    lastTab.click();
     lastTab.css("height",cssVar.getPropertyValue('--nav_height'));
     lastTab=lastTab.find('.ripple');
-    lastTab.css("background-color",tabColors[i]);
     //lastTab.toggleClass("animate");setTimeout(function(){lastTab.toggleClass("animate");}, 400);
 }
 function updateUI(menu){
