@@ -203,10 +203,9 @@ body, html {
 }
 .newTab:hover{
     background-color: var(--new_tab_color);
-    transform: scale(0.82) rotate(360deg);
 }
 .newTab:active{
-    transform: scale(0.75) rotate(0deg);
+    transform: scale(0.75);
 }
 .newTab .plus-icon{
     position: absolute;

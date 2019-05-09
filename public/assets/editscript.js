@@ -43,7 +43,7 @@ window.onload = function(){
 
             //window.editor.setValue(data[0].value);
         }
-        else{newColor();$('.newTab').click();} 
+        else{menuOpen=0;newColor();$('.newTab').click();} 
         $("body").get(0).style.setProperty("--new_tab_color", tabColors[tabTitles.length]);
     };
     http.send(JSON.stringify({token: token}));
@@ -102,7 +102,11 @@ $('.tabs').on('click', '.tab', function(e) {
     tabTitles.splice(card.attr('id'),1);
     tabColors.splice(card.attr('id'),1);
     card.css("height",'0');
-    updateIDs(0);
+    setTimeout(function() {
+        card.remove();
+        updateIDs(0);
+    },260);
+    
     
 });
 $('.tabs').on('keypress blur', '.title input', function(e) {
@@ -126,15 +130,14 @@ $('.edit').focusin(function(){
 });
 
 function updateIDs(i){
-    console.log(i);
-    $('tabs').next('.tabPane').prop('id', i);
-    if(i<tabTitles.length-1) updateIDs(++i);
-    else for(var i=0;i<tabTitles.length;i++){
-        console.log($('tabs').find('.tabPane #'+i));
-    }
+    $('.tabs > div').map(function() {
+        $(this).prop('id',i++);
+    }); 
+    $('.tabs > div').map(function() {
+        console.log($(this).prop('id')+" - "+$(this).find('.title input').val());
+    });
 }
 function pushNewTab(i, title){
-    console.log(title);
     var newTab =
         '<div class="tabPane" id="'+i+'">' +
         '<span class="ripple"></span>'+
@@ -143,6 +146,7 @@ function pushNewTab(i, title){
         '</div> '+
         '<div class="tab">' +
         '<p>'+title.charAt(0).toUpperCase()+'</p>' +
+        '<div class="delete"></div>'+
         '</div> ' +
         '</div>';
     $('.tabs').append(newTab);
@@ -154,6 +158,7 @@ function pushNewTab(i, title){
     //lastTab.toggleClass("animate");setTimeout(function(){lastTab.toggleClass("animate");}, 400);
 }
 function updateUI(menu){
+    if(!(menu && tabTitles.length > 5)) menuOpen=0;
     function addTabs(i, delay) {
 		setTimeout(function() {
             pushNewTab(i, tabTitles[i]);
@@ -167,7 +172,7 @@ function updateUI(menu){
                         },500);
                 },300);
             }
-            if(i<tabTitles.length)addTabs(++i,delay);
+            if(i<tabTitles.length-1)addTabs(++i,delay);
 		}, delay);
     }
     addTabs(0,30);
