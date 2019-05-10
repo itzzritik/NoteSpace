@@ -1,6 +1,8 @@
 var token = (window.location.pathname).substring(1,(window.location.pathname).length),
+    randomstring = require("randomstring"),
     tabColors = [],
     tabTitles = [],
+    tabNotes = [],
     cssVar = window.getComputedStyle(document.body),
     menuOpen = -1;
     currTab = null,

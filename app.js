@@ -141,6 +141,7 @@ app.post("/getData", function(req, res) {
 });
 app.get("/*", function(req, res) {
     var token = (req.originalUrl).substring(1, (req.originalUrl).length);
+    if(token != token.toLowerCase()) res.redirect(token.toLowerCase());
     if (token.length == 0) {
         var id = "";
         var unique = (id) => {
@@ -159,12 +160,16 @@ app.get("/*", function(req, res) {
             }
         };
         do {
-            id = ran.generate(7);
+            id = ran.generate({
+                length: 8,
+                capitalization: 'lowercase',
+                charset: 'alphabetic'
+            });
         } while (unique(id));
         res.redirect(id);
     }
     else
-        res.render("edit");
+        res.render("index");
 });
 
 app.listen(process.env.PORT || 8080, function() {
