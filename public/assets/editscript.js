@@ -59,10 +59,10 @@ window.onload = function(){
 };
 
 var typingTimer,doneTypingInterval = 1000;
-$(".edit").bind("change keyup input cut paste", function(event){
+$(".edit").bind("propertychange change keyup input cut paste", function(event){
     clearTimeout(typingTimer);
     typingTimer = setTimeout(function(){
-        updateServer(function(){},$('.tabs').find('#'+currTab+' .ripple'), 5);
+        updateServer(function(){},currTab.find('.ripple'));
     }, doneTypingInterval);
 });
 
@@ -76,18 +76,17 @@ $('.menu-link').click(function () {
 });
 
 $('.tabs').on('click', '.tabPane', function(e) {
-    var card = $(this);
-    if(currTab!=null && currTab!=card.attr('id')) {
-        card.parent().find('#'+currTab).css("background-color","transparent");
-        card.parent().find('#'+currTab).find('.tab').css("background-color","transparent");
-        card.parent().find('#'+currTab).find('.title input').css("cursor","pointer");
+    if(currTab!=null && currTab!=$(this)) {
+        currTab.css("background-color","transparent");
+        currTab.find('.tab').css("background-color","transparent");
+        currTab.find('.title input').css("cursor","pointer");
     }
-    currTab = card.attr('id');
-    card.find('.tab').css("background-color",tabColors[card.attr('id')]);
-    card.css("background-color","#3C3C3C");
-    card.find('.title input').css("cursor","text");
-    titleVal=card.find('.title input').val();
-    $(".nav .ripple").css('background-color',tabColors[card.attr('id')]);
+    currTab = $(this);
+    $(this).find('.tab').css("background-color",tabColors[$(this).attr('id')]);
+    $(this).css("background-color","#3C3C3C");
+    $(this).find('.title input').css("cursor","text");
+    titleVal=$(this).find('.title input').val();
+    $(".nav .ripple").css('background-color',tabColors[$(this).attr('id')]);
 });
 
 $('.tabs').on('click', '.tab', function (e) {
@@ -131,12 +130,12 @@ $('.tabs').on('keypress blur', '.title input', function(e) {
     if((e.type == "focusout" || (e.type == "keypress" && keycode == '13')) && titleVal!=$(this).val() && tabTitles.indexOf($(this).val())==-1){
         if($(this).val()!=""){
             titleVal=$(this).val();
-            tabTitles[currTab]=titleVal;
+            tabTitles[currTab.attr('id')]=titleVal;
             card.find('.tab p').text(titleVal.charAt(0).toUpperCase());
-            updateServer(function(){},card.find('.ripple'), 5);
+            updateServer(function(){},card.find('.ripple'));
             //setTimeout(function(){card.find('.ripple').toggleClass("animate");}, 400);
         }
-        else $(this).val(tabTitles[currTab]);
+        else $(this).val(tabTitles[currTab.attr('id')]);
     }
 });
 
@@ -153,7 +152,7 @@ $('.newTab').click(function () {
             updateServer(function(){
                 if(menuOpen==1) $('.tab .delete').css('height',(parseInt(cssVar.getPropertyValue('--nav_height'),10)*menuOpen)+'px');
                 newTabReady=!newTabReady;
-            }, $('.tabs').children().last().find('.ripple'), 5);
+            }, $('.tabs').children().last().find('.ripple'));
         }
         else data="{}";
     }
@@ -208,26 +207,30 @@ function updateUI(menu){
     }
     addTabs(0,0);
 }
-function updateServer(postfunction, ripple, tries){
-    if(menuOpen)ripple.toggleClass("animate");
-    else ripple.parent().find('.tab').toggleClass("animate");
+function updateServer(postfunction, ripple){
+    if(menuOpen){
+        ripple.toggleClass("animate");
+        ripple.parent().find('.tab').css('width','0');
+        ripple.parent().find('.tab .delete').css('width','0');
 
+    }
+    else ripple.parent().find('.tab').toggleClass("animate");
     const http = new XMLHttpRequest();
     http.open('POST', '/save');
     http.setRequestHeader('Content-type', 'application/json');
-    http.onload = function () {
-        if (http.readyState == XMLHttpRequest.DONE) {
+    http.onreadystatechange=function(e) {
+        if (http.readyState == XMLHttpRequest.DONE){   
             if (http.responseText == 1) {
-                if(menuOpen)ripple.toggleClass("animate");
-                else ripple.parent().find('.tab').toggleClass("animate");
                 postfunction();
             }
-            else if(tries>0) updateServer(postfunction,--tries);
-            else {
-                if(menuOpen)ripple.toggleClass("animate");
-                else ripple.parent().find('.tab').toggleClass("animate");
+            else{console.log(e);}
+            if(menuOpen){
+                ripple.toggleClass("animate");
+                ripple.parent().find('.tab').css('width',cssVar.getPropertyValue('--nav_height'));
+                ripple.parent().find('.tab .delete').css('width',(parseInt(cssVar.getPropertyValue('--nav_height'),10)*menuOpen)+'px');
             }
-        }
+            else ripple.parent().find('.tab').toggleClass("animate");
+        } 
     }
     http.send(JSON.stringify({
         notebook:{

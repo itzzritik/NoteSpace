@@ -83,8 +83,6 @@ body, html {
 }
 
 .sidebar .tabs .tabPane .ripple{
-    display: block;
-    float: right;
     position: absolute;
     width: 100%;
     height: var(--nav_height);
@@ -147,11 +145,11 @@ body, html {
     height: var(--nav_height);
     cursor: pointer;
     -webkit-tap-highlight-color: transparent;
-    transition: transform 0.26s cubic-bezier(0.175, 0.885, 0.32, 1.275), background-color 0.1s ease-in;
+    transition: transform 0.26s cubic-bezier(0.175, 0.885, 0.32, 1.275), all 0.1s ease-in;
     animation: enterTab 0.4s linear;
 }
 .tab.animate {
-    animation: load 0.35s infinite linear;
+    animation: load 0.7s infinite linear;
     transform-origin: 50% 50%;
 }
 @keyframes load {
@@ -159,13 +157,21 @@ body, html {
         border-radius: 0;
         transform: scale(1);
     }
-    50%{
+    25%{
         border-radius: calc(var(--nav_height) / 2);
-        transform: scale(0.6) rotate(180deg);
+        transform: scale(0.7) rotate(-30deg);
+    }
+    50%{
+        border-radius: 0;
+        transform: scale(1);
+    }
+    75%{
+        border-radius: calc(var(--nav_height) / 2);
+        transform: scale(0.7) rotate(30deg);
     }
     100% {
         border-radius: 0;
-        transform: scale(1) rotate(360deg);
+        transform: scale(1) ;
     }
 }
 
@@ -205,6 +211,7 @@ body, html {
     height: var(--nav_height);
     background-color: var(--sidebar_color);
     margin-top: 2px; 
+    z-index:5000;
     flex-shrink: 0;
 }
 .sidebar .newTabPane .ripple {
