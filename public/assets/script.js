@@ -1,5 +1,4 @@
 var token = (window.location.pathname).substring(1,(window.location.pathname).length),
-    randomstring = require("randomstring"),
     tabColors = [],
     tabTitles = [],
     tabNotes = [],
