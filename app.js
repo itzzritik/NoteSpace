@@ -86,27 +86,24 @@ app.get("/test", function(req, res) {
         else {
             if (data.length) {
                 dataSet.forEach(function (note) {
-                    var newData ={
-                        id: note.id,
-                        set: {}
-                    };
-                    if(note.title != null) newData = {...obj, ...{'notebook.$.title': note.title}};
-                    if(note.color != null) newData = {...obj, ...{'notebook.$.color': note.color}};
-                    if(note.type != null) newData = {...obj, ...{'notebook.$.type': note.type}};
-                    if(note.content != null) newData = {...obj, ...{'notebook.$.content': note.content}};
-                    /*NoteSpace.updateOne({ token: token, 'notebook.id': newData.id }, {$set: newData.set},
+                    var set = {};
+                    if(note.title != null) set['notebook.$.title'] = note.title;
+                    if(note.color != null) set['notebook.$.color'] = note.color;
+                    if(note.type != null) set['notebook.$.type'] = note.type;
+                    if(note.content != null) set['notebook.$.content'] = note.content;
+                    console.log(JSON.stringify(set, null, 4));
+                    NoteSpace.updateOne({ token: token, 'notebook.id': note.id }, {$set: set},
                     function(err, user) {
                         clearInterval(load);
                         if (err) {
                             console.log("\r>  Error While Saving Changes" + err);
-                            res.send("0");
+                            //res.send("0");
                         }
                         else {
                             console.log("\r>  Notespace Sucessfully Updated");
-                            console.log(user);
-                            res.send("1");
+                            //res.send("1");
                         }
-                    });*/
+                    });
                 });
             }
             else {
@@ -211,7 +208,7 @@ app.post("/getData", function(req, res) {
     NoteSpace.find({ token: token }, function(e, token) {
         if (e) { console.log(">  Error occured :\n>  " + e); }
         else {
-            res.json(token[0]);
+            res.json(token[0].notebook);
             console.log("  > Fetched and sent successfully");
         }
     });

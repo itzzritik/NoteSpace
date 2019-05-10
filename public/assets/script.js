@@ -1,20 +1,29 @@
-var token = (window.location.pathname).substring(1,(window.location.pathname).length),
-    tabColors = [],
-    tabTitles = [],
-    tabNotes = [],
+var token = (window.location.pathname).substring(1, (window.location.pathname).length),
     cssVar = window.getComputedStyle(document.body),
-    menuOpen = -1;
+    tabIds = [],
+    tabTitles = [],
+    tabColors = [],
+    tabTypes = [],
+    tabContents = [],
+    menuOpen = -1,
     currTab = null,
-    newTabReady = true;
+    newTabReady = true,
     hoverTabColor = null,
     titleVal = "",
-    data="";
+    data = {},
+    newData = [];
 
+function newId(){
+    var id;
+    do{id=(Math.PI * Math.max(0.01, Math.random())).toString(36).substr(2, 5);}
+    while(tabIds.indexOf(id) > -1);
+    tabIds.push(id);
+    return id;
+}
 function newColor(){
     var color;
     do{color=palette[Math.floor(Math.random() * (palette.length-1))];}
     while(color==tabColors[tabColors.length-1]);
-    tabColors.push(color);
     return color;
 }
 function newTitle(){
@@ -47,14 +56,23 @@ window.onload = function(){
         data=http.responseText;
         if(data!=""){
             data = JSON.parse(data);
-            tabColors = data.colors;
-            tabTitles = data.titles;
+            console.log(JSON.stringify(data, null, 4));
+            data.forEach(function (note) {
+                tabIds.push(note.id);
+                tabTitles.push(note.title);
+                tabColors.push(note.color);
+                tabTypes.push(note.type);
+                tabContents.push(note.content);
+            });
+            $("body").get(0).style.setProperty("--new_tab_color", newColor());
             updateUI(true);
-
             //window.editor.setValue(data[0].value);
         }
-        else{menuOpen=0;newColor();$('.newTab').click();} 
-        $("body").get(0).style.setProperty("--new_tab_color", tabColors[tabTitles.length]);
+        else {
+            menuOpen = 0;
+            $("body").get(0).style.setProperty("--new_tab_color", newColor());
+            $('.newTab').click();
+        }
     };
     http.send(JSON.stringify({token: token}));
 };
@@ -83,11 +101,10 @@ $('.tabs').on('click', '.tabPane', function(e) {
         currTab.find('.title input').css("cursor","pointer");
     }
     currTab = $(this);
-    $(this).find('.tab').css("background-color",tabColors[$(this).attr('id')]);
-    $(this).css("background-color","#3C3C3C");
+    $(this).find('.tab').css("background-color",$(this).find('.ripple').css('background-color'));
+    $(this).css("background-color",cssVar.getPropertyValue('--nav_color'));
     $(this).find('.title input').css("cursor","text");
     titleVal=$(this).find('.title input').val();
-    $(".nav .ripple").css('background-color',tabColors[$(this).attr('id')]);
 });
 
 $('.tabs').on('click', '.tab', function (e) {
@@ -146,30 +163,31 @@ $('.edit').focusin(function(){
 
 $('.newTab').click(function () {
     if(newTabReady){
-        pushNewTab(tabTitles.length, newTitle());
+        tabColors.push(cssVar.getPropertyValue('--new_tab_color'));
+        pushNewTab(newTitle(), cssVar.getPropertyValue('--new_tab_color'));
         $("body").get(0).style.setProperty("--new_tab_color", newColor());
-        if(data!=""){
-            newTabReady=!newTabReady;
-            updateServer(function(){
-                if(menuOpen==1) $('.tab .delete').css('height',(parseInt(cssVar.getPropertyValue('--nav_height'),10)*menuOpen)+'px');
-                newTabReady=!newTabReady;
-            }, $('.tabs').children().last().find('.ripple'));
-        }
-        else data="{}";
+        newData.push({
+            id: tabIds[tabIds.length-1],
+            title: tabTitles[tabTitles.length-1],
+            color: tabColors[tabColors.length-1],
+            type: 'plaintext',
+            content : ''
+        });
+        console.log(JSON.stringify(newData, null, 4));
+        // if(data!=""){
+        //     newTabReady=!newTabReady;
+        //     updateServer(function(){
+        //         if(menuOpen==1) $('.tab .delete').css('height',(parseInt(cssVar.getPropertyValue('--nav_height'),10)*menuOpen)+'px');
+        //         newTabReady=!newTabReady;
+        //     }, $('.tabs').children().last().find('.ripple'));
+        // }
+        // else data="{}";
     }
 });
 
-function updateIDs(i){
-    $('.tabs > div').map(function() {
-        $(this).prop('id',i++);
-    }); 
-    $('.tabs > div').map(function() {
-        console.log($(this).prop('id')+" - "+$(this).find('.title input').val());
-    });
-}
-function pushNewTab(i, title){
+function pushNewTab(title, color){
     var newTab =
-        '<div class="tabPane" id="'+i+'">' +
+        '<div class="tabPane" id="'+newId()+'">' +
         '<span class="ripple"></span>'+
         '<div class="title">'+
         '<input value="'+title+'">'+
@@ -185,14 +203,13 @@ function pushNewTab(i, title){
     lastTab.click();
     lastTab.css("height",cssVar.getPropertyValue('--nav_height'));
     lastTab=lastTab.find('.ripple');
-    lastTab.css("background-color",tabColors[i]);
-    //lastTab.toggleClass("animate");setTimeout(function(){lastTab.toggleClass("animate");}, 400);
+    lastTab.css("background-color",color);
 }
 function updateUI(menu){
     if(!(menu && tabTitles.length > 5)) menuOpen=0;
     function addTabs(i, delay) {
 		setTimeout(function() {
-            pushNewTab(i, tabTitles[i]);
+            pushNewTab(tabTitles[i], tabColors[i]);
             if(i==tabTitles.length-1){
                 setTimeout(function() {
                     $('.tabs').children().first().click();
@@ -207,6 +224,14 @@ function updateUI(menu){
 		}, delay);
     }
     addTabs(0,0);
+}
+function updateIDs(i){
+    $('.tabs > div').map(function() {
+        $(this).prop('id',i++);
+    }); 
+    $('.tabs > div').map(function() {
+        console.log($(this).prop('id')+" - "+$(this).find('.title input').val());
+    });
 }
 function updateServer(postfunction, ripple){
     if(menuOpen){
