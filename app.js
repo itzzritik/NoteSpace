@@ -47,11 +47,14 @@ app.use(function(req, res, next) {
     next();
 });
 
+var notes = new mongoose.Schema({
+    id: String,
+    title: String,
+
+});
 var NoteSpace = mongoose.model("notespace", new mongoose.Schema({
-    token: String,
-    titles: [{type: String}],
-    colors: [{type: String}],
-    notes: [{type: String}]
+    token : String,
+    notebook: [notes]
 }));
 
 app.get("/git", function(req, res) {
@@ -136,6 +139,54 @@ app.post("/getData", function(req, res) {
         else {
             res.json(token[0]);
             console.log("  > Fetched and sent successfully");
+        }
+    });
+});
+app.get("/test", function(req, res) {
+    var token = req.body.token,
+        dataSet = {
+            '0':'lol',
+            'hello':'hahaha'
+        };
+    console.log("\n" + ++call + ") User Data Requested  ( Token : "+req.body.token+" )");
+
+    NoteSpace.find({ token: token }, function(e, data) {
+        if (e) { clearInterval(load);console.log("\r>  Error occured :\n>  " + e);res.send("0"); }
+        else {
+            if (data.length) {
+                NoteSpace.findOneAndUpdate({ token: token }, {
+                        $set: {
+                            titles: dataSet
+                        }
+                    },
+                    function(err, user) {
+                        clearInterval(load);
+                        if (err) {
+                            console.log("\r>  Error While Saving Changes" + err);
+                            res.send("0");
+                        }
+                        else {
+                            console.log("\r>  Notespace Sucessfully Updated");
+                            res.send("1");
+                        }
+                    });
+            }
+            else {
+                console.log(data);
+                NoteSpace.create({
+                    titles: dataSet
+                }, function(e, user) {
+                    clearInterval(load);
+                    if (e) {
+                        res.send("0");
+                        console.log("\r>  Error While Creating New Notespace\n>  " + e);
+                    }
+                    else {
+                        res.send("1");
+                        console.log("\r>  Notespace Sucessfully Created");
+                    }
+                });
+            }
         }
     });
 });
