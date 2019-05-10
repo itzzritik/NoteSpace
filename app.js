@@ -137,10 +137,10 @@ app.get("/git", function(req, res) {
 });
 
 app.post("/save", function(req, res) {
-    var token = req.query.token,
-        updates = req.query.updates;
+    var token   = req.body.token,
+        updates = req.body.updates;
     console.log("\n" + ++call + ") User Data Requested  ( Token : "+token+" )");
-
+    console.log(JSON.stringify(updates, null, 4));
     NoteSpace.find({ token: token }, function(e, data) {
         if (e) { clearInterval(load);console.log("\r>  Error occured :\n>  " + e);res.send("0"); }
         else {

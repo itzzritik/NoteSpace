@@ -10,7 +10,7 @@ var token = (window.location.pathname).substring(1, (window.location.pathname).l
     newTabReady = true,
     hoverTabColor = null,
     titleVal = "",
-    data = {},
+    data = [],
     newData = [];
 
 function newId(){
@@ -55,7 +55,7 @@ window.onload = function(){
     http.onload = function() {
         data=http.responseText;
         if(data!=""){
-            data = JSON.parse(data.notebook);
+            data = JSON.parse(data).notebook;
             console.log(JSON.stringify(data, null, 4));
             data.forEach(function (note) {
                 tabIds.push(note.id);
@@ -148,8 +148,13 @@ $('.tabs').on('keypress blur', '.title input', function(e) {
     if((e.type == "focusout" || (e.type == "keypress" && keycode == '13')) && titleVal!=$(this).val() && tabTitles.indexOf($(this).val())==-1){
         if($(this).val()!=""){
             titleVal=$(this).val();
-            tabTitles[currTab.attr('id')]=titleVal;
+            tabTitles[tabIds.indexOf(currTab.attr('id'))]=titleVal;
             card.find('.tab p').text(titleVal.charAt(0).toUpperCase());
+            newData.push({
+                id: currTab.attr('id'),
+                title: titleVal
+            });
+            console.log(JSON.stringify(newData, null, 4));
             updateServer(function(){},card.find('.ripple'));
             //setTimeout(function(){card.find('.ripple').toggleClass("animate");}, 400);
         }
@@ -259,9 +264,7 @@ function updateServer(postfunction, ripple){
         } 
     }
     http.send(JSON.stringify({
-        notebook:{
-            token: token,
-            updates: newData
-        }
+        token: token,
+        updates: newData
     }));
 }
