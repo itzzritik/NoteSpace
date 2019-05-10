@@ -55,7 +55,7 @@ window.onload = function(){
     http.onload = function() {
         data=http.responseText;
         if(data!=""){
-            data = JSON.parse(data);
+            data = JSON.parse(data.notebook);
             console.log(JSON.stringify(data, null, 4));
             data.forEach(function (note) {
                 tabIds.push(note.id);
@@ -174,14 +174,14 @@ $('.newTab').click(function () {
             content : ''
         });
         console.log(JSON.stringify(newData, null, 4));
-        // if(data!=""){
-        //     newTabReady=!newTabReady;
-        //     updateServer(function(){
-        //         if(menuOpen==1) $('.tab .delete').css('height',(parseInt(cssVar.getPropertyValue('--nav_height'),10)*menuOpen)+'px');
-        //         newTabReady=!newTabReady;
-        //     }, $('.tabs').children().last().find('.ripple'));
-        // }
-        // else data="{}";
+        if(data!=""){
+            newTabReady=!newTabReady;
+            updateServer(function(){
+                if(menuOpen==1) $('.tab .delete').css('height',(parseInt(cssVar.getPropertyValue('--nav_height'),10)*menuOpen)+'px');
+                newTabReady=!newTabReady;
+            }, $('.tabs').children().last().find('.ripple'));
+        }
+        else data="{}";
     }
 });
 
@@ -200,10 +200,10 @@ function pushNewTab(title, color){
     $('.tabs').append(newTab);
     
     var lastTab=$('.tabs').children().last();
-    lastTab.click();
     lastTab.css("height",cssVar.getPropertyValue('--nav_height'));
     lastTab=lastTab.find('.ripple');
     lastTab.css("background-color",color);
+    lastTab.click();
 }
 function updateUI(menu){
     if(!(menu && tabTitles.length > 5)) menuOpen=0;
@@ -261,8 +261,7 @@ function updateServer(postfunction, ripple){
     http.send(JSON.stringify({
         notebook:{
             token: token,
-            titles: tabTitles,
-            colors: tabColors
+            updates: newData
         }
     }));
 }
