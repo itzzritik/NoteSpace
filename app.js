@@ -50,12 +50,86 @@ app.use(function(req, res, next) {
 var notes = new mongoose.Schema({
     id: String,
     title: String,
-
+    color: String,
+    type: String,
+    content: String,
 });
 var NoteSpace = mongoose.model("notespace", new mongoose.Schema({
     token : String,
     notebook: [notes]
 }));
+app.get("/test", function(req, res) {
+    var token = req.query.token,
+        dataSet = [
+            {
+                id: (Math.PI * Math.max(0.01, Math.random())).toString(36).substr(2, 5),
+                title: 'New Note',
+                color: '#f0f0f0',
+            },
+            {
+                id      : (Math.PI * Math.max(0.01, Math.random())).toString(36).substr(2, 5),
+                title   : 'New Note',
+                color   : '#f0f0f0',
+                content : "I'm a New Note" 
+            },
+            {
+                id      : (Math.PI * Math.max(0.01, Math.random())).toString(36).substr(2, 5),
+                color   : '#f0f0f0',
+                type    : 'plaintext',
+                content : "I'm a New Note" 
+            }
+    ];
+    console.log("\n" + ++call + ") User Data Requested  ( Token : "+token+" )");
+
+    NoteSpace.find({ token: token }, function(e, data) {
+        if (e) { clearInterval(load);console.log("\r>  Error occured :\n>  " + e);res.send("0"); }
+        else {
+            if (data.length) {
+                dataSet.forEach(function (note) {
+                    var newData ={
+                        id: note.id,
+                        set: {}
+                    };
+                    if(note.title != null) newData = {...obj, ...{'notebook.$.title': note.title}};
+                    if(note.color != null) newData = {...obj, ...{'notebook.$.color': note.color}};
+                    if(note.type != null) newData = {...obj, ...{'notebook.$.type': note.type}};
+                    if(note.content != null) newData = {...obj, ...{'notebook.$.content': note.content}};
+                    /*NoteSpace.updateOne({ token: token, 'notebook.id': newData.id }, {$set: newData.set},
+                    function(err, user) {
+                        clearInterval(load);
+                        if (err) {
+                            console.log("\r>  Error While Saving Changes" + err);
+                            res.send("0");
+                        }
+                        else {
+                            console.log("\r>  Notespace Sucessfully Updated");
+                            console.log(user);
+                            res.send("1");
+                        }
+                    });*/
+                });
+            }
+            else {
+                console.log(dataSet);
+                NoteSpace.create({
+                    token   : token,
+                    notebook: dataSet
+                }, function(e, user) {
+                    clearInterval(load);
+                    if (e) {
+                        res.send("0");
+                        console.log("\r>  Error While Creating New Notespace\n>  " + e);
+                    }
+                    else {
+                        res.send("1");
+                        console.log("\r>  Notespace Sucessfully Created");
+                    }
+                });
+            }
+        }
+    });
+});
+
 
 app.get("/git", function(req, res) {
     var m = req.query.m;
@@ -142,54 +216,7 @@ app.post("/getData", function(req, res) {
         }
     });
 });
-app.get("/test", function(req, res) {
-    var token = req.body.token,
-        dataSet = {
-            '0':'lol',
-            'hello':'hahaha'
-        };
-    console.log("\n" + ++call + ") User Data Requested  ( Token : "+req.body.token+" )");
 
-    NoteSpace.find({ token: token }, function(e, data) {
-        if (e) { clearInterval(load);console.log("\r>  Error occured :\n>  " + e);res.send("0"); }
-        else {
-            if (data.length) {
-                NoteSpace.findOneAndUpdate({ token: token }, {
-                        $set: {
-                            titles: dataSet
-                        }
-                    },
-                    function(err, user) {
-                        clearInterval(load);
-                        if (err) {
-                            console.log("\r>  Error While Saving Changes" + err);
-                            res.send("0");
-                        }
-                        else {
-                            console.log("\r>  Notespace Sucessfully Updated");
-                            res.send("1");
-                        }
-                    });
-            }
-            else {
-                console.log(data);
-                NoteSpace.create({
-                    titles: dataSet
-                }, function(e, user) {
-                    clearInterval(load);
-                    if (e) {
-                        res.send("0");
-                        console.log("\r>  Error While Creating New Notespace\n>  " + e);
-                    }
-                    else {
-                        res.send("1");
-                        console.log("\r>  Notespace Sucessfully Created");
-                    }
-                });
-            }
-        }
-    });
-});
 app.get("/*", function(req, res) {
     var token = (req.originalUrl).substring(1, (req.originalUrl).length);
     if(token != token.toLowerCase()) res.redirect(token.toLowerCase());
