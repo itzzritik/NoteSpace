@@ -64,9 +64,11 @@ body, html {
     user-select: none;
 }
 
-.sidebar .tabs{
+.sidebar .tabs {
     overflow-y: auto;
 }
+
+
 .sidebar .tabs::-webkit-scrollbar {
     width: 0px; 
     background: transparent;
@@ -82,14 +84,13 @@ body, html {
 
 .sidebar .tabs .tabPane .ripple{
     display: block;
-    float: left;
+    float: right;
     position: absolute;
-    width: calc(100% - var(--nav_height));
+    width: 100%;
     height: var(--nav_height);
+    /* border-radius: calc(var(--nav_height) / 2) 0 0 calc(var(--nav_height) / 2); */
     background: #333;
     transform: scaleX(0);
-    opacity: 0;
-    border-radius: 0;
 }
 .sidebar .tabs .tabPane .ripple.animate {
     animation: ripple 0.4s infinite linear;
@@ -100,9 +101,17 @@ body, html {
         opacity: 1;
         transform: scaleX(0);
     }
+    30%{
+        opacity: 1;
+        transform: scaleX(0.8);
+    }
+    60% {
+        opacity: 0.8;
+        transform: scaleX(1.2);
+    }
     100% {
         opacity: 0;
-        transform: scaleX(3);
+        transform: scaleX(1.2);
     }
 }
 
@@ -138,8 +147,26 @@ body, html {
     height: var(--nav_height);
     cursor: pointer;
     -webkit-tap-highlight-color: transparent;
-    transition: transform 0.26s cubic-bezier(0.175, 0.885, 0.32, 1.275), background-color 0.15s ease-in, opacity 0.15s ease-in;
+    transition: transform 0.26s cubic-bezier(0.175, 0.885, 0.32, 1.275), background-color 0.1s ease-in;
     animation: enterTab 0.4s linear;
+}
+.tab.animate {
+    animation: load 0.35s infinite linear;
+    transform-origin: 50% 50%;
+}
+@keyframes load {
+    0%{
+        border-radius: 0;
+        transform: scale(1);
+    }
+    50%{
+        border-radius: calc(var(--nav_height) / 2);
+        transform: scale(0.6) rotate(180deg);
+    }
+    100% {
+        border-radius: 0;
+        transform: scale(1) rotate(360deg);
+    }
 }
 
 .tab p{
@@ -176,6 +203,7 @@ body, html {
 .sidebar .newTabPane{
     width: 100%;
     height: var(--nav_height);
+    background-color: var(--sidebar_color);
     margin-top: 2px; 
     flex-shrink: 0;
 }

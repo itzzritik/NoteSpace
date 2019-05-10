@@ -59,7 +59,7 @@ window.onload = function(){
 };
 
 var typingTimer,doneTypingInterval = 1000;
-$(".edit").bind("propertychange change keyup input cut paste", function(event){
+$(".edit").bind("change keyup input cut paste", function(event){
     clearTimeout(typingTimer);
     typingTimer = setTimeout(function(){
         updateServer(function(){},$('.tabs').find('#'+currTab+' .ripple'), 5);
@@ -199,18 +199,18 @@ function updateUI(menu){
                     if(menu && tabTitles.length > 5) 
                         setTimeout(function() {
                             menuOpen=0;
-                            $('.menu-link').click();
+                            //$('.menu-link').click();
                         },500);
                 },200);
             }
             if(i<tabTitles.length-1)addTabs(++i,50/i);
 		}, delay);
     }
-    addTabs(0,50);
+    addTabs(0,0);
 }
 function updateServer(postfunction, ripple, tries){
-    ripple.toggleClass("animate");
-    ripple.parent().find('.tab').css('opacity', '0');
+    if(menuOpen)ripple.toggleClass("animate");
+    else ripple.parent().find('.tab').toggleClass("animate");
 
     const http = new XMLHttpRequest();
     http.open('POST', '/save');
@@ -218,14 +218,14 @@ function updateServer(postfunction, ripple, tries){
     http.onload = function () {
         if (http.readyState == XMLHttpRequest.DONE) {
             if (http.responseText == 1) {
-                ripple.toggleClass("animate");
-                ripple.parent().find('.tab').css('opacity', '1');
+                if(menuOpen)ripple.toggleClass("animate");
+                else ripple.parent().find('.tab').toggleClass("animate");
                 postfunction();
             }
             else if(tries>0) updateServer(postfunction,--tries);
             else {
-                ripple.toggleClass("animate");
-                ripple.parent().find('.tab').css('opacity', '1');
+                if(menuOpen)ripple.toggleClass("animate");
+                else ripple.parent().find('.tab').toggleClass("animate");
             }
         }
     }
