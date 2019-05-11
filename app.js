@@ -60,7 +60,22 @@ var NoteSpace = mongoose.model("notespace", new mongoose.Schema({
 }));
 app.get("/test", function(req, res) {
     var token = req.query.token,
-        updates = req.query.updates;
+        updates = [
+            {
+                "id": "ep99d",
+                "title": "evergreen",
+                "color": "#673AB7",
+                "type": "plaintext",
+                "content": ""
+            },
+            {
+                "id": "wnpfb",
+                "title": "big",
+                "color": "#9C27B0",
+                "type": "plaintext",
+                "content": ""
+            }
+        ];
     console.log("\n" + ++call + ") User Data Requested  ( Token : "+token+" )");
 
     NoteSpace.find({ token: token }, function(e, data) {
@@ -152,12 +167,12 @@ app.post("/save", function(req, res) {
                     if(note.type != null) set['notebook.$.type'] = note.type;
                     if(note.content != null) set['notebook.$.content'] = note.content;
                     console.log(JSON.stringify(set, null, 4));
-                    NoteSpace.updateOne({ token: token, 'notebook.id': note.id }, {$set: set},
+                    NoteSpace.updateOne({ token: token, 'notebook.id': note.id }, {$set: set}, {upsert: true, new: true},
                     function(err, user) {
                         clearInterval(load);
                         if (err) {
                             console.log("\r>  Error While Saving Changes" + err);
-                            res.send("0");
+                            //res.send("0");
                         }
                         else {
                             console.log("\r>  Notespace Sucessfully Updated");
@@ -167,7 +182,7 @@ app.post("/save", function(req, res) {
                 });
                 res.send("1");
             }
-            else {
+            else {``
                 NoteSpace.create({
                     token   : token,
                     notebook: updates
