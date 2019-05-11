@@ -179,18 +179,17 @@ app.post("/save", function(req, res) {
                     });
                     if(exists) {
                         exists={ token: token, 'notebook.id': note.id };
-                        updateSet={$set: set};
                         if(note.id != null) set['notebook.$.id'] = note.id;
                         if(note.title != null) set['notebook.$.title'] = note.title;
                         if(note.color != null) set['notebook.$.color'] = note.color;
                         if(note.type != null) set['notebook.$.type'] = note.type;
                         if(note.content != null) set['notebook.$.content'] = note.content;
+                        updateSet={$set: set};
                     }
-                    else{
+                    else {
                         exists={token: token};
-                        
+                        updateSet={$push: {'notebook': note}};
                     }
-                    updateSet={$push: {'notebook': note}};
                     console.log(JSON.stringify(set, null, 4));
                     NoteSpace.updateOne(exists, updateSet, function(err, user) {
                         clearInterval(load);

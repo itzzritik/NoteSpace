@@ -97,11 +97,11 @@ $('.menu-link').click(function () {
 $('.tabs').on('click', '.tabPane', function(e) {
     if(currTab!=null && currTab!=$(this)) {
         currTab.css("background-color","transparent");
-        currTab.find('.tab').css("background-color","transparent");
+        currTab.find('.tab').css("background-position","-100%");
         currTab.find('.title input').css("cursor","pointer");
     }
     currTab = $(this);
-    $(this).find('.tab').css("background-color",$(this).find('.ripple').css('background-color'));
+    $(this).find('.tab').css("background-position",'0');
     $(this).css("background-color",cssVar.getPropertyValue('--nav_color'));
     $(this).find('.title input').css("cursor","text");
     titleVal=$(this).find('.title input').val();
@@ -190,7 +190,7 @@ $('.newTab').click(function () {
     }
 });
 
-function pushNewTab(id,title, color){
+function pushNewTab(id, title, color){
     var newTab =
         '<div class="tabPane" id="'+id+'">' +
         '<span class="ripple"></span>'+
@@ -206,8 +206,8 @@ function pushNewTab(id,title, color){
     
     var lastTab=$('.tabs').children().last();
     lastTab.css("height",cssVar.getPropertyValue('--nav_height'));
-    lastTab=lastTab.find('.ripple');
-    lastTab.css("background-color",color);
+    lastTab.find('.tab').css("background-image",'linear-gradient(to right, '+color+' 50%, transparent 50%)');
+    lastTab.find('.ripple').css("background-color",color);
     lastTab.click();
 }
 function updateUI(menu){
