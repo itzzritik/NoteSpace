@@ -18,7 +18,7 @@ body, html {
 .nav {
     position: fixed;
     width: 100%;
-    height: var(--nav_height);
+    height: calc(var(--nav_height));
     background: var(--nav_color);
 }
 
@@ -325,6 +325,7 @@ body, html {
     position: absolute;
     top: 0;
     left: 0;
+    font-size: 12px;
     width: calc(100vw - var(--nav_height));
     height: calc(100vh - var(--nav_height));
     margin-top: var(--nav_height); 

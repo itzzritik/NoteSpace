@@ -9,8 +9,7 @@ var token = (window.location.pathname).substring(1, (window.location.pathname).l
     currTab = null,
     newTabReady = true,
     hoverTabColor = null,
-    titleVal = "",
-    data = [],
+    data = "",
     updateStack = [];
 
 function newId(){
@@ -63,9 +62,8 @@ window.onload = function(){
     http.setRequestHeader('Content-type', 'application/json');
     http.onload = function() {
         data=http.responseText;
-        if(data!=""){
+        if(data.length!=0){
             data = JSON.parse(data).notebook;
-            //console.log(JSON.stringify(data, null, 4));
             data.forEach(function (note) {
                 tabIds.push(note.id);
                 tabTitles.push(note.title);
@@ -105,26 +103,26 @@ $('.menu-link').click(function () {
         $('.menu').toggleClass('open');
         $('.editor').toggleClass('open');
         menuOpen = +!menuOpen;
-        currTab.css('background-color',(menuOpen==0)?cssVar.getPropertyValue('--sidebar_color'):cssVar.getPropertyValue('--nav_color'));
         $('.tab .delete').css('height',(parseInt(cssVar.getPropertyValue('--nav_height'),10)*menuOpen)+'px');
     }
 });
 
 $('.tabs').on('click', '.tabPane', function(e) {
-    if($(this) != currTab){
+    if(((currTab==null)?'':currTab.prop('id')) != $(this).prop('id')){
         if(currTab!=null) {
             currTab.css("background-color","transparent");
             currTab.find('.tab').css("background-position","-100%");
+            currTab.find('.title input').prop( "disabled", true ); 
             currTab.find('.title input').css("cursor","pointer");
         }
         currTab = $(this);
         currTab.find('.tab').css("background-position",'0');
         currTab.css("background-color",cssVar.getPropertyValue('--nav_color'));
         currTab.find('.title input').css("cursor","text");
-        titleVal=currTab.find('.title input').val();
-        console.log(currTab.prop('id'));
+        currTab.find('.title input').prop( "disabled", false ); 
         window.editor.setValue(tabContents[tabIds.indexOf(currTab.prop('id'))]);
     }
+    currTab = $(this);
 });
 
 $('.tabs').on('click', '.tab', function (e) {
@@ -169,21 +167,20 @@ $(".tabs").on({
 $('.tabs').on('keypress blur', '.title input', function(e) {
     var card = $(this).parent().parent(),
         keycode = (event.keyCode ? event.keyCode : event.which);
+    if((e.type == "focusout" || (e.type == "keypress" && keycode == '13'))){
         $(this).val($(this).val().trim());
-    if((e.type == "focusout" || (e.type == "keypress" && keycode == '13')) && titleVal!=$(this).val() && tabTitles.indexOf($(this).val())==-1){
-        if($(this).val()!=""){
-            titleVal=$(this).val();
-            tabTitles[tabIds.indexOf(currTab.prop('id'))]=titleVal;
-            card.find('.tab p').text(titleVal.charAt(0).toUpperCase());
-            pushIntoUpdateStack({
-                id: currTab.prop('id'),
-                title: titleVal
-            });
-            console.log(JSON.stringify(updateStack, null, 4));
-            updateServer(function(){},card.find('.ripple'));
-            //setTimeout(function(){card.find('.ripple').toggleClass("animate");}, 400);
+        if(tabTitles[currTab.prop('id')]!=$(this).val() && tabTitles.indexOf($(this).val())==-1){
+            if($(this).val()!=""){
+                tabTitles[currTab.prop('id')]=$(this).val();
+                card.find('.tab p').text(tabTitles[currTab.prop('id')].charAt(0).toUpperCase());
+                pushIntoUpdateStack({
+                    id: currTab.prop('id'),
+                    title: tabTitles[currTab.prop('id')]
+                });
+                updateServer(function(){},card.find('.ripple'));
+            }
+            else $(this).val(tabTitles[currTab.prop('id')]);
         }
-        else $(this).val(tabTitles[currTab.prop('id')]);
     }
 });
 
@@ -204,33 +201,34 @@ $('.newTab').click(function () {
             content : tabContents[tabContents.length-1]
         });
         //console.log(JSON.stringify(updateStack, null, 4));
-        if(data!=""){
+        if(data.length!=0){
             newTabReady=!newTabReady;
             updateServer(function(){
                 if(menuOpen==1) $('.tab .delete').css('height',(parseInt(cssVar.getPropertyValue('--nav_height'),10)*menuOpen)+'px');
                 newTabReady=!newTabReady;
             }, $('.tabs').children().last().find('.ripple'));
         }
-        else data="{}";
+        else data=' ';
     }
 });
 
 function pushNewTab(id, title, color){
     var newTab =
         '<div class="tabPane" id="'+id+'">' +
-        '<span class="ripple"></span>'+
-        '<div class="title">'+
-        '<input value="'+title+'">'+
-        '</div> '+
-        '<div class="tab">' +
-        '<div class="delete"><img src="/public/img/del.svg"></img></div>'+
-        '<p>'+title.charAt(0).toUpperCase()+'</p>' +
-        '</div> ' +
+            '<span class="ripple"></span>'+
+            '<div class="title">'+
+                '<input value="'+title+'">'+
+            '</div>'+
+            '<div class="tab">' +
+                '<div class="delete"><img src="/public/img/del.svg"></img></div>'+
+                '<p>'+title.charAt(0).toUpperCase()+'</p>' +
+            '</div> ' +
         '</div>';
     $('.tabs').append(newTab);
     
     var lastTab=$('.tabs').children().last();
     lastTab.css("height",cssVar.getPropertyValue('--nav_height'));
+    lastTab.find('.title input').prop( "disabled", true ); 
     lastTab.find('.tab').css("background-image",'linear-gradient(to right, '+color+' 50%, transparent 50%)');
     lastTab.find('.ripple').css("background-color",color);
     lastTab.click();
@@ -250,7 +248,7 @@ function updateUI(menu){
                         },500);
                 },200);
             }
-            if(i<tabTitles.length-1)addTabs(++i,50/i);
+            if(i<tabTitles.length-1)addTabs(++i,200);
 		}, delay);
     }
     addTabs(0,0);
@@ -265,13 +263,14 @@ function updateIDs(i){
 }
 function updateServer(postfunction, ripple){
     if(menuOpen){
-        ripple.toggleClass("animate");
+        ripple.addClass("animate");
         ripple.parent().find('.tab').css('width','0');
         ripple.parent().find('.tab .delete').css('width','0');
     }
-    else ripple.parent().find('.tab').toggleClass("animate");
-
-    console.log(updateStack);
+    else {
+        ripple.parent().css('background-color',cssVar.getPropertyValue('--sidebar_color'));
+        ripple.parent().find('.tab').addClass("animate");
+    }
     const http = new XMLHttpRequest();
     http.open('POST', '/save');
     http.setRequestHeader('Content-type', 'application/json');
@@ -282,12 +281,11 @@ function updateServer(postfunction, ripple){
             }
             else{console.log(e);}
             postfunction();
-            if(menuOpen){
-                ripple.toggleClass("animate");
-                ripple.parent().find('.tab').css('width',cssVar.getPropertyValue('--nav_height'));
-                ripple.parent().find('.tab .delete').css('width',(parseInt(cssVar.getPropertyValue('--nav_height'),10)*menuOpen)+'px');
-            }
-            else ripple.parent().find('.tab').toggleClass("animate");
+            ripple.removeClass("animate");
+            ripple.parent().find('.tab').css('width', cssVar.getPropertyValue('--nav_height'));
+            ripple.parent().find('.tab .delete').css('width', (parseInt(cssVar.getPropertyValue('--nav_height'), 10) * menuOpen) + 'px');
+            ripple.parent().css('background-color', cssVar.getPropertyValue('--nav_color'));
+            ripple.parent().find('.tab').removeClass("animate");
         } 
     }
     http.send(JSON.stringify({
