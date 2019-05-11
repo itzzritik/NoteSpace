@@ -135,7 +135,7 @@ $(".tabs").on({
             if(currTab.prop('id') == $(this).parent().prop('id')) $(this).css("background-position","-100%");
         }
         else if(currTab.prop('id') != $(this).parent().prop('id')){
-            $(this).css("background-position","-90%");
+            $(this).css("background-position","-95%");
         }
     },
     mouseleave: function () {
