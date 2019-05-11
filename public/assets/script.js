@@ -72,6 +72,8 @@ window.onload = function(){
             menuOpen = 0;
             $("body").get(0).style.setProperty("--new_tab_color", newColor());
             $('.newTab').click();
+            $('.tabs').children().last().find('.tab').toggleClass("animate");
+            setTimeout(function(){$('.tabs').children().last().find('.tab').toggleClass("animate");}, 350);
         }
     };
     http.send(JSON.stringify({token: token}));
@@ -95,24 +97,27 @@ $('.menu-link').click(function () {
 });
 
 $('.tabs').on('click', '.tabPane', function(e) {
-    if(currTab!=null && currTab!=$(this)) {
-        currTab.css("background-color","transparent");
-        currTab.find('.tab').css("background-position","-100%");
-        currTab.find('.title input').css("cursor","pointer");
+    console.log(currTab+" - "+$(this));
+    if($(this).prop('id') != currTab.prop('id')){
+        if(currTab!=null) {
+            currTab.css("background-color","transparent");
+            currTab.find('.tab').delay(50).queue(function (next) { $(this).css("background-position","-100%");next();});
+            currTab.find('.title input').css("cursor","pointer");
+        }
+        currTab = $(this);
+        currTab.find('.tab').css("background-position",'0');
+        currTab.css("background-color",cssVar.getPropertyValue('--nav_color'));
+        currTab.find('.title input').css("cursor","text");
+        titleVal=currTab.find('.title input').val();
     }
-    currTab = $(this);
-    $(this).find('.tab').css("background-position",'0');
-    $(this).css("background-color",cssVar.getPropertyValue('--nav_color'));
-    $(this).find('.title input').css("cursor","text");
-    titleVal=$(this).find('.title input').val();
 });
 
 $('.tabs').on('click', '.tab', function (e) {
     if (menuOpen == 1) {
         e.stopPropagation();
         var card = $(this).parent();
-        tabTitles.splice(card.attr('id'), 1);
-        tabColors.splice(card.attr('id'), 1);
+        tabTitles.splice(card.prop('id'), 1);
+        tabColors.splice(card.prop('id'), 1);
         card.css("height", '0');
         setTimeout(function () {
             card.remove();
@@ -148,17 +153,17 @@ $('.tabs').on('keypress blur', '.title input', function(e) {
     if((e.type == "focusout" || (e.type == "keypress" && keycode == '13')) && titleVal!=$(this).val() && tabTitles.indexOf($(this).val())==-1){
         if($(this).val()!=""){
             titleVal=$(this).val();
-            tabTitles[tabIds.indexOf(currTab.attr('id'))]=titleVal;
+            tabTitles[tabIds.indexOf(currTab.prop('id'))]=titleVal;
             card.find('.tab p').text(titleVal.charAt(0).toUpperCase());
             newData.push({
-                id: currTab.attr('id'),
+                id: currTab.prop('id'),
                 title: titleVal
             });
             console.log(JSON.stringify(newData, null, 4));
             updateServer(function(){},card.find('.ripple'));
             //setTimeout(function(){card.find('.ripple').toggleClass("animate");}, 400);
         }
-        else $(this).val(tabTitles[currTab.attr('id')]);
+        else $(this).val(tabTitles[currTab.prop('id')]);
     }
 });
 
@@ -178,7 +183,7 @@ $('.newTab').click(function () {
             type: 'plaintext',
             content : ''
         });
-        console.log(JSON.stringify(newData, null, 4));
+        //console.log(JSON.stringify(newData, null, 4));
         if(data!=""){
             newTabReady=!newTabReady;
             updateServer(function(){
