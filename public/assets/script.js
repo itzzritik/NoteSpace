@@ -40,7 +40,7 @@ function pushIntoUpdateStack(newUpdate){
             return;
         }
     }
-    newData.push(newUpdate);
+    updateStack.push(newUpdate);
 }
 
 require.config({ paths: { 'vs': 'lib/monaco-editor/min/vs' }});
@@ -92,7 +92,7 @@ $(".edit").bind("propertychange change keyup input cut paste", function(event){
     clearTimeout(typingTimer);
     typingTimer = setTimeout(function(){
         tabContents[tabIds.indexOf(currTab.prop('id'))]=window.editor.getValue();
-        newData.push({
+        pushIntoUpdateStack({
             id: currTab.prop('id'),
             content: tabContents[tabIds.indexOf(currTab.prop('id'))]
         });
@@ -175,11 +175,11 @@ $('.tabs').on('keypress blur', '.title input', function(e) {
             titleVal=$(this).val();
             tabTitles[tabIds.indexOf(currTab.prop('id'))]=titleVal;
             card.find('.tab p').text(titleVal.charAt(0).toUpperCase());
-            newData.push({
+            pushIntoUpdateStack({
                 id: currTab.prop('id'),
                 title: titleVal
             });
-            console.log(JSON.stringify(newData, null, 4));
+            console.log(JSON.stringify(updateStack, null, 4));
             updateServer(function(){},card.find('.ripple'));
             //setTimeout(function(){card.find('.ripple').toggleClass("animate");}, 400);
         }
@@ -196,14 +196,14 @@ $('.newTab').click(function () {
         tabColors.push(cssVar.getPropertyValue('--new_tab_color'));
         pushNewTab(newId(),newTitle(), cssVar.getPropertyValue('--new_tab_color'),tabTypes.push('plaintext'),tabContents.push(""));
         $("body").get(0).style.setProperty("--new_tab_color", newColor());
-        newData.push({
+        pushIntoUpdateStack({
             id: tabIds[tabIds.length-1],
             title: tabTitles[tabTitles.length-1],
             color: tabColors[tabColors.length-1],
             type: tabTypes[tabTypes.length-1],
             content : tabContents[tabContents.length-1]
         });
-        //console.log(JSON.stringify(newData, null, 4));
+        //console.log(JSON.stringify(updateStack, null, 4));
         if(data!=""){
             newTabReady=!newTabReady;
             updateServer(function(){
@@ -271,14 +271,14 @@ function updateServer(postfunction, ripple){
     }
     else ripple.parent().find('.tab').toggleClass("animate");
 
-    console.log(newData);
+    console.log(updateStack);
     const http = new XMLHttpRequest();
     http.open('POST', '/save');
     http.setRequestHeader('Content-type', 'application/json');
     http.onreadystatechange=function(e) {
         if (http.readyState == XMLHttpRequest.DONE){   
             if (http.responseText == 1) {
-                newData=[];
+                updateStack=[];
             }
             else{console.log(e);}
             postfunction();
@@ -292,6 +292,6 @@ function updateServer(postfunction, ripple){
     }
     http.send(JSON.stringify({
         token: token,
-        updates: newData
+        updates: updateStack
     }));
 }
