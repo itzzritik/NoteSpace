@@ -66,7 +66,6 @@ window.onload = function(){
             });
             $("body").get(0).style.setProperty("--new_tab_color", newColor());
             updateUI(true);
-            //window.editor.setValue(data[0].value);
         }
         else {
             menuOpen = 0;
@@ -83,6 +82,11 @@ var typingTimer,doneTypingInterval = 1000;
 $(".edit").bind("propertychange change keyup input cut paste", function(event){
     clearTimeout(typingTimer);
     typingTimer = setTimeout(function(){
+        tabContents[tabIds.indexOf(currTab.prop('id'))]=window.editor.getValue();
+        newData.push({
+            id: currTab.prop('id'),
+            content: tabContents[tabIds.indexOf(currTab.prop('id'))]
+        });
         updateServer(function(){},currTab.find('.ripple'));
     }, doneTypingInterval);
 });
@@ -109,6 +113,8 @@ $('.tabs').on('click', '.tabPane', function(e) {
         currTab.css("background-color",cssVar.getPropertyValue('--nav_color'));
         currTab.find('.title input').css("cursor","text");
         titleVal=currTab.find('.title input').val();
+        console.log(currTab.prop('id'));
+        window.editor.setValue(tabContents[tabIds.indexOf(currTab.prop('id'))]);
     }
 });
 
@@ -179,14 +185,14 @@ $('.edit').focusin(function(){
 $('.newTab').click(function () {
     if(newTabReady && menuOpen != -1){
         tabColors.push(cssVar.getPropertyValue('--new_tab_color'));
-        pushNewTab(newId(),newTitle(), cssVar.getPropertyValue('--new_tab_color'));
+        pushNewTab(newId(),newTitle(), cssVar.getPropertyValue('--new_tab_color'),tabTypes.push('plaintext'),tabContents.push(""));
         $("body").get(0).style.setProperty("--new_tab_color", newColor());
         newData.push({
             id: tabIds[tabIds.length-1],
             title: tabTitles[tabTitles.length-1],
             color: tabColors[tabColors.length-1],
-            type: 'plaintext',
-            content : ''
+            type: tabTypes[tabTypes.length-1],
+            content : tabContents[tabContents.length-1]
         });
         //console.log(JSON.stringify(newData, null, 4));
         if(data!=""){
@@ -253,9 +259,10 @@ function updateServer(postfunction, ripple){
         ripple.toggleClass("animate");
         ripple.parent().find('.tab').css('width','0');
         ripple.parent().find('.tab .delete').css('width','0');
-
     }
     else ripple.parent().find('.tab').toggleClass("animate");
+
+    console.log(newData);
     const http = new XMLHttpRequest();
     http.open('POST', '/save');
     http.setRequestHeader('Content-type', 'application/json');
