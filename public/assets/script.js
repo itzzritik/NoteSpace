@@ -92,16 +92,16 @@ $('.menu-link').click(function () {
         $('.menu').toggleClass('open');
         $('.editor').toggleClass('open');
         menuOpen = +!menuOpen;
+        currTab.css('background-color',(menuOpen==0)?cssVar.getPropertyValue('--sidebar_color'):cssVar.getPropertyValue('--nav_color'));
         $('.tab .delete').css('height',(parseInt(cssVar.getPropertyValue('--nav_height'),10)*menuOpen)+'px');
     }
 });
 
 $('.tabs').on('click', '.tabPane', function(e) {
-    console.log(currTab+" - "+$(this));
-    if($(this).prop('id') != currTab.prop('id')){
+    if($(this) != currTab){
         if(currTab!=null) {
             currTab.css("background-color","transparent");
-            currTab.find('.tab').delay(50).queue(function (next) { $(this).css("background-position","-100%");next();});
+            currTab.find('.tab').css("background-position","-100%");
             currTab.find('.title input').css("cursor","pointer");
         }
         currTab = $(this);
@@ -132,8 +132,10 @@ $(".tabs").on({
             $(this).find('.delete').css('opacity', '1');
             $(this).find('.delete').css('border-radius', (parseInt(cssVar.getPropertyValue('--nav_height'),10)/2)+'px');
             $(this).find('.delete').css('transform', 'scale(0.8)');
-            hoverTabColor=$(this).css('background-color');
-            $(this).css('background-color', $(this).parent().css('background-color'));
+            if(currTab.prop('id') == $(this).parent().prop('id')) $(this).css("background-position","-100%");
+        }
+        else if(currTab.prop('id') != $(this).parent().prop('id')){
+            $(this).css("background-position","-90%");
         }
     },
     mouseleave: function () {
@@ -141,7 +143,10 @@ $(".tabs").on({
             $(this).find('.delete').css('opacity', '0');
             $(this).find('.delete').css('border-radius', '0');
             $(this).find('.delete').css('transform', 'scale(1)');
-            $(this).css('background-color', hoverTabColor);
+            if(currTab.prop('id') == $(this).parent().prop('id'))  $(this).css("background-position","0");
+        }
+        else if(currTab.prop('id') != $(this).parent().prop('id')){
+            $(this).css("background-position","-100%");
         }
     }
 },'.tab');
@@ -172,7 +177,7 @@ $('.edit').focusin(function(){
 });
 
 $('.newTab').click(function () {
-    if(newTabReady){
+    if(newTabReady && menuOpen != -1){
         tabColors.push(cssVar.getPropertyValue('--new_tab_color'));
         pushNewTab(newId(),newTitle(), cssVar.getPropertyValue('--new_tab_color'));
         $("body").get(0).style.setProperty("--new_tab_color", newColor());
