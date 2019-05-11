@@ -62,8 +62,8 @@ app.get("/test", function(req, res) {
     var token = req.query.token,
         updates = [
             {
-                "id": "ep99d",
-                "title": "evergreen",
+                "id": "ep99x",
+                "title": "lol",
                 "color": "#673AB7",
                 "type": "plaintext",
                 "content": ""
@@ -89,16 +89,25 @@ app.get("/test", function(req, res) {
                     if(note.type != null) set['notebook.$.type'] = note.type;
                     if(note.content != null) set['notebook.$.content'] = note.content;
                     console.log(JSON.stringify(set, null, 4));
-                    NoteSpace.updateOne({ token: token, 'notebook.id': note.id }, {$set: set},
-                    function(err, user) {
-                        clearInterval(load);
-                        if (err) {
-                            console.log("\r>  Error While Saving Changes" + err);
-                            res.send("0");
-                        }
-                        else {
-                            console.log("\r>  Notespace Sucessfully Updated");
-                            //res.send("1");
+                    NoteSpace.findOne({ token: token, 'notebook.id': note.id }, function(err, search) {
+                        if(!err) {
+                            if(data.length) {
+                                NoteSpace.updateOne({ token: token, 'notebook.id': note.id }, {$set: set},
+                                function(err, user) {
+                                    clearInterval(load);
+                                    if (err) {
+                                        console.log("\r>  Error While Saving Changes" + err);
+                                        res.send("0");
+                                    }
+                                    else {
+                                        console.log("\r>  Notespace Sucessfully Updated");
+                                        //res.send("1");
+                                    }
+                                });
+                            }
+                            else{
+                                console.log("Need to create One");
+                            }
                         }
                     });
                 });
@@ -155,23 +164,39 @@ app.post("/save", function(req, res) {
     var token   = req.body.token,
         updates = req.body.updates;
     console.log("\n" + ++call + ") User Data Requested  ( Token : "+token+" )");
-    console.log(JSON.stringify(updates, null, 4));
-    NoteSpace.find({ token: token }, function(e, data) {
+    //console.log(JSON.stringify(updates, null, 4));
+    NoteSpace.find({ token: token }, function(e, result) {
         if (e) { clearInterval(load);console.log("\r>  Error occured :\n>  " + e);res.send("0"); }
         else {
-            if (data.length) {
+            if (result.length) {
                 updates.forEach(function (note) {
-                    var set = {};
-                    if(note.title != null) set['notebook.$.title'] = note.title;
-                    if(note.color != null) set['notebook.$.color'] = note.color;
-                    if(note.type != null) set['notebook.$.type'] = note.type;
-                    if(note.content != null) set['notebook.$.content'] = note.content;
+                    var set = {},exists=false,updateSet,pos='notebook.$.';
+                    (result[0].notebook).forEach(function (check) {
+                        if(check.id==note.id){
+                            exists=true;
+                            return;
+                        }
+                    });
+                    if(exists) {
+                        exists={ token: token, 'notebook.id': note.id };
+                        updateSet={$set: set};
+                    }
+                    else{
+                        exists={token: token};
+                        updateSet={$push: set};
+                        pos='notebook.$[].';
+                    }
+                    if(note.id != null) set[pos+'.id'] = note.id;
+                    if(note.title != null) set[+pos+'title'] = note.title;
+                    if(note.color != null) set[pos+'color'] = note.color;
+                    if(note.type != null) set[pos+'type'] = note.type;
+                    if(note.content != null) set[pos+'content'] = note.content;
                     console.log(JSON.stringify(set, null, 4));
-                    NoteSpace.updateOne({ token: token, 'notebook.id': note.id }, {$set: set}, {upsert: true, new: true},
-                    function(err, user) {
+                    NoteSpace.updateOne(exists, updateSet, function(err, user) {
                         clearInterval(load);
                         if (err) {
                             console.log("\r>  Error While Saving Changes" + err);
+                            console.log(exists);
                             //res.send("0");
                         }
                         else {
@@ -182,7 +207,7 @@ app.post("/save", function(req, res) {
                 });
                 res.send("1");
             }
-            else {``
+            else {
                 NoteSpace.create({
                     token   : token,
                     notebook: updates
