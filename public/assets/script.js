@@ -11,7 +11,7 @@ var token = (window.location.pathname).substring(1, (window.location.pathname).l
     hoverTabColor = null,
     titleVal = "",
     data = [],
-    newData = [];
+    updateStack = [];
 
 function newId(){
     var id;
@@ -27,11 +27,20 @@ function newColor(){
     return color;
 }
 function newTitle(){
-    var tabTitle;
-    do{tabTitle=title[Math.floor(Math.random() * (title.length-1))];}
-    while(tabTitles.indexOf(tabTitle) > -1);
-    tabTitles.push(tabTitle);
-    return tabTitle;
+    var title;
+    do{title=titleData[Math.floor(Math.random() * (titleData.length-1))];}
+    while(tabTitles.indexOf(title) > -1);
+    tabTitles.push(title);
+    return title;
+}
+function pushIntoUpdateStack(newUpdate){
+    for(var i=0;i<updateStack.length;i++){
+        if(updateStack[i].id==newUpdate.id){
+            jQuery.extend(updateStack[i], newUpdate);
+            return;
+        }
+    }
+    newData.push(newUpdate);
 }
 
 require.config({ paths: { 'vs': 'lib/monaco-editor/min/vs' }});
