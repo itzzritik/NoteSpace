@@ -56,7 +56,7 @@ window.onload = function(){
         data=http.responseText;
         if(data!=""){
             data = JSON.parse(data).notebook;
-            console.log(JSON.stringify(data, null, 4));
+            //console.log(JSON.stringify(data, null, 4));
             data.forEach(function (note) {
                 tabIds.push(note.id);
                 tabTitles.push(note.title);
@@ -169,7 +169,7 @@ $('.edit').focusin(function(){
 $('.newTab').click(function () {
     if(newTabReady){
         tabColors.push(cssVar.getPropertyValue('--new_tab_color'));
-        pushNewTab(newTitle(), cssVar.getPropertyValue('--new_tab_color'));
+        pushNewTab(newId(),newTitle(), cssVar.getPropertyValue('--new_tab_color'));
         $("body").get(0).style.setProperty("--new_tab_color", newColor());
         newData.push({
             id: tabIds[tabIds.length-1],
@@ -190,9 +190,9 @@ $('.newTab').click(function () {
     }
 });
 
-function pushNewTab(title, color){
+function pushNewTab(id,title, color){
     var newTab =
-        '<div class="tabPane" id="'+newId()+'">' +
+        '<div class="tabPane" id="'+id+'">' +
         '<span class="ripple"></span>'+
         '<div class="title">'+
         '<input value="'+title+'">'+
@@ -214,7 +214,7 @@ function updateUI(menu){
     if(!(menu && tabTitles.length > 5)) menuOpen=0;
     function addTabs(i, delay) {
 		setTimeout(function() {
-            pushNewTab(tabTitles[i], tabColors[i]);
+            pushNewTab(tabIds[i],tabTitles[i], tabColors[i]);
             if(i==tabTitles.length-1){
                 setTimeout(function() {
                     $('.tabs').children().first().click();
@@ -252,9 +252,10 @@ function updateServer(postfunction, ripple){
     http.onreadystatechange=function(e) {
         if (http.readyState == XMLHttpRequest.DONE){   
             if (http.responseText == 1) {
-                postfunction();
+                newData=[];
             }
             else{console.log(e);}
+            postfunction();
             if(menuOpen){
                 ripple.toggleClass("animate");
                 ripple.parent().find('.tab').css('width',cssVar.getPropertyValue('--nav_height'));
