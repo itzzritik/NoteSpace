@@ -84,6 +84,7 @@ body, html {
 
 .sidebar .tabs .tabPane .ripple{
     position: absolute;
+    left: 0;
     width: 100%;
     height: var(--nav_height);
     /* border-radius: calc(var(--nav_height) / 2) 0 0 calc(var(--nav_height) / 2); */

@@ -215,10 +215,10 @@ $('.newTab').click(function () {
 function pushNewTab(id, title, color){
     var newTab =
         '<div class="tabPane" id="'+id+'">' +
-            '<span class="ripple"></span>'+
             '<div class="title">'+
                 '<input value="'+title+'">'+
             '</div>'+
+            '<span class="ripple"></span>'+
             '<div class="tab">' +
                 '<div class="delete"><img src="/public/img/del.svg"></img></div>'+
                 '<p>'+title.charAt(0).toUpperCase()+'</p>' +
