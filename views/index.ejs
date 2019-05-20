@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html>
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=device-width, height=device-height, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
 <head>
     <title>Notespace</title>
     <link rel="icon" href="/public/img/fevicon.png" type="image/png" sizes="32x32">
@@ -10,21 +10,23 @@
     </div>
 </head>
 <body>
-    <div class="editor">
-        <div class="sidebar">
-            <div class="navHead">
-                <span class="navTitle">NOTE SPACE</span>
-                <div class="menu"><div class="menu-link"><span class="menu-icon">
-                    <span class="menu-line menu-line-1"></span> <span class="menu-line menu-line-2"></span> <span class="menu-line menu-line-3"></span>
-                </span></div></div>
+    <div class="innerBody">
+        <div class="editor">
+                <div class="sidebar">
+                    <div class="navHead">
+                        <span class="navTitle">NOTE SPACE</span>
+                        <div class="menu"><div class="menu-link"><span class="menu-icon">
+                            <span class="menu-line menu-line-1"></span> <span class="menu-line menu-line-2"></span> <span class="menu-line menu-line-3"></span>
+                        </span></div></div>
+                    </div>
+                    <div class="tabs"></div>
+                    <div class="newTabPane">
+                        <span class="ripple"></span>
+                        <div class="newTab"><span class="plus-icon"><span class="menu-line new-line-1"></span> <span class="menu-line new-line-2"></span></div>
+                    </div>
+                </div>
+                <div class="edit"></div>
             </div>
-            <div class="tabs"></div>
-            <div class="newTabPane">
-                <span class="ripple"></span>
-                <div class="newTab"><span class="plus-icon"><span class="menu-line new-line-1"></span> <span class="menu-line new-line-2"></span></div>
-            </div>
-        </div>
-        <div class="edit"></div>
     </div>
 </body>
 <script src="lib/monaco-editor/min/vs/loader.js"></script>

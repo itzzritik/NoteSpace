@@ -78,23 +78,25 @@ window.onload = function(){
             menuOpen = 0;
             $("body").get(0).style.setProperty("--new_tab_color", newColor());
             $('.newTab').click();
-            $('.tabs').children().last().find('.tab').toggleClass("animate");
-            setTimeout(function(){$('.tabs').children().last().find('.tab').toggleClass("animate");}, 350);
+            $('.tabs').children().last().find('.tab').addClass("animate");
+            setTimeout(function(){$('.tabs').children().last().find('.tab').addClass("animate");}, 350);
         }
     };
     http.send(JSON.stringify({token: token}));
 };
 
 var typingTimer,doneTypingInterval = 1000;
-$(".edit").bind("propertychange blur change keyup input cut paste", function(e){
-    tabContents[tabIds.indexOf(currTab.prop('id'))]=window.editor.getValue();
-    pushIntoUpdateStack({
-        id: currTab.prop('id'),
-        content: tabContents[tabIds.indexOf(currTab.prop('id'))]
-    });
+$(".edit").bind("propertychange blur change keyup input cut paste", function(event){
     clearTimeout(typingTimer);
     typingTimer = setTimeout(function(){
-        updateServer(function(){},currTab.find('.ripple'));
+        if(tabContents[tabIds.indexOf(currTab.prop('id'))]!=window.editor.getValue()){
+            tabContents[tabIds.indexOf(currTab.prop('id'))]=window.editor.getValue();
+            pushIntoUpdateStack({
+                id: currTab.prop('id'),
+                content: tabContents[tabIds.indexOf(currTab.prop('id'))]
+            });
+            updateServer(function(){},currTab.find('.ripple'));
+        }
     }, doneTypingInterval);
 });
 
@@ -114,6 +116,15 @@ $('.tabs').on('click', '.tabPane', function(e) {
             currTab.find('.tab').css("background-position","-100%");
             currTab.find('.title input').prop( "disabled", true ); 
             currTab.find('.title input').css("cursor","pointer");
+        }
+        if(typingTimer!=null) clearTimeout(typingTimer);
+        if(menuOpen!=-1 && tabContents[tabIds.indexOf(currTab.prop('id'))]!=window.editor.getValue()){
+            tabContents[tabIds.indexOf(currTab.prop('id'))]=window.editor.getValue();
+            pushIntoUpdateStack({
+                id: currTab.prop('id'),
+                content: tabContents[tabIds.indexOf(currTab.prop('id'))]
+            });
+            updateServer(function(){},currTab.find('.ripple'));
         }
         currTab = $(this);
         currTab.find('.tab').css("background-position",'0');
@@ -249,7 +260,7 @@ function updateUI(menu){
                         },500);
                 },200);
             }
-            if(i<tabTitles.length-1)addTabs(++i,200);
+            if(i<tabTitles.length-1)addTabs(++i,0);
 		}, delay);
     }
     addTabs(0,0);
@@ -285,7 +296,8 @@ function updateServer(postfunction, ripple){
             ripple.removeClass("animate");
             ripple.parent().find('.tab').css('width', cssVar.getPropertyValue('--nav_height'));
             ripple.parent().find('.tab .delete').css('width', (parseInt(cssVar.getPropertyValue('--nav_height'), 10) * menuOpen) + 'px');
-            ripple.parent().css('background-color', cssVar.getPropertyValue('--nav_color'));
+            if(ripple.parent().prop('id') == currTab.prop('id'))
+                ripple.parent().css('background-color', cssVar.getPropertyValue('--nav_color'));
             ripple.parent().find('.tab').removeClass("animate");
         } 
     }

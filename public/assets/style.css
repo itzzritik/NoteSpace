@@ -6,10 +6,10 @@
     --sidebar_white_color: #eee;
     --new_tab_color: #2d2d2d;
 }
-body, html {
-    overflow: hidden;
-    width: 100vw;
-    height: 100vh;
+body, html, .innerBody{
+    overflow: hidden !important;
+    width: 100%;
+    height: 100%;
     margin: 0;
     padding: 0;
     background-color: var(--sidebar_color);
@@ -24,10 +24,10 @@ body, html {
 
 .editor {
     position: absolute;
+    overflow: hidden;
     width: calc(100vw + 200px);
     right: 0;
     height: 100vh;
-    overflow: hidden;
     transition: margin-right 0.26s cubic-bezier(0.175, 0.885, 0.32, 1.275);
 }
 .editor.open{
