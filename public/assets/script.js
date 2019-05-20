@@ -86,14 +86,14 @@ window.onload = function(){
 };
 
 var typingTimer,doneTypingInterval = 1000;
-$(".edit").bind("propertychange change keyup input cut paste", function(event){
+$(".edit").bind("propertychange blur change keyup input cut paste", function(e){
+    tabContents[tabIds.indexOf(currTab.prop('id'))]=window.editor.getValue();
+    pushIntoUpdateStack({
+        id: currTab.prop('id'),
+        content: tabContents[tabIds.indexOf(currTab.prop('id'))]
+    });
     clearTimeout(typingTimer);
     typingTimer = setTimeout(function(){
-        tabContents[tabIds.indexOf(currTab.prop('id'))]=window.editor.getValue();
-        pushIntoUpdateStack({
-            id: currTab.prop('id'),
-            content: tabContents[tabIds.indexOf(currTab.prop('id'))]
-        });
         updateServer(function(){},currTab.find('.ripple'));
     }, doneTypingInterval);
 });
@@ -220,7 +220,9 @@ function pushNewTab(id, title, color){
             '</div>'+
             '<span class="ripple"></span>'+
             '<div class="tab">' +
-                '<div class="delete"><img src="/public/img/del.svg"></img></div>'+
+                '<div class="delete">'+ 
+                    '<img src="/public/img/del.svg"></img>'+
+                '</div>'+
                 '<p>'+title.charAt(0).toUpperCase()+'</p>' +
             '</div> ' +
         '</div>';
@@ -244,7 +246,6 @@ function updateUI(menu){
                     if(menu && tabTitles.length > 5) 
                         setTimeout(function() {
                             menuOpen=0;
-                            //$('.menu-link').click();
                         },500);
                 },200);
             }
