@@ -42,8 +42,8 @@ function pushIntoUpdateStack(newUpdate){
     updateStack.push(newUpdate);
 }
 
-require.config({ paths: { 'vs': 'lib/monaco-editor/min/vs' }});
 window.editor = "";
+require.config({ paths: { 'vs': 'lib/monaco-editor/min/vs' }});
 require(['vs/editor/editor.main'], function() {
     window.editor = monaco.editor.create(document.getElementsByClassName('edit')[0], {
         value: "",
@@ -51,6 +51,7 @@ require(['vs/editor/editor.main'], function() {
         minimap: { enabled: true },
         theme: "vs-dark"
     });
+    console.log("Loaded Editor");
 }); 
 
 window.onresize = function (){
