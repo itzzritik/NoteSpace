@@ -20,7 +20,7 @@ body, html, .innerBody{
     width: 100%;
     height: 100%;
     background-color: #fff;
-    transition: height 1s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    transition: height 1s cubic-bezier(0.02, 0.01, 0.21, 1);
 }
 
 .nav {
