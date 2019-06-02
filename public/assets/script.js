@@ -79,7 +79,7 @@ window.onload = function(){
             $("body").get(0).style.setProperty("--new_tab_color", newColor());
             $('.newTab').click();
             $('.tabs').children().last().find('.tab').addClass("animate");
-            setTimeout(function(){$('.tabs').children().last().find('.tab').addClass("animate");}, 350);
+            setTimeout(function(){$('.tabs').children().last().find('.tab').removeClass("animate");}, 350);
         }
     };
     http.send(JSON.stringify({token: token}));
@@ -118,7 +118,7 @@ $('.tabs').on('click', '.tabPane', function(e) {
             currTab.find('.title input').css("cursor","pointer");
         }
         if(typingTimer!=null) clearTimeout(typingTimer);
-        if(menuOpen!=-1 && tabContents[tabIds.indexOf(currTab.prop('id'))]!=window.editor.getValue()){
+        if(menuOpen!=-1 && currTab!=null && tabContents[tabIds.indexOf(currTab.prop('id'))]!=window.editor.getValue()){
             tabContents[tabIds.indexOf(currTab.prop('id'))]=window.editor.getValue();
             pushIntoUpdateStack({
                 id: currTab.prop('id'),
