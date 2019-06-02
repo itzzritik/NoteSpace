@@ -57,6 +57,10 @@ require(['vs/editor/editor.main'], function() {
 window.onresize = function (){
     window.editor.layout();
 };
+
+function splash(){
+    $('.splash').css('height','0');
+}
 window.onload = function(){
     const http = new XMLHttpRequest();
     http.open('POST', '/getData');
@@ -82,6 +86,7 @@ window.onload = function(){
             $('.tabs').children().last().find('.tab').addClass("animate");
             setTimeout(function(){$('.tabs').children().last().find('.tab').removeClass("animate");}, 350);
         }
+        splash();
     };
     http.send(JSON.stringify({token: token}));
 };
