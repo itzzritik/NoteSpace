@@ -60,11 +60,14 @@ window.onresize = function (){
 
 function splash(){
     $('.splash .loading-wrapper').delay(300).queue(function (next) {
+            $('meta[name="theme-color"]').prop('content',  cssVar.getPropertyValue('--nav_color'));
             $(this).css("animation","splashwrapper 0.8s forwards cubic-bezier(0.175, 0.885, 0.32, 1.275)");
-            next();
         });
     $('.splash #loading-content').css("animation","splashcontent 0.8s forwards cubic-bezier(0.175, 0.885, 0.32, 1.275)");
     $('.splash .splashlogo').css("animation","splashlogo 0.8s forwards cubic-bezier(0.175, 0.885, 0.32, 1.275)");
+    setTimeout(function(){
+        $('.splash').css("display","none");
+    }, 1100);
 }
 window.onload = function(){
     const http = new XMLHttpRequest();

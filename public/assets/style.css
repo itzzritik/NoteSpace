@@ -17,6 +17,7 @@ html,
 	padding: 0;
 	background-color: var(--sidebar_color);
 }
+
 .splash {
 	position: absolute;
 	z-index: 11;
