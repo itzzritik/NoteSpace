@@ -24,13 +24,6 @@ html,
 	height: 100%;
 	transition: all 1s cubic-bezier(0.02, 0.01, 0.21, 1);
 }
-.splash.hide{
-}
-.splash-overlay{
-    width: 100%;
-    height: 100%;
-    background-color: var(--sidebar_color);
-}
 
 .splashlogo {
 	width: calc(var(--nav_height) * 1.3);
@@ -43,12 +36,6 @@ html,
     -webkit-user-select: none;
     -ms-user-select: none;
 }
-.splashlogo.hide{
-	width: calc(var(--nav_height) - 15px);
-	height: var(--nav_height);
-	left: 50%;
-	margin-left: calc(0px - calc(var(--nav_height) / 2));
-}
 
 .loading-wrapper {
 	width: 100%;
@@ -57,17 +44,10 @@ html,
     position: absolute;
     top: 0; left: 0; bottom: 0; right: 0;
     background-color: var(--splash_color);
+    transition: all 1s cubic-bezier(0.02, 0.01, 0.21, 1);
 }
 .loading-wrapper.hide{
-    width: 100vw;
-    height: 100vw;
-    border-radius: 100%;
-    animation: splash 3s linear ;
-}
-@keyframes splash {
-	100% {
-        transform: scale(0);
-	}
+    opacity: 0;
 }
 
 #loading-content {
