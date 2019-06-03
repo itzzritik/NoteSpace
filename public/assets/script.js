@@ -59,7 +59,9 @@ window.onresize = function (){
 };
 
 function splash(){
-    $('.splash #loading-content').css({'height:':"1000px","width":"1000px"});
+    $('.splash #loading-content').css("opacity","0");
+    $('.splash .loading-wrapper').addClass("hide");
+    $('.splash .splashlogo').addClass("hide");
 }
 window.onload = function(){
     const http = new XMLHttpRequest();
