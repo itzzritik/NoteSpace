@@ -59,7 +59,7 @@ window.onresize = function (){
 };
 
 function splash(){
-    $('.splash').css('opacity','0');
+    //$('.splash').css('opacity','0');
 }
 window.onload = function(){
     const http = new XMLHttpRequest();
