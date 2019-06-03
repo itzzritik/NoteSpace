@@ -59,7 +59,7 @@ window.onresize = function (){
 };
 
 function splash(){
-    //$('.splash').css('opacity','0');
+    $('.splash #loading-content').css({'height:':"1000px","width":"1000px"});
 }
 window.onload = function(){
     const http = new XMLHttpRequest();
@@ -86,6 +86,7 @@ window.onload = function(){
             $('.tabs').children().last().find('.tab').addClass("animate");
             setTimeout(function(){$('.tabs').children().last().find('.tab').removeClass("animate");}, 350);
         }
+        console.log("Loaded Page");
         splash();
     };
     http.send(JSON.stringify({token: token}));
