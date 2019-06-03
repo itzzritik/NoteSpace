@@ -51,7 +51,7 @@ require(['vs/editor/editor.main'], function() {
         minimap: { enabled: true },
         theme: "vs-dark"
     });
-    console.log("Loaded Editor");
+    $('.splash p').text('LOADING NOTEBOOK');
 }); 
 
 window.onresize = function (){
@@ -59,6 +59,7 @@ window.onresize = function (){
 };
 
 function splash(){
+    $('.splash p').text('');
     $('.splash .loading-wrapper').delay(300).queue(function (next) {
             $('meta[name="theme-color"]').prop('content',  cssVar.getPropertyValue('--nav_color'));
             $(this).css("animation","splashwrapper 0.8s forwards cubic-bezier(0.175, 0.885, 0.32, 1.275)");
@@ -94,7 +95,6 @@ window.onload = function(){
             $('.tabs').children().last().find('.tab').addClass("animate");
             setTimeout(function(){$('.tabs').children().last().find('.tab').removeClass("animate");}, 350);
         }
-        console.log("Loaded Page");
         splash();
     };
     http.send(JSON.stringify({token: token}));
