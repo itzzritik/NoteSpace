@@ -66,7 +66,7 @@ function splash(){
     $('.splash #loading-content').css("animation","splashcontent 0.8s forwards cubic-bezier(0.175, 0.885, 0.32, 1.275)");
     $('.splash .splashlogo').css("animation","splashlogo 0.8s forwards cubic-bezier(0.175, 0.885, 0.32, 1.275)");
     setTimeout(function(){
-        $('.splash').css("display","none");
+        $('.splash').remove();
     }, 1100);
 }
 window.onload = function(){
