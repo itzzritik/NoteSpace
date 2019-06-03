@@ -36,6 +36,12 @@ html,
     -webkit-user-select: none;
     -ms-user-select: none;
 }
+@keyframes splashlogo {
+	100% {
+		transform: scale(0.5);
+        opacity: 0;
+	}
+}
 
 .loading-wrapper {
 	width: 100%;
@@ -44,10 +50,11 @@ html,
     position: absolute;
     top: 0; left: 0; bottom: 0; right: 0;
     background-color: var(--splash_color);
-    transition: all 1s cubic-bezier(0.02, 0.01, 0.21, 1);
 }
-.loading-wrapper.hide{
-    opacity: 0;
+@keyframes splashwrapper {
+	100% {
+		opacity: 0;
+	}
 }
 
 #loading-content {
@@ -57,7 +64,12 @@ html,
 	margin: auto;
     position: absolute;
     top: 0; left: 0; bottom: 0; right: 0;
-    transition: all 0.5s cubic-bezier(0.02, 0.01, 0.21, 1);
+}
+@keyframes splashcontent {
+	100% {
+		transform: scale(1.2);
+        opacity: 0;
+	}
 }
 
 #loading-content:after {
@@ -113,7 +125,7 @@ html,
 	-o-animation: loader 2s linear infinite;
 }
 
-@-webkit-keyframes loaders {
+@keyframes loaders {
 	0% {
 		-webkit-transform: rotate(0deg);
 		-ms-transform: rotate(0deg);
