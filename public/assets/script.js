@@ -92,7 +92,7 @@ window.onload = function(){
             setTimeout(function(){$('.tabs').children().last().find('.tab').removeClass("animate");}, 350);
         }
         console.log("Loaded Page");
-        //splash();
+        splash();
     };
     http.send(JSON.stringify({token: token}));
 };
