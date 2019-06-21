@@ -40,8 +40,8 @@ var mongoConnect = function(callback) {
 };
 mongoConnect();
 
-app.use(bodyParser.json({limit: "50mb"}));
-app.use(bodyParser.urlencoded({limit: "50mb", extended: true, parameterLimit:50000}));
+app.use(bodyparser.json({limit: "50mb"}));
+app.use(bodyparser.urlencoded({limit: "50mb", extended: true, parameterLimit:50000}));
 app.use(function(req, res, next) {
     res.header("Access-Control-Allow-Origin", "*");
     res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
