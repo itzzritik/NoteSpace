@@ -6,6 +6,7 @@ const clear = require('clear');
 const git = require('simple-git/promise')();
 const ran = require("randomstring");
 const ip = require("ip");
+require('dotenv').config();
 
 var call = 0,
     loader = function(msg) {
@@ -21,8 +22,9 @@ app.use('/public', express.static('public'));
 app.use('/lib', express.static('node_modules'));
 
 const dbOptions = { useNewUrlParser: true,useFindAndModify: false, reconnectTries: Number.MAX_VALUE, poolSize: 10 };
+console.log(process.env.MONGO_KEY);
 var mongoConnect = function(callback) {
-    mongoose.connect(require("./mongo"), dbOptions).then(
+    mongoose.connect(process.env.MONGO_KEY, dbOptions).then(
         () => { 
             clearInterval(load);
             console.log("\r>  Connection Established"); 
