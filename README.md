@@ -13,7 +13,6 @@
   - *Multiple notes can be stored in a notebook in the form of tabs.*
   - *Different tabs get different color and unique names by default. Tabs can be altered according to the requirement.*
 + **Stunning User Interface**
-  - *We all know that First impression is the last impression.*
-  - *Following that we developed the best User Interface to keep you motivated while working on your stuff.* 
+  - *We all know that First impression is the last impression, following that we developed the best **User Interface** to keep you enchanted while working on your stuff.* 
   - *Super smooth animations make things even better.*
 + ****
