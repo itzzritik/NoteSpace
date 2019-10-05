@@ -4,10 +4,10 @@
 
 # Features
 + **Not Just a Normal Text Editor**  
-*Rich text editor with code highlighting and suggestions powered by **Moncao Editor from Microsoft**. You'll not be missing any language as most of the **languages** are supported.
+*Rich text editor with code highlighting and suggestions powered by Moncao Editor from Microsoft. You'll not be missing any language as most of the languages are supported.
 + **No Authentication Required**  
-*Tag based content saving or sharing is implemented, i.e simply share the tag of your notebook to someone, Yes it's that easy. Notebook can be open or **password protected**.*
+*Tag based content saving or sharing is implemented, i.e simply share the tag of your notebook to someone, Yes it's that easy. Notebook can be open or password protected.*
 + **Tab Based Notebook**  
 *Multiple notes can be stored in a notebook in the form of tabs, Different tabs get different color and unique names by default and can be altered according to the requirement.*
 + **Stunning User Interface**  
-*We all know that First impression is the last impression, following that we developed the best **User Interface** to keep you enchanted while working on your stuff. Super smooth animations make things even better.*
+*We all know that First impression is the last impression, following that we developed the best User Interface to keep you enchanted while working on your stuff. Super smooth animations make things even better.*
