@@ -23,6 +23,7 @@
 
 ## Libraries Used:
 - [JQuery v3.4.0](https://jquery.com/)
+- [Socket.IO v2.3.0](https://socket.io/)
 - [Monaco Editor v0.18.1](https://microsoft.github.io/monaco-editor/)
 - [Random String v1.1.5](https://github.com/klughammer/node-randomstring/)
-- [Simple Git](https://www.npmjs.com/package/simple-git/)
+- [Simple Git v1.126.0](https://www.npmjs.com/package/simple-git/)
