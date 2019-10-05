@@ -27,3 +27,10 @@
 - [Monaco Editor v0.18.1](https://microsoft.github.io/monaco-editor/)
 - [Random String v1.1.5](https://github.com/klughammer/node-randomstring/)
 - [Simple Git v1.126.0](https://www.npmjs.com/package/simple-git/)
+
+---
+  
+## Try Your Hands Now
+**NoteSpace** is fully fabricated and ready to be tested. **Go ahead** give it a try.  
+
+[<img src="public/img/demo.png" width="200">](http://notespaceapp.herokuapp.com/)
