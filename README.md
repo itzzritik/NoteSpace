@@ -4,13 +4,16 @@
 
 # Features
 + **Not Just a Normal Editor**
-  - Rich editor with code highlighting and suggestions.
-  - Powered by Moncao Editor from Microsoft.
+  - *Rich editor with code highlighting and suggestions.*
+  - *Powered by Moncao Editor from Microsoft.*
 + **No Authentication Required**
   - Tag Based Sharing.
   - Simply share the tag of your notebook to someone, Yes it's that easy.
 + **Tab Based Notebook**
   - Multiple notes can be stored in a notebook in the form of tabs.
-  - Different tabs get different colors 
+  - Different tabs get different color and unique names by default.
+  - Tabs can be created and deleted according to the requirement.
 + **Stunning User Interface**
+  - We all know that First impression is the last impression.
+  - Following that we developed the best User Interface to keep you motivated in working on your stuff.   
   - 
