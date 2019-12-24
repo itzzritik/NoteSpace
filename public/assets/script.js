@@ -47,7 +47,7 @@ require.config({ paths: { 'vs': 'lib/monaco-editor/min/vs' }});
 require(['vs/editor/editor.main'], function() {
     window.editor = monaco.editor.create(document.getElementsByClassName('edit')[0], {
         value: "",
-        language: 'java',
+        language: 'javascript',
         minimap: { enabled: true },
         theme: "vs-dark"
     });
@@ -120,7 +120,7 @@ $('.menu-link').click(function () {
         $('.menu').toggleClass('open');
         $('.editor').toggleClass('open');
         menuOpen = +!menuOpen;
-        $('.tab .delete').css('height',(parseInt(cssVar.getPropertyValue('--nav_height'),10)*menuOpen)+'px');
+        $('.tab .delete').css('height',(parseInt($('.tab .delete').css('width'),10)*menuOpen)+'px');
     }
 });
 
@@ -151,7 +151,8 @@ $('.tabs').on('click', '.tabPane', function(e) {
     currTab = $(this);
 });
 
-$('.tabs').on('click', '.tab', function (e) {
+// Delete Notes
+/*$('.tabs').on('click', '.tab', function (e) {
     if (menuOpen == 1) {
         e.stopPropagation();
         var card = $(this).parent();
@@ -163,7 +164,7 @@ $('.tabs').on('click', '.tab', function (e) {
             updateIDs(0);
         }, 260);
     }
-});
+});*/
 
 $(".tabs").on({
     mouseenter: function () {
@@ -178,6 +179,8 @@ $(".tabs").on({
         }
     },
     mouseleave: function () {
+        $(this).find(".circleProgress > circle#progress").attr("class", "");
+        $(this).find(".delete .cross1 , .delete .cross2").css("background-color", "#ffffff");
         if (menuOpen == 1) {
             $(this).find('.delete').css('opacity', '0');
             $(this).find('.delete').css('border-radius', '0');
@@ -187,6 +190,21 @@ $(".tabs").on({
         else if(currTab.prop('id') != $(this).parent().prop('id')){
             $(this).css("background-position","-100%");
         }
+    },
+
+    mouseup: function (e) {
+        clearTimeout(pressTimer);
+        $(this).find(".delete .cross1 , .delete .cross2").css("background-color", "#ffffff");
+        $(this).find(".circleProgress > circle#progress").attr("class", "");
+        
+    },
+    mousedown: function (e) {
+        let card = $(this);
+        card.find(".circleProgress > circle#progress").attr("class", "active");
+        pressTimer = window.setTimeout(function () {
+            card.find(".circleProgress > circle#progress").attr("class", "active launch");
+            card.find(".delete .cross1 , .delete .cross2").css("background-color", "#ff4e46");
+        }, 1000);
     }
 },'.tab');
 
@@ -220,11 +238,11 @@ $('.newTab').click(function () {
         pushNewTab(newId(),newTitle(), cssVar.getPropertyValue('--new_tab_color'),tabTypes.push('plaintext'),tabContents.push(""));
         $("body").get(0).style.setProperty("--new_tab_color", newColor());
         pushIntoUpdateStack({
-            id: tabIds[tabIds.length-1],
-            title: tabTitles[tabTitles.length-1],
-            color: tabColors[tabColors.length-1],
-            type: tabTypes[tabTypes.length-1],
-            content : tabContents[tabContents.length-1]
+            id: tabIds[tabIds.length - 1],
+            title: tabTitles[tabTitles.length - 1],
+            color: tabColors[tabColors.length - 1],
+            type: tabTypes[tabTypes.length - 1],
+            content: tabContents[tabContents.length - 1]
         });
         //console.log(JSON.stringify(updateStack, null, 4));
         if(data.length!=0){
@@ -247,7 +265,10 @@ function pushNewTab(id, title, color){
             '<span class="ripple"></span>'+
             '<div class="tab">' +
                 '<div class="delete">'+ 
-                    '<img src="/public/img/del.svg"></img>'+
+                    '<span class="cross-icon"><span class="menu-line cross1"></span> <span class="menu-line cross2"></span>'+
+                    '<svg class="circleProgress" viewBox="0 0 311.812 311.812">'+
+                    '<circle id="progress" class="" fill="none" stroke="#000000" stroke-width="10" stroke-linecap="round" stroke-miterlimit="10" stroke-dasharray="0,1000" cx="155.906" cy="155.906" r="141.027"/>'+
+                    '</svg>'+
                 '</div>'+
                 '<p>'+title.charAt(0).toUpperCase()+'</p>' +
             '</div> ' +

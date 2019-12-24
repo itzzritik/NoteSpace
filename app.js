@@ -21,7 +21,7 @@ app.set("view engine", "ejs");
 app.use('/public', express.static('public'));
 app.use('/lib', express.static('node_modules'));
 
-const dbOptions = { useNewUrlParser: true,useFindAndModify: false,  useUnifiedTopology: true, reconnectTries: Number.MAX_VALUE, poolSize: 10 };
+const dbOptions = { useNewUrlParser: true,useFindAndModify: false,  useUnifiedTopology: true, poolSize: 10 };
 console.log(process.env.MONGO_KEY);
 var mongoConnect = function(callback) {
     mongoose.connect(process.env.MONGO_KEY, dbOptions).then(

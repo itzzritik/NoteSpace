@@ -367,21 +367,64 @@ html,
 }
 .tab .delete {
 	position: absolute;
-	right: 0;
-	width: var(--nav_height);
-	height: 0;
-	background-color: #ff4e46;
+	right: 4px;
+	width: calc( var(--nav_height) - 10px);
+	background-color: var(--nav_color);
+	border: 1px solid transparent;
 	opacity: 0;
 	overflow: hidden;
+	margin-top: 4px;
 	transition: all 0.26s cubic-bezier(0.175, 0.885, 0.32, 1.275);
 }
 .tab .delete:active {
 	transform: scale(0.8);
 }
-.tab .delete img {
+.tab .delete .cross-icon {
+	position: absolute;
+	top: calc(50% - 3px);
+	left: 5px;
 	width: calc(var(--nav_height) / 3);
 	height: calc(var(--nav_height) / 3);
-	margin-top: calc(var(--nav_height) / 3);
+	transform: rotate(45deg);
+}
+.tab .delete .cross1 {
+	background-color: #fff;
+}
+.tab .delete .cross2 {
+	transform: rotate(90deg);
+	background-color: #fff;
+}
+.circleProgress {
+	position: absolute;
+	top: -17px;
+	left: -10px;
+	width: calc( var(--nav_height) - 10px);
+	height: calc( var(--nav_height) - 10px);
+	transform: rotate(-90deg);
+	cursor: pointer;
+	background-color: transparent;
+}
+.circleProgress > circle#progress {
+	stroke-dasharray: 0, 1000;
+	stroke: var(--sidebar_white_color);;
+	stroke-width: 0;
+	transition: 0s ease-out all;
+	opacity: 0;
+	transform-origin: 50% 50%;
+	transform: rotate(-90deg);
+}
+.circleProgress > circle#progress.active {
+	stroke-dasharray: 885, 1000; /* full circle */
+	stroke-width:20;
+	opacity: 0.5;
+	transform-origin: 50% 50%;
+	transform: rotate(330deg);
+	transition: 1s ease-in-out  all;
+	
+}
+.circleProgress > circle#progress.active.launch {
+	stroke: #ff4e46;
+	transition: 0s ease-out all;
 }
 
 .sidebar .newTabPane {
