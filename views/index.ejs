@@ -21,22 +21,36 @@
             <div class="sidebar">
                 <div class="navHead">
                     <span class="navTitle">NOTE SPACE</span>
-                    <div class="menu"><div class="menu-link"><span class="menu-icon">
-                        <span class="menu-line menu-line-1"></span> <span class="menu-line menu-line-2"></span> <span class="menu-line menu-line-3"></span>
-                    </span></div></div>
+                    <div class="menu">
+                        <div class="menu-link">
+                            <span class="menu-icon">
+                                <span class="menu-line menu-line-1"></span>
+                                <span class="menu-line menu-line-2"></span>
+                                <span class="menu-line menu-line-3"></span>
+                            </span>
+                        </div>
+                    </div>
                 </div>
                 <div class="tabs"></div>
                 <div class="newTabPane">
                     <span class="ripple"></span>
-                    <div class="newTab"><span class="plus-icon"><span class="menu-line new-line-1"></span> <span class="menu-line new-line-2"></span></div>
+                    <div class="newTab">
+                        <span class="plus-icon">
+                            <span class="menu-line new-line-1"></span>
+                            <span class="menu-line new-line-2"></span>
+                        </span>
+                    </div>
                 </div>
             </div>
             <div class="edit"></div>
         </div>
     </div>
 </body>
-<script src="lib/monaco-editor/min/vs/loader.js"></script>
+<script src="/socket.io/socket.io.js"></script>
+<script src="/lib/monaco-editor/min/vs/loader.js"></script>
 <script src="/public/assets/lib/jquery.js"></script>
-<script src="/public/assets/data.js"></script>
-<script src="/public/assets/script.js"></script>
+<script src="/public/assets/scripts/data.js"></script>
+<script src="/public/assets/scripts/tools.js"></script>
+<script src="/public/assets/scripts/script.js"></script>
+<script src="/public/assets/scripts/socketUtils.js"></script>
 </html>
