@@ -5,8 +5,6 @@ const mongoose = require('mongoose'),
     logger = require('./logger'),
     NoteSpace = require('../models/notespace.js');
 
-mongoose.set('useCreateIndex', true);
-
 const get = (token, cb) => {
         NoteSpace.find({ token }, function(err, notes) {
             if (err) return cb(err);
@@ -70,7 +68,7 @@ const get = (token, cb) => {
         }, 50);
     },
 
-    dbOptions = { useNewUrlParser: true, useFindAndModify: false, useUnifiedTopology: true, poolSize: 10 },
+    dbOptions = { useNewUrlParser: true, useFindAndModify: false, useUnifiedTopology: true, useCreateIndex: true, poolSize: 10 },
     mongoConnect = (callback) => {
         loading = consoleLoader(' '.repeat(34));
         mongoose.connect(process.env.MONGO_KEY, dbOptions).then(
