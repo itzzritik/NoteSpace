@@ -30,11 +30,11 @@ const mongoose = require('mongoose'),
                         });
                         if(exists) {
                             exists = { token: token, 'notebook.id': note.id };
-                            if(note.id != null) set['notebook.$.id'] = note.id;
-                            if(note.title != null) set['notebook.$.title'] = note.title;
-                            if(note.color != null) set['notebook.$.color'] = note.color;
-                            if(note.type != null) set['notebook.$.type'] = note.type;
-                            if(note.content != null) set['notebook.$.content'] = note.content;
+                            if(note.id) set['notebook.$.id'] = note.id;
+                            if(note.title) set['notebook.$.title'] = note.title;
+                            if(note.color) set['notebook.$.color'] = note.color;
+                            if(note.type) set['notebook.$.type'] = note.type;
+                            if(note.content) set['notebook.$.content'] = note.content;
                             updateSet={$set: set};
                         }
                         else {

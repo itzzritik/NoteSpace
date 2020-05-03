@@ -7,10 +7,9 @@ var token = (window.location.pathname).substring(1, (window.location.pathname).l
     currTab = null,
     newTabReady = true,
     hoverTabColor = null,
-    data = "",
     updateStack = [];
 
-window.editor = "";
+window.editor = '';
 require.config({ paths: { 'vs': 'lib/monaco-editor/min/vs' } });
 require(['vs/editor/editor.main'], function () {
     window.editor = monaco.editor.create(document.getElementsByClassName('edit')[0], {
@@ -20,7 +19,6 @@ require(['vs/editor/editor.main'], function () {
         automaticLayout: true,
         theme: "vs-dark"
     });
-    $('.splash p').text('LOADING NOTEBOOK');
 });
 
 window.onresize = function () {
@@ -103,14 +101,28 @@ function initUI(menu, cb) {
 
 function updateUI(updates) {
     updates.forEach(function(update, i) {
-        if ('title' in update) {
-            notebook[update.id].title = update.title;
-            $('#' + update.id + ' .title input').val(update.title);
-            $('#' + update.id + ' .tab p').text(update.title.charAt(0).toUpperCase());
+        if ('tab' in update) { 
+            if (update.tab == 'new') {
+                notebook[update.id] = {
+                    title: update.title,
+                    color: update.color,
+                    type: update.type,
+                    content: update.content
+                }
+                pushNewTab(update.id);
+            }
+            else if (update.tab == 'del') {}
         }
-        if ('content' in update) {
-            notebook[update.id].content = update.content;
-            if(update.id == currTab.prop('id')) window.editor.setValue(update.content || '');
+        else {
+            if ('title' in update) {
+                notebook[update.id]['title'] = update.title;
+                $('#' + update.id + ' .title input').val(update.title);
+                $('#' + update.id + ' .tab p').text(update.title.charAt(0).toUpperCase());
+            }
+            if ('content' in update) {
+                notebook[update.id]['content'] = update.content;
+                if(update.id == currTab.prop('id')) window.editor.setValue(update.content || '');
+            }
         }
     });
 }
@@ -135,7 +147,7 @@ function updateServer(ripple, callback) {
         ripple.parent().find('.tab').addClass("animate");
     }
 
-    socket.emit('saveUpdateData', token, updateStack, function (err) {
+    saveUpdateData(function (err) {
         if (err) console.log(err);
         else updateStack = [];
 

@@ -1,4 +1,5 @@
 window.onload = function () {
+    $('.splash p').text('LOADING NOTEBOOK');
     socket = io();
 
     socket.on('connect', function(){      
@@ -6,13 +7,19 @@ window.onload = function () {
     });
 
     socket.on('disconnect', function(err){   
-        console.log('disconnected', err);
+        console.log('Socket Disconnected');
     });
 
     socket.on('reconnect', function () {
-        console.log('you have been reconnected');
-        // where username is a global variable for the client
-        // socket.emit('user-reconnected', username);
+        console.log('Socket Reconnected');
+    });
+
+    socket.on('connect_failed', function(err){   
+        console.log('Failed to Reconnect', err);
+    });
+
+    socket.on('connect_error', function(err){   
+        console.log('Error occurred while reconnecting', err);
     });
 
     socket.on('showNotebook', function(data) {
@@ -37,19 +44,22 @@ window.onload = function () {
             });
         }
         else {
+            menuOpen = 0;
             $("body").get(0).style.setProperty("--new_tab_color", newColor());
             $('.newTab').click();
             $('.tabs').children().last().find('.tab').addClass("animate");
             setTimeout(function () { $('.tabs').children().last().find('.tab').removeClass("animate"); }, 350);
-            menuOpen = 0;
             splash();
         }
     });
 
     socket.on('updateNotebook', function(updates) {
-        console.log(updates);
         if (!$.isEmptyObject(updates)) {
             updateUI(updates);
         }
     });
 };
+
+var saveUpdateData = function(callback) {
+    socket.emit('saveUpdateData', token, updateStack, callback);
+}

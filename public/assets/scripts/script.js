@@ -136,7 +136,7 @@ $('.newTab').click(function () {
     if (newTabReady && menuOpen != -1) {
         let id = newId();
         notebook[id] = {
-            title: newTitle(),
+            title: $.isEmptyObject(notebook)? 'New Tab' : newTitle(),
             color: cssVar.getPropertyValue('--new_tab_color'),
             type: 'plaintext',
             content: ''
@@ -150,17 +150,24 @@ $('.newTab').click(function () {
             title: notebook[id].title,
             color: notebook[id].color,
             type: notebook[id].type,
-            content: notebook[id].content
+            content: notebook[id].content,
+            tab: 'new'
         });
 
-        if (data.length != 0) {
+        newTabReady = !newTabReady;
+        updateServer($('.tabs').children().last().find('.ripple'), function() {
+            if (menuOpen == 1) 
+                $('.tab .delete').css('height', (parseInt(cssVar.getPropertyValue('--nav_height'), 10) * menuOpen) + 'px');
             newTabReady = !newTabReady;
-            updateServer($('.tabs').children().last().find('.ripple'), function() {
-                if (menuOpen == 1) 
-                    $('.tab .delete').css('height', (parseInt(cssVar.getPropertyValue('--nav_height'), 10) * menuOpen) + 'px');
-                newTabReady = !newTabReady;
-            });
-        }
-        else data = ' ';
+        });
     }
+});
+
+
+window.addEventListener('online', function(e) {
+    console.log('Online');
+});
+  
+window.addEventListener('offline', function(e) {
+    console.log('Offline');
 });
