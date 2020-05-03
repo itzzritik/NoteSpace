@@ -3,9 +3,11 @@ let loading, mongoCall = 0;
 const mongoose = require('mongoose'),
     chalk = require('chalk'),
     logger = require('./logger'),
-    NoteSpace = require('../models/notespace.js'),
+    NoteSpace = require('../models/notespace.js');
 
-    get = (token, cb) => {
+mongoose.set('useCreateIndex', true);
+
+const get = (token, cb) => {
         NoteSpace.find({ token }, function(err, notes) {
             if (err) return cb(err);
             else return cb(null, notes[0]);
@@ -34,7 +36,7 @@ const mongoose = require('mongoose'),
                             if(note.title) set['notebook.$.title'] = note.title;
                             if(note.color) set['notebook.$.color'] = note.color;
                             if(note.type) set['notebook.$.type'] = note.type;
-                            if(note.content) set['notebook.$.content'] = note.content;
+                            if(note.content != null) set['notebook.$.content'] = note.content;
                             updateSet={$set: set};
                         }
                         else {
