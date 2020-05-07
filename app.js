@@ -8,7 +8,7 @@ const express = require('express'),
     ip = require('ip'),
     chalk = require('chalk'),
     socketIO = require('socket.io'),
-    io = socketIO(server);
+    io = socketIO(server),
 
     mongoUtils = require('./tools/mongoUtils'),
     logger = require('./tools/logger'),
