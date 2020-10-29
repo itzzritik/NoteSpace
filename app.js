@@ -37,7 +37,7 @@ app.get('/:token', (req, res) => {
     res.render('index');
 });
 
-app.get('/', function(req, res) {
+app.get('/', (req, res) => {
     let token = '',
         unique = (token) => {
             NoteSpace.find({ token }, function(err, tokens) {
