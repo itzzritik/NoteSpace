@@ -31,7 +31,7 @@ app.use(function(req, res, next) {
     next();
 });
 
-app.get('/:token', function(req, res) {
+app.get('/:token', (req, res) => {
     let token = req.params.token;
     if (token != token.toLowerCase()) res.redirect(token.toLowerCase());
     res.render('index');
