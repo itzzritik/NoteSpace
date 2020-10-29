@@ -25,7 +25,7 @@ app.use('/public', express.static('public'));
 app.use('/lib', express.static('node_modules'));
 app.use(bodyparser.json({limit: '50mb'}));
 app.use(bodyparser.urlencoded({limit: '50mb', extended: true, parameterLimit:50000}));
-app.use(function(req, res, next) {
+app.use((req, res, next) => {
     res.header('Access-Control-Allow-Origin', '*');
     res.header('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept');
     next();
@@ -40,7 +40,7 @@ app.get('/:token', (req, res) => {
 app.get('/', (req, res) => {
     let token = '',
         unique = (token) => {
-            NoteSpace.find({ token }, function(err, tokens) {
+            NoteSpace.find({ token }, (err, tokens) => {
                 if (err) logger.error(false, 'Error occurred while `find` action in mongoose:', err);
 
                 if (tokens.length) return true;
@@ -54,7 +54,7 @@ app.get('/', (req, res) => {
     res.redirect(token);
 });
 
-server.listen(env.PORT || 8080, function() {
+server.listen(env.PORT || 8080, () => {
     logger.clear();
     logger.log(true, 'Starting Server');
     logger.log(false, 'Server is running at', 
