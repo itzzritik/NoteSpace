@@ -60,7 +60,5 @@ server.listen(env.PORT || 8080, function() {
     logger.log(false, 'Server is running at', 
         chalk.blue('http://' + (env.IP || ip.address() || 'localhost') + ':' + (env.PORT || '8080')));
 	
-	mongoUtils.connect(() => {
-		socketUtils.initialize(io);
-	});
+	mongoUtils.connect(() => socketUtils.initialize(io));
 });
